@@ -1,0 +1,49 @@
+\section{Conclusion}\label{sec:conclusion}
+
+The results of this paper assemble into one picture. Every algebraic rootfinding method
+in the family of \cite{graf2026numerical,noferini2016numerical} obeys the same
+average-case skeleton over Gaussian random systems: a universal local exchange rate
+between root and subproblem conditioning, computed here exactly and driven in part by
+the roots away from the unit torus, plus a structural term that identifies the method.
+The structural terms are now understood at every level except the sharpest: the Cayley
+method is solved unconditionally, with the conclusion that its exponential worst case is
+a tail event and that the comparison is neutral in the relative metric; the Sylvester,
+Gr\"obner and rational univariate terms are computed at leading order, the last with a
+closed-form constant; and the full-configuration term of the normal form is proved
+bounded at $d=1$ and $2$, against the random-matrix calibration, so the normal-form
+theorem is unconditional there. The choice of coefficient model and of quotient basis is
+not a detail: each ensemble selects its own natural basis, and mismatching them converts
+logarithmic effects into linear ones.
+
+For the record, the following are proved here: Theorem~\ref{thm:reduction1},
+Corollary~\ref{cor:wilkinson}, Lemmas~\ref{lem:jacobian}, \ref{lem:intensity},
+\ref{lem:h}, \ref{lem:rice}, \ref{lem:integrability}, \ref{lem:rectangular},
+\ref{lem:gram}, \ref{lem:jensen}, \ref{lem:secondmoment} with
+Propositions~\ref{prop:d1secondmoment} and \ref{prop:stratified} and
+Theorem~\ref{thm:overlap}, Lemma~\ref{lem:hiddenvariable} (from
+\cite{noferini2016numerical}), Lemma~\ref{lem:adjugate},
+Propositions~\ref{prop:masscheck}, \ref{prop:kostlandensity}, \ref{prop:rootscale},
+\ref{prop:outer} with Corollary~\ref{cor:logkm} and the closed-form constant of
+Proposition~\ref{prop:closedform}, \ref{prop:local}, \ref{prop:d1finiteness} (fixed
+$d$), \ref{prop:finiteness}, \ref{prop:kostlan} (with numerical check),
+\ref{prop:rur} (with closed-form constant), \ref{prop:totaldegree} (sketch level in two
+steps, with numerical check), \ref{prop:mep} (with numerical check);
+Theorem~\ref{thm:cayley}, verified numerically in Section~\ref{sec:verification}
+together with the relative analysis of Sections~\ref{sec:relativeCayley}
+and~\ref{sec:relative} (Proposition~\ref{prop:scoreboard}); the overlap term is
+resolved numerically at $d=1$ and $d=2$ in Section~\ref{sec:protocol}.
+
+\section{The open problem}\label{sec:open}
+
+\begin{problem}\label{prob:open}
+  What remains of the overlap question. (i) Settle the regime at $d=3$, where the
+  measured overlaps run parallel to the Ginibre control, a stable $0.2$ below it, up to
+  $N=1296$: extend the stratified second-moment route of Theorem~\ref{thm:overlap},
+  whose identity chain carries over to the trivariate Cayley pencil, or decide
+  numerically at larger sizes. (ii) Identify the invariant basis for the Kostlan model
+  at $d\ge2$, where both the weighted box and the degrevlex Fubini--Study staircase
+  fail.
+\end{problem}
+
+\paragraph{Acknowledgements.}
+Parts of this paper were prepared with the help of Anthropic's Claude (Fable~5).

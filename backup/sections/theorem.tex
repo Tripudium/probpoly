@@ -1,0 +1,198 @@
+\section{The normal-form theorem and interpretation}\label{sec:theorem}
+
+\begin{theorem}[normal-form method; conditional in its last claim]\label{thm:main}
+  In the model of Definition~\ref{def:model}, for fixed $d$ and $n\to\infty$,
+  \[
+    \Rcal_n = (d+1)\log n + \Theta_n + O(d), \qquad 0\le\Theta_n<\infty,
+  \]
+  with $\Theta_n<\infty$ by Proposition~\ref{prop:finiteness}. In particular
+  $\Rcal_n\ge(d+1)\log n - O(d)$. By Theorem~\ref{thm:overlap}, unconditionally for
+  $d=1,2$ (and, at $d\ge3$, whenever $\Theta_n = O(d)$),
+  \[
+    \Rcal_n = (d+1)\log n + O(d):
+  \]
+  the local terms are the whole story.
+\end{theorem}
+
+\proof
+Combine Corollary~\ref{cor:wilkinson}, so that $\Rcal_n = A_n + \Theta_n + C_n$ as an
+identity of finite quantities by Lemma~\ref{lem:rice} and
+Proposition~\ref{prop:finiteness}, with Proposition~\ref{prop:local}, under the conjecture
+insert $\Theta_n = O_d(1)$.
+\endproof
+
+\begin{remark}\label{rem:tworeadings}
+  Two readings. First, average-case tameness: the average logarithmic loss grows
+  logarithmically in the B\'ezout count, so there is no exponential average-case penalty
+  in this model. The worst-case instability of
+  \cite{noferini2016numerical,graf2026numerical} lives in the upper tail of $\Lambda$,
+  produced by nearly colliding roots, whose contribution Section~\ref{sec:collisions}
+  shows to be integrable, and in adversarial geometries. This agrees with the histograms
+  in our earlier notes. Second, a caveat on the yardstick: $\keig$ is invariant under
+  $P\mapsto cP$ while $\kroot$ is not, and $\sigma_{\min}(J)$ is exponentially large at
+  outer roots, where the absolute root conditioning is spuriously excellent. A substantial
+  part of the deterministic term $(d+1)\log n$ is this mismatch of units. A scale-free
+  comparison removes it:
+  \[
+    \Eroots\log\Bigl[\keig\cdot\frac{\sigma_{\min}(J)}{\sqrt{S\,h_\bullet}}\Bigr]
+    = \Theta_n + C_n + \EW[\log\sigma_{\min}(G)] + O(\log d),
+  \]
+  whose deterministic part is $O(\log d)$. In this normalization the entire
+  $n$-dependence of the average ratio is $\Theta_n$, which is bounded for $d\le2$ by
+  Theorem~\ref{thm:overlap}.
+\end{remark}
+
+\subsection{The Kostlan model: an extreme units effect}\label{sec:kostlan}
+
+In the Kostlan model ($p_i = \sum_{|\alpha|\le n}c_{i,\alpha}\sqrt{\binom n\alpha}\,
+x^\alpha$ with i.i.d.\ $c_{i,\alpha}\sim\CN(0,1)$, kernel
+$K(x,y) = (1+\langle x,y\rangle)^n$, B\'ezout count $N=n^d$),
+Proposition~\ref{prop:kostlandensity} shows that the root-average measure does not depend
+on $n$. This changes the geometry of the problem completely, and the local terms can be
+computed in closed form.
+
+\begin{proposition}\label{prop:kostlan}
+  Under the root average of the Kostlan model, with $s:=\|X\|^2$ and
+  $H_d:=\sum_{k=1}^d\frac1k$:
+  \begin{enumerate}[(a)]
+    \item $u := s/(1+s)$ has density $d\,u^{d-1}$ on $(0,1)$, and
+      $\Eroots[\log(1+s)] = H_d$, exactly;
+    \item $\Eroots[\log\sigma_{\min}(J)] = \frac{H_d}2\,n + \frac12\log n + O_d(1)$ and
+      $\Eroots[\log|\det J|] = \frac{dH_d}2\,n + \frac d2\log n + O_d(1)$;
+    \item the normal-form conditioning ratio satisfies
+      \[
+        \Rcal_n^{\mathrm{Kos}} = \frac{H_d}2\,n + O(\log n) + \Theta_n^{\mathrm{Kos}}.
+      \]
+  \end{enumerate}
+\end{proposition}
+
+\proof
+(a) The normalized root density is $\frac{d!}{\pi^d}(1+s)^{-(d+1)}$, so the radial
+variable has density $d\,s^{d-1}(1+s)^{-(d+1)}$; the substitution $u=s/(1+s)$ gives
+$d\,u^{d-1}$, and
+$\E\log(1+s) = -d\int_0^1u^{d-1}\log(1-u)\,du = H_d$, by the classical integral
+$\int_0^1u^{k-1}\log(1-u)\,du = -H_k/k$. (b) Here $\Sigma(X) = SH$ has eigenvalues
+$n(1+s)^{n-1}$, with multiplicity $d-1$, and $n(1+s)^{n-2}$ (proof of
+Proposition~\ref{prop:kostlandensity}), so the sandwich \eqref{eq:sandwich} gives
+$\log\sigma_{\min}(J) = \log\sigma_{\min}(G) + \frac12\log n
++ \frac{n-1}2\log(1+s) + O(\log(1+s))$, and by (a) the slack has expectation $O(H_d)$;
+the tilt is handled by Corollary~\ref{cor:weighted} exactly as in
+Proposition~\ref{prop:local}, and the integrability check of
+Lemma~\ref{lem:integrability} holds with the $n$-free spatial density. For the
+determinant, $\det\Sigma = n^d(1+s)^{(n-1)d-1}$. (c) Reduction I is model-independent,
+and $\Eroots\log(1+|\lambda|) = O(1)$ since the one-coordinate marginal has an $n$-free
+density with $\P(|x_1|>t) = O(t^{-2})$. Numerical check at $d=1$: the measured
+$\Eroots\log|p'|$ is $10.707,\ 21.008,\ 41.420$ at $n=20,40,80$, against the prediction
+$\frac n2 + \frac12\log n - 1 + \frac{\psi(2)}2 = 10.709,\ 21.056,\ 41.402$, and the
+measured $\E\log(1+|z|^2)$ is $1.001$ against $H_1=1$.
+\endproof
+
+This computation exposes two structural facts. First, there is no outer-root phenomenon
+here in the sense of Section~\ref{sec:outer}: the root measure does not concentrate on a
+torus, so a fixed fraction of the roots carries affine local scales of size
+$(1+s)^{\Theta(n)}$, and the units mismatch, logarithmic in the separate-degree model,
+becomes \emph{linear} in $n$. The affine yardstick and the Kostlan ensemble do not belong
+together: the ensemble is unitarily invariant on projective space, and its natural
+condition numbers are the projective ones of Shub and Smale \cite{shub1993complexity}.
+
+Second, in the scale-free normalization of Remark~\ref{rem:tworeadings} the spatial term
+disappears identically:
+\[
+  \Eroots\log\Bigl[\frac{\sigma_{\min}(J)}{\sqrt{\lambda_\bullet(\Sigma)}}\Bigr]
+  = \EW[\log\sigma_{\min}(G)] + O_d(1),
+\]
+with no $n$-dependence at all, so the entire $n$-dependence of the scale-free Kostlan
+ratio is the overlap term $\Theta_n^{\mathrm{Kos}}$. The Kostlan model is therefore the
+clean laboratory for the overlap question, and running the protocol of
+Section~\ref{sec:protocol} on Kostlan roots is a natural complement to the
+separate-degree runs.
+
+\subsection{The total-degree model: same coefficients, different mechanism}
+\label{sec:totaldegree}
+
+In the total-degree i.i.d.\ model, $p_i = \sum_{|\alpha|\le n}c_{i,\alpha}x^\alpha$ with
+i.i.d.\ $\CN(0,1)$ coefficients, the kernel is $K(x,y) = F(t)$ with $t_l = x_l\bar y_l$
+and $F(t) = \sum_{|\alpha|\le n}t^\alpha$, and $N = n^d$. The simplex Newton polytope
+changes the geometry of the root measure, but not the local coefficients.
+
+\begin{proposition}\label{prop:totaldegree}
+  In the total-degree model, with $s_l := n\log r_l$ and $s_0 := 0$:
+  \begin{enumerate}[(a)]
+    \item uniformly on compacts, $\log F(e^{s/n}) = d\log n + \log\Phi(s) + o(1)$, where
+      \[
+        \Phi(s) = \int_{\Delta_d}e^{\langle\theta,s\rangle}\,d\theta
+        = \sum_{l=0}^d\frac{e^{s_l}}{\prod_{m\ne l}(s_l-s_m)}
+      \]
+      is the exponential divided difference on the nodes $\{0,s_1,\dots,s_d\}$, with
+      $\Phi(0) = 1/d!$;
+    \item the rescaled log-radii of a root converge in law to the Monge--Amp\`ere density
+      \[
+        m_{\mathrm{td}}(s) = d!\,\det D_s^2\log\Phi(s),
+      \]
+      a probability measure: its mass is
+      $d!\Vol\bigl(\nabla\log\Phi(\R^d)\bigr) = d!\Vol(\mathrm{int}\,\Delta_d) = 1$,
+      since $\nabla\log\Phi$ is the moment map of the exponential family with uniform
+      base measure on $\Delta_d$; at $d=1$ it reduces to the density $m$ of
+      Proposition~\ref{prop:rootscale};
+    \item the heavy tail is collective: $\P(\min_ls_l>t) = \frac dt\,(1+o(1))$, while
+      excursions of a single coordinate with the others bounded have probability
+      $O(t^{1-2d})$; the far roots recede radially in all coordinates at once, as the
+      simplex polytope dictates;
+    \item as a result,
+      \begin{gather*}
+        \Eroots\log S = 2d\log n + O_d(1), \qquad
+        \Eroots\log\sigma_{\min}(J) = (d+1)\log n + O_d(1), \\
+        \Eroots\log|\det J| = d(d+1)\log n + O_d(1),
+      \end{gather*}
+      and $\Rcal_n^{\mathrm{td}} = (d+1)\log n + \Theta_n^{\mathrm{td}} + O_d(1)$: the
+      local coefficients coincide with those of the separate-degree model.
+  \end{enumerate}
+\end{proposition}
+
+\proofsketch
+(a) is a Riemann sum:
+$\sum_{\alpha\in n\Delta_d}e^{\langle\alpha,s\rangle/n}
+= n^d\int_{\Delta_d}e^{\langle\theta,s\rangle}d\theta\,(1+o(1))$, and the
+divided-difference evaluation of the simplex integral is classical. For (b), with
+$t_l = e^{s_l/n}$ the diagonal part of
+$H_{jk} = \delta_{jk}\partial_{t_k}\log F + \bar x_jx_k\,\partial_j\partial_k\log F$
+cancels at leading order against the chain-rule correction, leaving
+$H_{jk} = \bar x_jx_k\,n^2(t_jt_k)^{-1}(D_s^2\log\Phi)_{jk}(1+o(1))$, so
+$\det H = n^{2d}\prod_lr_l^{-1}\det D_s^2\log\Phi$, and the intensity of
+Lemma~\ref{lem:intensity} transported to the $s$-variables is
+$d!\det D_s^2\log\Phi$; the mass statement is the moment-map property. For (c), write
+$s = (t+c)\mathbf1 + w$ with $\sum w_l = 0$: since the node $s_0=0$ does not shift,
+$\Phi = \frac{e^{t+c}}{t+c}\,\psi(w)\,(1+O(1/t))$ with $\psi$ the divided difference on
+the nodes $w$ alone, so $\log\Phi$ is affine in the radial direction up to curvature
+$O(t^{-2})$, and the gradient image of $\{\min_ls_l>t\}$ is the slab
+$\{\sum\theta_l>1-1/t\}$ of $\Delta_d$, of volume $\approx\frac d{t\,d!}$; multiplying by
+$d!$ gives the tail $d/t$. The single-coordinate slab carries
+$\det D^2\log\Phi = O(t^{-2d})$ over an $O(1)$ region. For (d),
+$\log S = d\log n + \log\Phi$ and $\log\Phi\approx t$ on the deep tail, so
+$\E[\log\Phi]_+ = \int\P(\log\Phi>t)\,dt = d\log n + O_d(1)$; the $\sigma_{\min}$ and
+determinant averages follow by the sandwich of Proposition~\ref{prop:local}, the
+deep-tail eigenvalue deficit ($\lambda_{\mathrm{rad}}\sim t^{-2}$) integrating to
+$O_d(1)$ against the $d/t$ tail. On the torus the eigenvalues of $H$ are
+$\mu_{\tan} = \frac{n(n+d+1)}{(d+1)(d+2)}$, with multiplicity $d-1$, and
+$\mu_{\mathrm{rad}} = \mu_{\tan}/(d+1)$, so the eccentricity is exactly $d+1$; at $d=1$,
+$\mu = n(n+2)/12$, the Kac value, as it must be. Two steps are at sketch level: the
+uniformity in (a) and the tail-slab computation in (c).
+\endproof
+
+Numerical check at $d=2$, with the usual pipeline on triangular coefficient supports (all
+$n^2$ roots recovered): the fitted slopes of $\E\log S$, $\E\log\sigma_{\min}(J)$,
+$\E\log|\det J|$ over $n\le11$ are $2.6, 2.0, 4.2$ against the asymptotic $4, 3, 6$, with
+successive increments rising ($2.3\to2.9$, $1.8\to2.2$, $3.8\to4.7$), the same
+finite-size attenuation pattern shown by the separate-degree data at equal sizes, where
+the exact finite-$n$ integrals certified the coefficients. The collective-tail diagnostic
+of (c) is clearly visible: the joint exceedance $\P(s_1>1\text{ and }s_2>1)$ exceeds the
+product of the marginals by a stable factor $\approx1.5$, whereas in the separate-degree
+model the one-point intensity factorizes exactly across coordinates.
+
+The three models now span the full picture. Separate degree: torus concentration,
+per-coordinate outer roots, local coefficients $(d+1)\log n$. Total degree: torus
+concentration, collective radial excursions, the \emph{same} coefficients. Kostlan: no
+concentration, linear growth in $n$, projective normalization mandatory. The agreement of
+the two i.i.d.\ models strengthens the reading of Theorem~\ref{thm:main}: the coefficient
+$(d+1)\log n$ is a robust property of torus-concentrated Gaussian ensembles, not an
+artifact of the box supports.

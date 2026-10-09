@@ -1,0 +1,65 @@
+\begin{thebibliography}{10}
+
+\bibitem{azais2009level}
+Jean-Marc Aza{\"i}s and Mario Wschebor.
+\newblock {\em Level Sets and Extrema of Random Processes and Fields}.
+\newblock Wiley, Hoboken, 2009.
+
+\bibitem{beltran2009smale}
+Carlos Beltr{\'a}n and Luis~M. Pardo.
+\newblock Smale's 17th problem: average polynomial time to compute affine and
+  projective solutions.
+\newblock {\em Journal of the American Mathematical Society}, 22(2):363--385,
+  2009.
+
+\bibitem{bernstein1975roots}
+David~N. Bernstein.
+\newblock The number of roots of a system of equations.
+\newblock {\em Functional Analysis and its Applications}, 9:183--185, 1975.
+
+\bibitem{blum1998complexity}
+Lenore Blum, Felipe Cucker, Michael Shub, and Steve Smale.
+\newblock {\em Complexity and Real Computation}.
+\newblock Springer, New York, 1998.
+
+\bibitem{burgisser2011smale}
+Peter B{\"u}rgisser and Felipe Cucker.
+\newblock On a problem posed by {S}teve {S}male.
+\newblock {\em Annals of Mathematics (2)}, 174(3):1785--1836, 2011.
+
+\bibitem{burgisser2013condition}
+Peter B{\"u}rgisser and Felipe Cucker.
+\newblock {\em Condition: The Geometry of Numerical Algorithms}, volume 349 of
+  {\em Grundlehren der mathematischen Wissenschaften}.
+\newblock Springer, Berlin, 2013.
+
+\bibitem{graf2026numerical}
+Emil Graf and Alex Townsend.
+\newblock Numerical instability of algebraic rootfinders.
+\newblock {\em Linear Algebra and its Applications}, 729:308--336, 2026.
+
+\bibitem{lairez2017deterministic}
+Pierre Lairez.
+\newblock A deterministic algorithm to compute approximate roots of polynomial
+  systems in polynomial average time.
+\newblock {\em Foundations of Computational Mathematics}, 17(5):1265--1292,
+  2017.
+
+\bibitem{noferini2016numerical}
+Vanni Noferini and Alex Townsend.
+\newblock Numerical instability of resultant methods for multidimensional
+  rootfinding.
+\newblock {\em SIAM Journal on Numerical Analysis}, 54(2):719--743, 2016.
+
+\bibitem{shub1993complexity}
+Michael Shub and Stephen Smale.
+\newblock Complexity of {B}\'ezout's theorem {II}: volumes and probabilities.
+\newblock In {\em Computational Algebraic Geometry}, volume 109 of {\em
+  Progress in Mathematics}, pages 267--285. Birkh\"auser, 1993.
+
+\bibitem{wilkinson1984perfidious}
+James~H Wilkinson.
+\newblock The perfidious polynomial.
+\newblock {\em Studies in numerical analysis}, 24:1--28, 1984.
+
+\end{thebibliography}

@@ -1,0 +1,168 @@
+\section{The local terms}\label{sec:local}
+
+Throughout, $\Eroots[\varphi] := \frac1N\E\sum_j\varphi(z_j)$, always computed via
+Lemma~\ref{lem:rice}.
+
+\subsection{Where the roots are: the scale $1/n$}
+
+\begin{proposition}\label{prop:rootscale}
+  Let $s := n\log r_l$ be the rescaled log-radius of one coordinate of a root. The
+  per-coordinate, per-root density of $s$ converges as $n\to\infty$, uniformly on compact
+  sets and with relative error $O((|s|+1)/n)$ for $1\le|s|\le\delta n$, to
+  \[
+    m(s) := \frac1{s^2} - \frac{e^s}{(e^s-1)^2}, \qquad s\in\R,
+  \]
+  which is even, has total mass $1$, and satisfies $m(0)=\frac1{12}$.
+\end{proposition}
+
+\proof
+Substituting $r=e^{s/n}$ into Lemma~\ref{lem:h}(a) gives, for $|s|\ge1$,
+$(1-r)^{-2} = n^2s^{-2}(1+O(s/n))$ and
+$(n+1)^2r^n(1-r^{n+1})^{-2} = n^2e^s(e^s-1)^{-2}(1+O((|s|+1)/n))$. Near $s=0$ the two
+singular parts nearly cancel and the term-by-term argument degrades; there one uses instead
+that both $h(e^{s/n})/n^2$ and $m$ are real-analytic with derivatives bounded uniformly in
+$n$ on compacts, and that they match at $s=0$ to relative order $1/n$ by
+Lemma~\ref{lem:h}(b). Evenness is Lemma~\ref{lem:h}(d). An antiderivative of $m$ is
+$-1/s + (e^s-1)^{-1}$, which is continuous at $0$ and shows the total mass is $1$; expanding
+$e^s(e^s-1)^{-2} = s^{-2} - \frac1{12} + O(s^2)$ gives $m(0)=\frac1{12}$, consistent with
+$h(1) = n^2m(0)(1+O(1/n))$.
+\endproof
+
+\subsection{The outer-root phenomenon}\label{sec:outer}
+
+The tail $m(s)\sim s^{-2}$ is heavy: the expected number of roots with $r_l>1+\delta$ is of
+order $N/(\delta n)$ for $1/n\ll\delta\ll1$. These few roots dominate several averages.
+
+\begin{proposition}\label{prop:outer}
+  As $n\to\infty$ with $d$ fixed, per coordinate $l$:
+  \begin{align}
+    \Eroots[\log k_n(r_l)] &= 2\log n + O(1), \label{eq:logk}\\
+    \Eroots[\log h(r_l)] &= 2\log n + \int_\R m\log m\,ds + o(1), \label{eq:logh}
+  \end{align}
+  with the integral in \eqref{eq:logh} finite. The naive evaluation of \eqref{eq:logk} on the
+  torus gives $\log(n+1)$: it is wrong by a factor of $2$ at leading order.
+\end{proposition}
+
+\proof
+\eqref{eq:logh}: on the window $|s|\le\delta n$,
+$\log h = 2\log n + \log m(s) + O((|s|+1)/n)$ and $\int m|\log m|<\infty$; outside, the mass
+is $O(1/(\delta n))$ and $|\log h| = O(\log n)$ there, so the error is $o(1)$.
+
+\eqref{eq:logk}: for $r=e^{s/n}$ with $1\ll s\le\delta n$,
+\[
+  \log k_n(r) = s + \log\frac ns + O(1),
+\]
+that is, the vector of monomial values is exponentially large in $s$ just outside the torus.
+Integrating,
+\[
+  \int_{-\delta n}^{\delta n} m(s)\Bigl[\log n + \log\frac{e^s-1}s\Bigr]ds
+  = \log n + \int_1^{\delta n}\frac{s+O(\log s)}{s^2}\,ds + O(1) = 2\log n + O(1),
+\]
+since $\int_1^{\delta n}s^{-1}ds = \log n + O(1)$. The region $|r-1|>c$ contributes $O(1)$:
+there $h(r)\le(r-1)^{-2}$ for $r>1$, $\log k_n(r)\le(n+1)\log_+r+O(1)$, and
+$\frac1n\int_c^\infty(r-1)^{-2}\,n\log r\,dr = O(1)$, while for $r<1-c$ the integrand is
+bounded by $O(\log n)$ on mass $O(1/n)$. The matching lower bound is the same computation on
+$s\in[1,\delta n]$.
+\endproof
+
+\begin{corollary}\label{cor:logkm}
+  Let $a$ be a fixed positive integer and $m := an-1$. Then, for every coordinate $l$,
+  \[
+    \Eroots\bigl[\log k_m(r_l)\bigr] = (1+a)\log n + O_a(1).
+  \]
+\end{corollary}
+
+\proof
+The computation behind \eqref{eq:logk} repeats with one change: since $m+1=an$, on the window
+one has, exactly in the exponent,
+$\log k_m(e^{s/n}) = \log\bigl((e^{as}-1)/(e^{s/n}-1)\bigr)
+= \log n + \log\frac{e^{as}-1}s + O(\frac{1+|s|}n)$, and the positive tail contributes
+$\int_1^{\delta n}as\,m(s)\,ds = a\log n + O_a(1)$. The region $|r-1|>c$ contributes $O(a)$
+by the same bounds, with $\log k_m(r)\le an\log_+r + O(1)$.
+\endproof
+
+\begin{remark}\label{rem:outer}
+  Half of the roots lie outside the torus, at rescaled distances with tail
+  $\P(s>t)\approx1/t$ up to $t\approx n$. A root at $s$ has all its local scales of size
+  $e^{\Theta(s)}$, and the average of such an exponent against a $1/t$ tail truncated at $n$
+  is $\log n$. The exact symmetry of Lemma~\ref{lem:h}(d) does not cancel this: at the mirror
+  root inside the disk, the local scales are only polynomially small, so the contribution is
+  one-sided. In the assembled ratio there are cancellations between factors at each outer
+  root (the dual vector in $\Lambda_j$ is exponentially small there, see
+  Remark~\ref{rem:dualvector}), which is why all terms must be computed to the same accuracy
+  and none replaced by its torus value.
+\end{remark}
+
+\subsection{Computation of $A_n$ and $C_n$}
+
+\begin{proposition}\label{prop:local}
+  Let $A_n := \Eroots[\log\sigma_{\min}(J)]$ and $C_n := \Eroots[\log(1+|\lambda|)]$ with
+  $\lambda=(z)_1$. For fixed $d$ and $n\to\infty$,
+  \[
+    A_n = (d+1)\log n + O(d), \qquad C_n = \log2 + o(1).
+  \]
+  Specifically,
+  \[
+    A_n = \tfrac12\sum_{l=1}^d\Eroots[\log k_n(r_l)] + \tfrac12\Eroots[\log h_\bullet]
+    + \EW[\log\sigma_{\min}(G)] + o(1),
+  \]
+  where $h_\bullet$ lies between $\min_lh(r_l)$ and $\max_lh(r_l)$; the three terms are
+  $d\log n+O(d)$, $\log n+O(\log d)$, and $-\frac12\log d+O(1)$.
+\end{proposition}
+
+\proof
+By Lemmas~\ref{lem:rice}, \ref{lem:jacobian}, \ref{lem:h}(c) and \eqref{eq:sandwich},
+$\log\sigma_{\min}(J) = \log\sigma_{\min}(G) + \frac12\log S + \frac12\log h_\bullet$.
+Conditionally on the root location, $G$ carries the weight $|\det G|^2$; the
+location-dependent factor $\det\Sigma$ cancels between the weight and the normalization, so
+Corollary~\ref{cor:weighted}(b) applies unchanged. The term $\frac12\Eroots[\log S]$ equals
+$\frac12\sum_l\Eroots[\log k_n(r_l)] = d\log n + O(d)$ by \eqref{eq:logk}. For the middle
+term, \eqref{eq:logh} gives $\log n + O(1)$ per coordinate, and the spread satisfies
+$\frac12\E[\log(h_{\max}/h_{\min})] = O(\E\log_+\max_l|s_l|) = O(\log d)$, because each
+$|s_l|$ has the tail of Proposition~\ref{prop:rootscale} and
+$\E[\log_+\max_l|s_l|]\le\log(2d)+1$ by a union bound. For $C_n$: on the window,
+$\log(1+|z_1|) = \log2 + \frac{s_1}{4n} + O(s_1^2/n^2)$, and
+$\int_1^{\delta n}\frac s{4n}\,m(s)\,ds = O(\frac{\log n}n)$; the region $|r-1|>c$
+contributes $O(1/n)$ by the same bounds as above. Hence $C_n = \log2 + O(\log n/n)$.
+\endproof
+
+\begin{remark}\label{rem:d1check}
+  Consistency check at $d=1$, where $\sigma_{\min}(J) = |p'(z_j)|$.
+  Proposition~\ref{prop:local} asserts $\Eroots\log|p'(z_j)| = 2\log n + O(1)$: the on-torus
+  conditional standard deviation is
+  $\sqrt{Sh} = \sqrt{(n+1)n(n+2)/12}\approx n^{3/2}$, giving $\frac32\log n$, and the outer
+  roots add $\frac12\log n$, since at the $j$-th outermost root $|p'|\approx ne^{nu_j}$ with
+  $u_j\approx1/(2j)$ and $\frac1n\sum_{j\le n/2}nu_j\approx\frac12\log n$. Equivalently, the
+  expected log-discriminant of a Kac polynomial is $2n\log n\,(1+o(1))$. Note that the
+  equally-spaced heuristic $|p'(z_j)|\approx n$, valid for roots of unity, is off by a full
+  power of $n$.
+\end{remark}
+
+The per-coordinate constant is in fact available in closed form.
+
+\begin{proposition}\label{prop:closedform}
+  $\Eroots\bigl[\log k_n(r_l)\bigr] = 2\log n + 1 + 2\gamma - 2\log2\pi + o(1)
+  = 2\log n - 1.52132\dots$
+\end{proposition}
+
+\proof
+Split at $|s|=A$ with $\log n\ll A\ll n$, $s=n\log r$. On the window,
+$\log k_n(e^{s/n}) = \log n + g(s) + O(A/n)$ with the unified formula
+$g(s) = s_+ + \log(1-e^{-|s|}) - \log|s|$, and the window density converges to the even
+density $m(s) = s^{-2} - e^s(e^s-1)^{-2}$; hence the window contributes
+$\log n + [\log A + C_m] + 2(F-D) + o(1)$, where
+$C_m := \lim_A\bigl[\int_0^A s\,m\,ds - \log A\bigr]$, $D := \int_0^\infty m\log s\,ds$,
+$F := \int_0^\infty m\log(1-e^{-s})\,ds$. In the outer region $r>e^{A/n}$ the density is
+$(1+o(1))(r-1)^{-2}dr/n$ and $\log k_n = (n+1)\log r - \log(r-1) + o(1)$; the exact
+primitive $\int\log r\,(r-1)^{-2}dr = -\frac{\log r}{r-1} + \log\frac{r-1}r$ gives the
+contribution $1 + \log n - \log A + o(1)$, while the region $r<e^{-A/n}$ contributes $o(1)$.
+The three integrals evaluate to $C_m = -1$, $D = \frac12(\log2\pi-\gamma)$, a Binet-type
+integral, and $F = \frac12 - D$; these evaluations were certified numerically to eighteen
+digits, and the resulting constant $1 + C_m + 2F - 2D = 1 + 2\gamma - 2\log2\pi$ agrees to
+all computed digits with the direct extrapolation of the finite-$n$ quadratures ($-1.52133$
+from $n\le800$).
+\endproof
+
+Section~\ref{sec:verification} shows that the finite-$n$ integrals reproduce the
+measurements. Joint asymptotics in $(n,d)$ would require the remaining $O_d(1)$ constants
+uniform in $d$.

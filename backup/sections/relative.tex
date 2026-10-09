@@ -1,0 +1,93 @@
+\section{The relative picture, and why it is the right one}\label{sec:relative}
+
+Everything computed so far lives in the absolute metric of
+\cite{graf2026numerical,noferini2016numerical}, and deliberately so: it is the metric in
+which the Gaussian calculus is exact, every average is an identity or a quadrature, and
+the machinery of Sections~\ref{sec:jacobian}--\ref{sec:structural} applies without
+normalizing anything. But it is not the metric in which conclusions should be drawn.
+Floating-point arithmetic commits \emph{relative} errors; backward-stable eigensolvers
+return backward errors relative to the norm of the data; and the relative condition
+number is invariant under the rescalings of data and unknowns that every implementation
+performs, while the absolute one is not. In Gaussian ensembles this is not a pedantic
+distinction: the hidden scales are enormous and root-dependent, as the outer-root and
+units effects documented throughout this paper show, so absolute comparisons
+systematically conflate genuine sensitivity with the bookkeeping of scales. The absolute
+metric is the right vehicle for the computation; the relative metric is the right lens
+for the verdict. This section converts the entire scoreboard.
+
+Following \cite[Sec.~5]{noferini2016numerical},
+$\kappa_{\mathrm{rel}} = \kappa_{\mathrm{abs}}\cdot\|D\|/\|X\|$ with $D$ the data of the
+subproblem and $X$ its solution, so for every method
+\[
+  \what\Rcal_M := \frac1N\,\E\sum_j\log
+  \frac{\kappa_{\mathrm{rel}}(M)}{\kappa_{\mathrm{rel,root}}}
+  = \Rcal_M + \E\log\|D_M\| - \E\log\max_i\sup_\Omega|p_i| + O(1),
+\]
+the output scales contributing $O(1)$ in these models, and the baseline being
+$\E\log\max_i\sup_\Omega|p_i| = \frac d2\log n + O(\log dn)$.
+
+\begin{proposition}[relative scoreboard]\label{prop:scoreboard}
+  In the separate-degree model, with the pairwise and local entries at $d=2$:
+  \begin{enumerate}[(a)]
+    \item Cayley: $\what\Rcal = O_d(\log\log n)$ for every $d$, by
+      Proposition~\ref{prop:opnorm}: relative neutrality, the clean case.
+    \item Sylvester: $\what\Rcal = \frac12\log n + O(\log\log n)$: the data scale
+      $\sup_x\|S(x)\|_2$ coincides with $\sup|p|$ up to the Toeplitz-symbol log factors,
+      so the relative and absolute coefficients agree.
+    \item Multiparameter (\textsc{MinUnif}): $\what\Rcal = \frac{13}2\log n + O(1)$, the
+      data norm contributing $\frac12\log n$ through the coefficient block.
+    \item Normal form:
+      $\what\Rcal = (\frac d2+1)\log n + \E\log\|M_g(\B)\| + O(1)$, basis-dependent
+      through the norm of the multiplication matrix; measured,
+      $\E\log\|M_g\|\approx\frac12\log N$ for the companion matrix at $d=1$ and
+      $\approx2\log n$ for the B\'ezout pencil at $d=2$, giving $\approx2\log n$ and
+      $\approx4\log n$ respectively.
+    \item Gr\"obner elimination: $\what\Rcal = -n(\log n+C)(1+o(1))$: only \emph{half}
+      of the pair energy cancels against $\E\log\|f\|$, because the coefficient norm of
+      the eliminant sees one radial tail, $\sum_i\E\log\max(1,|x_i|)$, where the
+      root-averaged potential sees two; measured,
+      $\log\|f\|/\mathrm{PE} = 0.65, 0.64, 0.62$ at $n=6,8,11$, trending to $\frac12$.
+    \item Rational univariate representation: $\what\Rcal = \delta\,N\,(1+o(1))$ with,
+      in the balanced case,
+      \[
+        \delta = \frac G\pi + \frac{\log2}4 - \frac{7\,\zeta(3)}{2\pi^2}
+        = 0.03857\ldots > 0,
+      \]
+      $G$ Catalan's constant: the unique exponential penalty of the family.
+  \end{enumerate}
+\end{proposition}
+
+\proofsketch
+(a) is Proposition~\ref{prop:opnorm} with the conversion formula. (b), (c), (d) insert
+the data scales computed or measured above; for (d) note that $\|M_g(\B)\|$ is a
+property of the chosen basis, not of the quotient. For (e), $\E\log\|f\|$ per root is
+the circle average of the potential of the coordinate marginal,
+$\E\log\max(1,|x|) = \frac1{2n}(\log n+C')(1+o(1))$, a single-tail quantity, while the
+pair energy is the root average of the same potential, a two-tail quantity twice as
+large; the difference is $-n(\log n+C)$ at leading order. For (f), the same comparison
+for the projected marginal is a contest of constants: the circle potential of the limit
+law $W$ is
+$c' = \E[\log_+|W|] = \frac1{2\pi}\int_{-\pi/2}^{\pi/2}\log(1+\cos\theta)\,d\theta
+= \frac G\pi - \frac{\log2}4$, by the classical evaluation
+$\int_0^{\pi/2}\log(1+\cos\theta)\,d\theta = 2G - \frac\pi2\log2$, while the pair energy
+constant is $I(u) = \frac{7\zeta(3)}{2\pi^2} - \frac{\log2}2$
+(Proposition~\ref{prop:rur}); $\delta = c' - I(u)$. Measured,
+$(\log\|f\| - \mathrm{PE})/N = -0.073, -0.052, -0.029$ at $n=6,8,11$, rising toward
+$\delta$ with the explicit $(\log n)/n$ outer transient common to both terms.
+\endproof
+
+The relative verdict is sharper than the absolute one, and closer to practical folklore.
+The resultant methods are benign: Cayley exactly neutral, Sylvester polynomially
+penalized, and the exponential worst cases of \cite{noferini2016numerical} are tail
+events in both metrics. The normal form pays a polynomial factor that depends on the
+basis through $\|M_g\|$, one more reason the basis is not a detail. Elimination remains
+distorted by units even relatively, now through the mismatch between the unit circle,
+where the coefficient norm of the eliminant is measured, and the region where its roots
+actually live. And the rational univariate representation is the one method the relative
+metric convicts: its projected root measure fails to be an equilibrium measure of the
+circle, its potential is not constant, and the resulting $e^{\delta N}$ average penalty
+is exactly the clustering mechanism of the devastating example of
+\cite[Sec.~4]{graf2026numerical} surviving into the average case, in the metric where it
+belongs. The practical reading: project only if you must, and if you must, the constant
+$\delta(u)$ is a design objective, minimized by making the projected measure as close to
+equilibrium as the geometry allows.

@@ -1,0 +1,300 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{mathtools}
+
+\usepackage{amsmath, amssymb,latexsym}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{fullpage}
+
+\usepackage{hyperref}
+
+\def\ans{\textcolor{red}{$\diamondsuit$\ }}
+
+%\def\TeXHOME{../..}
+%\input \TeXHOME/defnAMS.tex
+
+\def\dfn{\stackrel {{\mbox{\scriptsize\rm{def}}}}{=}}
+\def\wtd{\widetilde}
+\def\what{\widehat}
+\def\ue{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily u.e.}}}{\sim}}}
+\def\se{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily s.e.}}}{\sim}}}
+\def\Lpk{\mathcal{L}_{p_k}}
+%\def\F{\mbox{\scriptsize \rm F}}
+%\def\T{\mbox{\scriptsize \rm T}}
+
+\def\F{\mathbb{F}}
+\def\G{\mathbb{G}}
+\def\K{\mathbb{K}}
+\def\H{\mathbb{H}}
+\def\E{\mathbb{E}}
+\def\P{\mathbb{P}}
+\def\C{\mathbb{C}}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+
+
+% Added by Etna you can ask me to remove
+\def\Ei{\mathrm{Ei}}
+\def\B{\mathcal{B}}
+\def\kap{\kappa}
+\def\cayleyM{R_{\mathrm{Cayley}}}
+\def\sylvM{R_{\mathrm{Sylv}}}
+\def\xx{\mathbf{x}}
+\def\cc{\mathbf{c}}
+\def\xu{\underline{\xx}}
+\def\cu{\underline{\cc}}
+
+\usepackage{subcaption}
+
+
+
+\definecolor{brilliantrose}{rgb}{1.0, 0.33, 0.64}
+\definecolor{myviolet}{rgb}{0.21, 0.0, 0.85}
+\definecolor{amethyst}{rgb}{0.6, 0.4, 0.8}
+\definecolor{carrotorange}{rgb}{0.93, 0.57, 0.13}
+\newenvironment{vn}{\begin{quote}\color{myviolet} \small\sf VN $\diamondsuit$~}{\end{quote}}
+\newenvironment{el}{\begin{quote}\color{amethyst} \small\sf EL $\spadesuit$~}{\end{quote}}
+\newenvironment{ml}{\begin{quote}\color{carrotorange} \small\sf ML $\clubsuit$~}{\end{quote}}
+
+\def\bone{\boldsymbol{1}}
+
+\def\proof{\par{\it Proof}. \ignorespaces}
+
+\def\endproof{\vbox{\hrule height0.6pt\hbox{%
+   \vrule height1.3ex width0.6pt\hskip0.8ex
+   \vrule width0.6pt}\hrule height0.6pt
+  }}
+
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\eig}{eig}
+\DeclareMathOperator{\Rev}{Rev}
+\DeclareMathOperator{\cwRev}{cwRev}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\grade}{grade}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\cond}{cond}
+\DeclareMathOperator{\rev}{rev}
+\DeclareMathOperator{\tr}{trace}
+\DeclareMathOperator{\fchar}{char}
+\DeclareMathOperator{\mvec}{vec}
+\DeclareMathOperator{\unvec}{unvec}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{conjecture}{Conjecture}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{remark}{{\sc Remark}}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{problem}{Problem}[section]
+\newtheorem{claim}{Claim}[section]
+
+
+\def\sss{\scriptstyle}
+\title{Random polynomial systems and stability of resultant methods}
+\author{Etna Lindy, Martin Lotz, Vanni Noferini}
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+
+
+\begin{itemize}
+    \item In Nof-Town for Cayley resultant for $n$ variables
+    \[ \kap (x^*_d, \cayleyM) = \frac{\|V\|_2 \|W\|_2}{\det(J(x^*))} \geq \frac{1}{\det(J(x^*))}  \]
+    where $V$ and $W$ can be constructed by evaluating the basis polynomials at the root $x^*$. 
+    Any system with Jacobian having small singular values is enough to construct an unstable example, even with relative conditioning (product of largest singular values).
+    \begin{itemize}
+        \item May tackle this by reasoning that certain random systems are likely to have nice enough Jacobians? 
+        \item Challenges; how the eigenvectors behave, what is the distribution of the Jacobian
+    \end{itemize}
+    
+
+    \item In Nof-Town Sylvester matrix in 2D
+    \[ \kap (x_d^*, \sylvM) \geq \frac{\|W\|_2}{\det(J(x^*))}. \]
+    There are examples where $\|W\|_2 \geq 1$, and so the same kind of instability appears here.
+    The example system given is (for $u > 0$)
+    \[ x^ny^n + \sqrt{u} x = \alpha_{n-1}^{-1}(x^n + y^n) + \sqrt{u} y = 0\]
+    with a root at origin. 
+
+
+    \item In Graf-Town Normal-Form methods are given a bound
+    \[ \kap (x_i^*) = \frac{\|[\det Q]_\B \|_2 \|\B(x^*)\|_2 }{|\det(J(x^*))|}(1+|x_i^*|)\]
+    where $Q$ is a matrix that satisfies $P(x) = Q(x) (x-x^*)$ and $\B$ is a basis for the quotient of the vanishing ideal of the system.
+    If we assume that the enumerator is equal to one this again reduces to the value of the Jacobian at origin.
+    \begin{itemize}
+        \item What if the enumerator is not equal to one? How to approximate the effect of it?
+        \item They give a badly behaving example $x_i^2 + \sigma x_{i+1} = 0$ for all $i \in [d-1]$, where the conditioning at the origin is $\sigma^{-d}$.
+    \end{itemize}
+
+    \item Gröbner bases are exponentially ill-conditioned, eg. with example $x_i^2 - \sigma x_{i+1} = 0$.
+    \begin{itemize}
+        \item How about random systems? Can we say {\it anything} about them?
+    \end{itemize}
+    
+\end{itemize}
+
+We consider the quantity $\|J^{-1}\|_2| \det J(x^*) | = \prod_{i=1}^{n-1} \sigma_i(J)$ as an indicator of accuracy.
+First we consider the Gaussian case with a root at zero.
+What else can we do?
+
+
+Behavior of the eigenvectors; what kind of values are to be expected from the roots? Generalization of the distribution of the roots for the $n$-dimensional case.
+
+\subsection{What we can do for now}
+
+
+
+
+\begin{claim}\label{res:boundsingvals}
+    Let $G$ be a random $n\times n$ matrix with independent Gaussian entries.
+    Let the random variable $T$ be the product of the $n-1$ largest singular values of $G$, that is $T = \prod_{i=1}^{n-1} \sigma_i(G)$.
+    The expected value of $T$ is bounded below by
+    \[ \E[T] \geq C^{n-1} \prod_{i=2}^{n} \frac{\Gamma(i+\frac12)}{\Gamma(i)} \sim \sqrt{d!}, \]
+    where $C$ is a constant depending on the variance of the entries of $G$.
+\end{claim}
+\begin{proof}
+    Consider an orthogonal projection matrix $P$ to a space of dimension $n-1$. Now the matrix $PG$ 
+\end{proof}
+
+
+
+
+
+
+
+\begin{example}[Root at zero]
+    We consider the roots of the following polynomial system
+    \[ \mathrm{diag}(x^2) + Gx = 0, \]
+    where $G$ is a matrix with independent Gaussian entries. 
+    This system has a root at zero, and Jacobian that is equal to $G$ at the origin.
+    The root at origin is nice to inspect, as in that case the left and right eigenvectors are equal to 1 for the Cayley resultant.
+    For normal form methods, the left eigenvector is [WHAT].
+    The conditioning of the problem associates to the of $n-1$ largest singular values of the Jacobian.
+    Since the Jacobian can here is a Gaussian random matrix, by Claim\ref{res:boundsingvals} we have for Cayley resultant
+    \[ \E[\kap(\lambda_i)] \leq C^{d-1}\frac{1}{\sqrt{d!}}(1+|\lambda_i|), \] 
+    and for normal form methods
+    \[ \E[\kap(\lambda_i)] \leq \frac{\|[\det Q]_\B\|_2}{\sqrt{d!}}(1+|\lambda_i|). \]
+    How about Macaylay resultant?
+    \begin{el}
+        Fix this (not formal since using the $\sim$ version)
+    \end{el}
+\end{example}
+
+
+
+
+
+\subsection{Marginal distribution of the roots as degree increases}
+
+
+\begin{theorem}[Theorem 1.2 in \cite{barbarino2022limit}]\label{thm:logpot}
+    Let $a_i$ be a sequence of independent random complex variables, with mean $0$ and variance $1$, and with uniformly bounded (but not necessarily identical) distributions. Let $p_k(x)=\sum_{i=0}^k \alpha_{i,k} a_i x^i$, where $\alpha_{i,k}$ is a sequence of complex numbers with $\alpha_{k,k} \neq 0$ for all $k$. Then, when $k \longrightarrow \infty$, $\mu_k(\omega)$ converges almost surely to the deterministic measure $\mu$ satisfying (in the sense of distributions)
+    \[  \Delta_z U(z) = 2 \pi \mu   \]
+    where $\Delta_z$ is the Laplacian and the logarithmic potential is
+    \begin{equation}\label{eq:logpot}
+        U(z) = \lim_{k \rightarrow \infty} \frac{1}{2k} \log \sum_{i=0}^k \frac{|\alpha_{i,k}|^2}{|\alpha_{k,k}|^2} |z|^{2i}.  
+    \end{equation}  
+\end{theorem}
+
+
+
+
+
+
+
+\begin{corollary}
+    Let $P(x_1,\dots,x_n) = 0$ be a random polynomial system of degree $d$ with independent coefficients each having mean zero and variance one. Let $\mathcal{R} = \{r \in \C^n \mid r = (r_1,\dots,r_n) \}$ be the set of roots of the system and consider the associated indicator functions $\mu_d^i = \sum_{r \in \mathcal{R}} \delta(r_i)$.
+    As the degree of the polynomial system $P$ goes to infinity, the limit $\lim_{d\to \infty} \mu_d^i = \mu^i$ is the uniform distribution on $S = \{ x \in \C \mid |x| = 1 \}$.
+\end{corollary}
+
+
+
+\begin{proof}
+ Let $\cc \in \N^{n}$ and denote $\xx^\cc = \prod_{i=1}^n x_i^{c_i}$ and $|\cc| = \sum_{i=1}^n c_i$. For the last $n-1$ coordinates denote $\cu = (c_2,\dots,c_n)$ and $\xu = (x_2,\dots,x_n)$. With $|\xx|$ we mean the pointwise modulus.
+    We start by conditioning by the variables $x_2,\dots,x_n$, giving us a set of univariate polynomials in $x_1$
+    \[ P_j(x_1) = \sum_{|\cc| \leq d} \alpha_{\cc}^j \xx^\cc = \sum_{k = 0}^d x_1^{k} \sum_{|\cu| \leq d-k} \alpha_{\cc}^j \xu^{\cu}, ~j \in [d], \]
+    where the $k$th coefficient has variance $\sum_{|\cu| \leq d-k} |\xu|^{2\cu}$. Specifically, the variance of the degree $d$ term is 1.
+    We may now write $U(z)$ in \eqref{eq:logpot} as
+    \begin{align*}
+        U(z) = \lim_{d\to\infty} \frac{1}{2d} \log \left( \sum_{k=0}^d  \sum_{|\cu| \leq d-k} |\xu|^{2\cu}  |z|^{2k} \right).
+    \end{align*}
+    Letting $|x_*| = \max_{i} |x_i|$, we get
+    \begin{align*}
+        U(z) &= \lim_{d\to \infty} ~\frac{1}{2d}\left[ \log(|x_*|^{2d}) + \log \left( \sum_{k=0}^d \sum_{|\cu| \leq d-k} \frac{|\xu|^{2\cu}}{|x_*|^{2d}}  |z|^{2k} \right) \right] \\
+        &=  \log(|x_*|) + \lim_{d\to \infty}\frac{1}{2d} \log \left( \sum_{|\cc| \leq d} \frac{1}{|x_*|^{2(d-|\cc|)}} \frac{|z|^{2c_1}}{|x_*|^{2c_1}} \frac{|\xu|^{2\cu}}{|x_*|^{2|\cu|}} \right) \geq \log(|x_*|).
+    \end{align*}
+    The last inequality follows from the second term being nonnegative; the sum inside the logarithm is always at least $1$. 
+    We may construct a similar bound by extracting $|z|^{2k}$ from the sum, and hence $U(z) \geq \max(\log(|x_*|),\log(|z|))$.
+    On the other hand, we have the following upper bound:
+    \begin{align*} 
+    \lim_{d\to \infty} ~&\frac{1}{2d} \log \left(\sum_{|\cc|\leq d} |z|^{2c_1} |\xu|^{2\cu} \right) \leq \lim_{d\to \infty} \frac{1}{2d} \log \left( \sum_{|c|\leq d} |z|^{2c_1}|x_*|^{2|\cu|} \right) \\
+    &\leq \lim_{d\to \infty} \frac{1}{2d} \log \left( (n+d)^d \sum_{i+j \leq d} |z|^{2i} |x_*|^{2j} \right) \\
+    &= \lim_{d\to \infty} \stackrel{\to 0}{\frac{1}{2d} \log \left( (n+d)^d \right)} + \frac{1}{2d} \log \left( \sum_{i+j \leq d} |z|^{2i} |x_*|^{2j} \right) \\
+    &\leq \lim_{d\to \infty} \frac{1}{2d}\log \left( \sum_{i+j \leq d} \max (|z|, |x_*|)^{2(i+j)} \right) \\
+    &=\max( \log (|z|), \log(|x_*|)).
+    \end{align*}
+    Hence $U(z) = \max(\log(|x_*|), \log(|z|))$, and the conditional distribution of $x_1$ is the uniform distribution on $S_{\max |x_i|}$.
+
+    This means, that $\Pr(|x_1| \geq |x_j|) = 1$ for all $j \in [d]$;
+    \begin{align*}
+       \Pr(|x_1|\geq |x_j|) = \int_0^\infty \stackrel{= 1}{\Pr(|x_1| \geq r \mid |x_j| = r)} \Pr(|x_j| = r) dr = 1. 
+    \end{align*}
+    Applying this for all pairs of indices $i,j \in [d]$, we have $|x_i| = |x_j|$ almost surely.
+    
+
+    Now define $r_i = x_i/x_1$ to write
+    \begin{align*}
+        \sum_{|c| \leq k} \alpha_c x^c =  \sum_{|c| \leq k} \alpha_c x_1^{|c|} \prod_{i=2}^k r_i^{c_i}.
+    \end{align*}
+    Let the marginal distribution of the roots with respect to the first coordinate be $f_k(x_1)$, and $g_k(|r|)$ be the joint distribution of $|r| = (|r_i|)_{i=2}^n \in \R^{n-1}$ at the roots. Then
+    \begin{align*}
+        \lim_{k\to \infty} f_k(x_1) &= \lim_{k\to \infty} \int_0^\infty f_k(x_1 \mid |r_i| = t_i) g_k( t) dt \\ 
+        &\stackrel{(*)}{=} \int_0^\infty \lim_{k\to \infty}  f_k(x_1 \mid |r_i| = t_i) \Pr(|r_i| = t_i) dt,
+    \end{align*}
+    where $\lim_{k\to \infty} \Pr(|r_i| = t_i) = \delta_{\mathbf{1}}(t)$ and $\lim_{k\to \infty} f_k(x_1 \mid |r_i| = t) \to S^{c(t)} (**)$ almost surely. 
+     
+\end{proof}
+
+This gives us a reason to assume that the roots are somewhat close to the unit circle.
+This is relevant for the computation of the eigenvectors around the zeros.
+\begin{el}
+    In most applications the roots are not in the unit circle so how is this reasonable?
+    In the systems we consider maybe...
+    but does this just mean that the systems we consider are meaningless to begin with?
+\end{el}
+
+
+\begin{claim}
+    There exists some bounds for finite degree as well?
+\end{claim}
+
+
+\subsection{Pending questions}
+
+\begin{itemize}
+    \item  What can we do when the root is not at the origin? Then the entries of the Jacobian are no longer independent, so one needs to find methods to tackle that.
+    Can we say something about the correlation?
+    What kind of results exist already in literature?
+
+    \item What kind of systems can we consider? Are we able to cover all the "devastating examples" somehow?
+\end{itemize}
+
+
+\bibliographystyle{plain}
+\bibliography{sample}
+
+\end{document}

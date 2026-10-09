@@ -1,0 +1,53 @@
+\section{Reduction I: what the normal-form condition number is}\label{sec:reduction1}
+
+\begin{theorem}\label{thm:reduction1}
+  Almost surely, for every root $z_j$ and every matrix polynomial $Q$ with
+  $P(x)=Q(x)(x-z_j)$,
+  \[
+    [\det Q] = \det J(z_j)\,[\ell_j] \qquad \text{in } R/I.
+  \]
+  In particular $\|[\det Q]_\B\|_2 = |\det J(z_j)|\,\|V^{-T}e_j\|_2$, for every choice of $Q$.
+\end{theorem}
+
+\proof
+At a root $z_k\ne z_j$: $Q(z_k)(z_k-z_j) = P(z_k) = 0$ and $z_k-z_j\ne0$, so
+$\det Q(z_k)=0$. At $z_j$: differentiating $P(x)=Q(x)(x-z_j)$ and evaluating at $z_j$ kills
+the term containing $(x-z_j)$ and gives $J(z_j)=Q(z_j)$, so $\det Q(z_j)=\det J(z_j)$. The
+polynomial $\det Q - \det J(z_j)\,\ell_j$ vanishes at all $N$ roots of the radical
+zero-dimensional ideal $I$, hence lies in $I$.
+\endproof
+
+\begin{corollary}\label{cor:wilkinson}
+  With $\Lambda_j := \|V^{-T}e_j\|_2\,\|Ve_j\|_2$,
+  \[
+    \keig(z_j) = \Lambda_j\,(1+|\lambda_j|), \qquad \Lambda_j\ge1, \qquad
+    \frac{\keig(z_j)}{\kroot(z_j)} = \sigma_{\min}(J(z_j))\,\Lambda_j\,(1+|\lambda_j|),
+  \]
+  and $\Lambda_j$ is the Wilkinson condition number of the eigenvalue $\lambda_j$ of $M_g$ in
+  the basis $\B$.
+\end{corollary}
+
+\proof
+Substituting Theorem~\ref{thm:reduction1} into \eqref{eq:keig} cancels $|\det J|$, and
+$\|\B(z_j)\| = \|Ve_j\|$. The bound $\Lambda_j\ge1$ is Cauchy--Schwarz on
+$1 = \ell_j(z_j) = [\ell_j]_\B^T \B(z_j)$. For the eigenvector statement: if $c$ is the
+coordinate vector of $f\in R/I$ then $f(z_j) = v_j^Tc$ and $(gf)(z_j) = \lambda_j f(z_j)$, so
+$M_g^Tv_j = \lambda_jv_j$, and from $M_g^TV = V\diag(\lambda)$ one gets
+$M_g(V^{-T}e_j) = \lambda_j(V^{-T}e_j)$. In the standard convention (right eigenvector $v$,
+left eigenvector $u$ with $u^*A = \lambda u^*$, condition number $\|u\|\|v\|/|u^*v|$), for
+$A = M_g^T$ the left eigenvector is $u_j = \overline{V^{-T}e_j}$; then
+$u_j^*v_j = e_j^TV^{-1}Ve_j = 1$ exactly, $\|u_j\| = \|V^{-T}e_j\|$, and the Wilkinson number
+equals $\Lambda_j$.
+\endproof
+
+\begin{remark}\label{rem:reduction1}
+  Three consequences. First, the reduction of $\det Q$ modulo $I$ is not a separate
+  difficulty: it \emph{is} the eigenvector conditioning, so the two lines of attack pursued in
+  our earlier notes (bounding the reduction; studying $M_g$) coincide. Second, the method can
+  never beat the root conditioning by more than $\sigma_{\min}(J)(1+|\lambda|)$,
+  deterministically. Third, $\Lambda_j$ depends on the basis $\B$, as it must: $\keig$
+  describes the algorithm, and the algorithm chooses a basis. The convention $q=\det Q$ in
+  \eqref{eq:keig} is confirmed by \cite[Thm.~6.2]{graf2026numerical}, which also proves the
+  evaluation identity $[\det Q]_\B^T\,\B(x^*) = \det J(x^*)$, consistent with
+  Theorem~\ref{thm:reduction1}.
+\end{remark}

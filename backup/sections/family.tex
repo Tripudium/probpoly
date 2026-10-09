@@ -1,0 +1,669 @@
+\section{The full method family}\label{sec:family}
+
+This section extends the analysis to the remaining methods of \cite{graf2026numerical}:
+hidden-variable resultants (with \cite{noferini2016numerical}), Gr\"obner elimination, the
+rational univariate representation, multiparameter eigenvalue problems, and the Macaulay
+resultant. The pipeline of Sections~\ref{sec:jacobian}--\ref{sec:local} computes the local
+terms of any method; the methods differ in their structural terms, which we now classify.
+
+\subsection{Hidden-variable resultants are local methods}
+
+The key input is an identity proved in \cite{noferini2016numerical} which, read with the
+present machinery, moves the hidden-variable resultant methods from the pairwise class to
+the local one.
+
+\begin{lemma}[\cite{noferini2016numerical}]\label{lem:hiddenvariable}
+  Let $R(x_d)$ be the Cayley resultant matrix polynomial of the system in the monomial
+  basis, for any $d\ge2$, or the Sylvester matrix polynomial for $d=2$. Let $z_j$ be a
+  simple root whose $d$-th coordinate $x_{d,j}$ is a simple eigenvalue of $R$, and let
+  $v_j,w_j$ be the eigenvectors in the canonical normalizations of
+  \cite[Lem.~3.5]{noferini2016numerical} (Vandermonde, for Cayley) and
+  \cite[Lem.~4.4]{noferini2016numerical} (Vandermonde and Horner shifts, for Sylvester).
+  Then
+  \[
+    w_j^T\,R'(x_{d,j})\,v_j = \det J(z_j)
+  \]
+  exactly, and therefore, by the eigenvalue condition number formula
+  \cite[Lem.~2.11]{noferini2016numerical},
+  \[
+    \kappa(x_{d,j},R) = \frac{\|v_j\|_2\,\|w_j\|_2}{|\det J(z_j)|},
+    \qquad
+    \frac{\kappa(x_{d,j},R)}{\kroot(z_j)}
+    = \frac{\sigma_{\min}(J(z_j))\,\|v_j\|_2\,\|w_j\|_2}{|\det J(z_j)|}.
+  \]
+\end{lemma}
+
+\proof
+The identity is \cite[Thm.~3.6]{noferini2016numerical} in matrix form for Cayley, and is
+established inside the proof of \cite[Lem.~4.5]{noferini2016numerical} for Sylvester. The
+condition number formula is an equality, and the ratio $\|v\|\|w\|/|w^TR'v|$ is invariant
+under rescaling of the eigenvectors, so any normalization gives the same value.
+\endproof
+
+Every factor on the right is a local functional of the root: $\sigma_{\min}(J)$ and
+$\det J$ by Lemma~\ref{lem:jacobian}, $\|v_j\|$ and $\|w_j\|$ because the canonical
+eigenvectors are built from the root coordinates (Cayley) or from the fiber polynomials at
+the root (Sylvester). No pair energy and no deflated determinant survive; comparing with
+Lemma~\ref{lem:adjugate}(a) below gives the byproduct identity
+$\gamma_j = r'(x_j)/\det J(z_j)$ in the canonical normalization, so the two exponentially
+large quantities $r'(x_j)$ and $\gamma_j$ cancel exactly. The scalar-eliminant methods of
+Section~\ref{sec:elimination} do retain a pair energy; the matrix formulation is precisely
+what removes it, a quantitative vindication of the ``numerically confirmed eliminants''
+terminology recalled in \cite[Sec.~2.2]{noferini2016numerical}.
+
+\subsection{The Cayley average: an unconditional theorem}\label{sec:cayley}
+
+In the model of Definition~\ref{def:model} the Cayley construction is generically regular:
+roots at infinity and singular resultant matrix polynomials form a null set, by the box
+Newton polytopes. For Cayley in the monomial basis,
+\cite[Lem.~3.5]{noferini2016numerical} gives $\|v_j\|$ and $\|w_j\|$ in closed form: with
+$\tau_k = kn-1$,
+\[
+  \|v_j\|_2^2 = \prod_{k=1}^{d-1}k_{\tau_{d-k}}(r_k), \qquad
+  \|w_j\|_2^2 = \prod_{k=1}^{d-1}k_{\tau_k}(r_k), \qquad
+  r_k = |(z_j)_k|^2.
+\]
+
+\begin{theorem}\label{thm:cayley}
+  In the model of Definition~\ref{def:model}, for fixed $d\ge2$ and $n\to\infty$, with
+  $\kappa(\cdot,R_{\mathrm{Cay}})$ the absolute condition number of
+  \cite{noferini2016numerical} in the monomial basis,
+  \[
+    \frac1N\,\E\sum_{j=1}^N\log\frac{\kappa(x_{d,j},R_{\mathrm{Cay}})}{\kroot(z_j)}
+    \;=\; -\,\frac{d(d-1)}2\,\log n \;+\; O_d(1).
+  \]
+\end{theorem}
+
+\proof
+By Lemma~\ref{lem:hiddenvariable} the summand is
+$\log\sigma_{\min}(J) + \log\|v_j\| + \log\|w_j\| - \log|\det J|$, a local functional, so
+Lemma~\ref{lem:rice} applies; the integrability checks of Lemma~\ref{lem:integrability}
+extend verbatim to $\log|\det J|$ and $\log k_m(r_l)$. The four pieces are:
+\begin{enumerate}[(1)]
+  \item $\Eroots[\log\sigma_{\min}(J)] = (d+1)\log n + O(d)$, by
+    Proposition~\ref{prop:local}.
+  \item $\Eroots[\log|\det J|] = \EW[\log|\det G|]
+    + \frac d2\sum_l\Eroots[\log k_n(r_l)] + \frac12\sum_l\Eroots[\log h(r_l)]$, since
+    $|\det J| = |\det G|\,(\det\Sigma)^{1/2}$ and $\det\Sigma = S^d\prod_lh(r_l)$; by
+    Corollary~\ref{cor:weighted}(a) and Proposition~\ref{prop:outer} this equals
+    $d(d+1)\log n + \frac12\sum_{j=2}^{d+1}\psi(j) + O(d^2)$.
+  \item $\Eroots[\log\|v_j\| + \log\|w_j\|]
+    = \frac12\sum_{k=1}^{d-1}\bigl(\E[\log k_{(d-k)n-1}(r_k)]
+    + \E[\log k_{kn-1}(r_k)]\bigr)
+    = \frac12\sum_{k=1}^{d-1}(d+2)\log n + O_d(1)
+    = \frac{(d-1)(d+2)}2\log n + O_d(1)$, by Corollary~\ref{cor:logkm} with $a=d-k$ and
+    $a=k$.
+\end{enumerate}
+Adding: $(d+1) - d(d+1) + \frac{(d-1)(d+2)}2 = -(d^2-1) + \frac{d^2+d-2}2
+= -\frac{d(d-1)}2$.
+\endproof
+
+\begin{remark}\label{rem:cayley}
+  Four remarks are in order. First, the sign: on average, in the absolute metric of
+  \cite{noferini2016numerical}, the eigenvalue of the Cayley eigenproblem is \emph{less}
+  sensitive than the root, by a polynomial factor; the exponential worst case
+  $\kappa\ge\kroot^d$ of \cite[Thm.~3.7]{noferini2016numerical} is a tail event in this
+  model. Second, the units: absolute condition numbers compare perturbations of $R$ with
+  perturbations of $p$, which live at different scales, and
+  \cite[Sec.~5]{noferini2016numerical} shows that the relative comparison can behave
+  differently; Section~\ref{sec:relativeCayley} carries out the relative analysis and shows
+  that the apparent paradox disappears there. Third, the basis normalization
+  $\sup_\Omega|\phi_k| = 1$ of \cite{noferini2016numerical} is satisfied by monomials on
+  the closed unit polydisk, which contains the bulk of the roots; the outer roots are
+  handled by the same tail estimates as everywhere above. Fourth, the theorem concerns the
+  eigenvalue subproblem only: the construction of $R$ and the eigenvector extraction are
+  outside its scope, exactly as in
+  \cite{noferini2016numerical,graf2026numerical}.
+\end{remark}
+
+For Sylvester at $d=2$ the same reduction gives
+\[
+  \frac1N\,\E\sum_j\log\frac{\kappa(x_{2,j},R_{\mathrm{Sylv}})}{\kroot(z_j)}
+  = 3\log n - \bigl(6\log n + O(1)\bigr) + \tfrac32\log n
+  + \Eroots\log\|w_j\| + O(1),
+\]
+by Proposition~\ref{prop:local}, item (2) of the proof above, and
+Corollary~\ref{cor:logkm} with $a=2$ for $\|v\| = \|(x_1^{2n-1},\dots,1)\|$. The remaining
+factor is the Horner-shift norm, and here, uniquely in this paper, the conditioning on the
+root matters at leading order. The entries of $w_j$ are the coefficients of the deflated
+fibers, $b_k = \sum_{j>k}a_jx_1^{j-k-1}$ with fiber coefficients $a_j$ of variance
+$k_n(r_2)$, and the root constraint $\sum_ja_jx_1^j = 0$ is one linear condition on them;
+the rank-one Schur complement gives, exactly,
+\[
+  \E_{\mathrm{cond}}\|w_j\|^2 = 2\,k_n(r_2)\,G_c(r_1), \qquad
+  G_c(r) = \frac{n\,(r^{n+1}+1) - 2r\,\dfrac{r^n-1}{r-1}}{(r-1)\,(r^{n+1}-1)}, \qquad
+  G_c(1) = \frac{n(n+2)}6.
+\]
+On the window $r=e^{s/n}$ one has $G_c = n^2\gamma_c(s)(1+o(1))$ with
+$\gamma_c(s) = \bigl[(e^s+1) - 2(e^s-1)/s\bigr]/\bigl[s(e^s-1)\bigr]$, and
+$\gamma_c(s)\sim1/s$ as $s\to\infty$: the constraint cancels the exponential growth of the
+deflated coefficients at outer roots, so, in contrast with every unconditioned monomial
+functional above, there is \emph{no} outer inflation. Passing from the second moment to the
+log-average costs only a universal constant, with no assumption on the conditional
+spectrum: diagonalizing the conditional covariance and writing
+$\|w_j\|^2 = \sum_i\lambda_i|g_i|^2$ with independent standard complex Gaussians $g_i$, the
+concavity of the logarithm gives pointwise
+$\log\|w_j\|^2\ge\log\sum_i\lambda_i + \sum_i\frac{\lambda_i}{\sum\lambda}\log|g_i|^2$, so
+that
+$\log\E_{\mathrm{cond}}\|w_j\|^2 - \gamma
+\le\E_{\mathrm{cond}}\log\|w_j\|^2\le\log\E_{\mathrm{cond}}\|w_j\|^2$, using
+$\E\log|g|^2 = -\gamma$. Hence $\Eroots\log\|w_j\| = 2\log n + O(1)$ (by quadrature,
+$\E\log G_c - 2\log n\to-2.25$), and the Sylvester coefficient is
+\[
+  3 - 6 + \tfrac32 + 2 = +\tfrac12:
+\]
+on average, in the absolute metric, the Sylvester eigenvalue is worse conditioned than the
+root by $\sqrt n$ and worse than the Cayley eigenvalue by $n^{3/2}$, consistent in
+direction with the $\|v\|/\|w\|$ comparison of \cite[Sec.~4.3]{noferini2016numerical}. An
+unconditioned computation would give $+1$; the difference is real and visible in the data.
+The one ingredient not captured by the Schur complement is the $|\det J|^2$ weight of the
+root average; we rely here on the numerically supported assumption that its effect is a
+bounded shift, measured at $+0.08$ to $+0.12$: the finite-$n$ prediction built from $G_c$
+tracks the measured $\E\log\|w_j\| = 2.21, 2.78, 3.24, 3.80$ at $n=4,6,8,11$ within that
+margin, and the assembled ratio prediction tracks the measured $0.73, 0.98, 1.19, 1.38$
+within $0.06$--$0.12$.
+
+\subsection{Numerical verification of Theorem \ref{thm:cayley}}\label{sec:verification}
+
+All experiments were run in double precision in Python (NumPy/SciPy, LAPACK backends):
+polynomial eigenvalue problems are solved by companion linearization and the QZ algorithm;
+roots are refined by Newton iteration to residuals near machine precision;
+Vandermonde-type systems are assembled column-normalized in log-space, which is legitimate
+since $\Lambda_j$ is invariant under column scaling, and solved by LU factorization with
+explicit residual monitoring; deterministic predictions are evaluated by adaptive
+quadrature, with extended-precision arithmetic near removable singularities. The scripts
+accompany this paper.
+
+Because the sign of Theorem~\ref{thm:cayley} is surprising, we tested it directly at
+$d=2$: sample the model, build the B\'ezout (Cayley) matrix polynomial $B(x_2)$ of size
+$n$, compute all roots by linearization plus Newton refinement, and evaluate every quantity
+per root. Three outcomes, for $n\in\{4,6,8,11,14\}$ with $20$--$60$ samples per $n$ (all
+$2n^2$ roots recovered in every run):
+\begin{enumerate}[(1)]
+  \item The identity of Lemma~\ref{lem:hiddenvariable} holds to machine precision: the
+    eigenvalue condition number computed from numerical null vectors of $B(x_2^*)$ and the
+    Rayleigh quotient agrees with $\|v\|\|w\|/|\det J|$ with relative error below
+    $10^{-11}$ at every root.
+  \item The measured averages match the \emph{finite-$n$} deterministic predictions of the
+    theory (the integrals $\frac1n\int h_n\log k_m\,dr$ etc., evaluated by quadrature, plus
+    the tilted Gaussian constants); see Table~\ref{tab:cayley}. The residual gap in the
+    last column is the min--max slack of the $\sigma_{\min}$ sandwich \eqref{eq:sandwich},
+    which the single-coordinate prediction does not resolve; it is bounded and of the
+    observed size.
+  \item Fitting a slope in $\log n$ over $n\le14$ gives $-0.58$ rather than $-1$; this is
+    a finite-size effect, not a discrepancy.
+  \item The same deterministic prediction, evaluated for large $n$, converges to
+    $-\log n + 1.12 + o(1)$: the constant inside the theory converges only logarithmically
+    (its per-coordinate part is now closed-form, Proposition~\ref{prop:closedform}), and
+    at $n=14$ about $40\%$ of it is still missing. The theorem's coefficient
+    $-\frac{d(d-1)}2 = -1$ is thereby confirmed by the $n\to\infty$ behaviour of the exact
+    integrals, while the finite-$n$ data sit on the exact finite-$n$ curve.
+\end{enumerate}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{r|cc|cc|cc}
+    & \multicolumn{2}{c|}{$\Eroots\log|\det J|$}
+    & \multicolumn{2}{c|}{$\Eroots\log\|v\|\|w\|$}
+    & \multicolumn{2}{c}{$\Eroots\log(\kappa_{\mathrm{Cay}}/\kroot)$} \\
+    $n$ & pred. & meas. & pred. & meas. & pred. & meas. \\
+    \hline
+    4 & 5.39 & 5.39 & 1.93 & 1.90 & $-1.18$ & $-1.41$ \\
+    8 & 8.41 & 8.42 & 3.06 & 3.11 & $-1.55$ & $-1.67$ \\
+    14 & 11.11 & 11.11 & 4.04 & 3.99 & $-1.93$ & $-2.16$
+  \end{tabular}
+  \caption{Measured root averages at $d=2$ for the Cayley method against the finite-$n$
+    deterministic predictions of the theory.}
+  \label{tab:cayley}
+\end{table}
+
+Five further measurements were carried out with the same infrastructure.
+
+\emph{Cayley at $d=3$.} The trivariate Cayley tensor was built by convolution and two
+B\'ezout-type divisions, and self-tested: the identity of Lemma~\ref{lem:hiddenvariable}
+holds to $10^{-11}$ in the log across all roots, and all $6n^3$ roots are recovered at
+$n=2,3,4$, validating the construction. The measured ratio
+$\Eroots\log(\kappa_{\mathrm{Cay}}/\kroot)$ is $-2.53, -3.00, -3.29$, negative and
+monotonically decreasing, consistent in sign and direction with the coefficient
+$-\frac{d(d-1)}2 = -3$ of Theorem~\ref{thm:cayley}, with the strong finite-size
+attenuation expected at such small $n$.
+
+\emph{Sylvester.} The identity of Lemma~\ref{lem:hiddenvariable} for the Sylvester matrix
+holds to relative error below $4\cdot10^{-3}$ in the log (degrading with the conditioning
+of $S(x_2^*)$ at outer roots, but negligible against the means), and the measured
+$\Eroots\log(\kappa_{\mathrm{Sylv}}/\kroot)$ is positive and increasing,
+$0.73, 0.98, 1.19, 1.38$ at $n=4,6,8,11$, and is reproduced within $0.06$--$0.12$ by the
+finite-$n$ prediction built from the conditional fiber moment $G_c$ of
+Section~\ref{sec:cayley}, whose asymptotic coefficient is $+\frac12$.
+
+\emph{Coordinate pair energy.} The coordinate pair energy
+$\frac1N\sum_j\sum_{i\ne j}\log|x_{2,j}-x_{2,i}|$, the structural term of Gr\"obner
+elimination, measures $9.9, 17.4, 29.0, 46.2$ at the same $n$, against the
+independent-pair quadrature prediction $9.3, 17.4, 26.6, 42.2$: correlations contribute
+under ten percent, and the growth is $\Theta(n\log n)$, an outer-root effect again, since
+$\E\log|x-x'|$ for an independent pair equals
+$\E\log\max(|x|,|x'|)\approx(\log n)/n$ per pair, times $N-1 = 2n^2-1$ pairs.
+
+\emph{Projected pair energy.} The projected pair energy of the rational univariate
+representation with balanced $u$: measured $11.1, 19.9, 31.4, 50.4$ at $n=4,6,8,11$,
+against the one-point Monte Carlo $(N-1)I_n = 10.5, 19.6, 29.1, 48.1$, with
+$I_n\to I(u) = 7\zeta(3)/(2\pi^2) - \frac12\log2$ (Proposition~\ref{prop:rur});
+correlations again contribute under five percent.
+
+\emph{Overlap term.} The overlap term $\Theta_n$ at $d=1$ and $d=2$; this is reported in
+Section~\ref{sec:protocol}, where it decides between the two candidate regimes. The
+scripts are short (a B\'ezout builder, a companion linearization, Newton refinement, and
+quadrature routines) and are available alongside this paper.
+
+\subsection{Relative conditioning: resolution of the apparent paradox}
+\label{sec:relativeCayley}
+
+Theorem~\ref{thm:cayley} says that in the absolute metric the Cayley eigenvalue is
+typically \emph{better} conditioned than the root. This is not absurd, but it is a
+statement about units: an absolute perturbation of size $\varepsilon$ means something
+different for the resultant matrix, whose entries are degree-$d$ forms in the coefficients
+and are large, than for the polynomials themselves. Following
+\cite[Sec.~5]{noferini2016numerical}, the relative condition numbers are
+$\kappa_{\mathrm{rel}} = \kappa_{\mathrm{abs}}\cdot\|D\|/\|X\|$ with $D$ the data and $X$
+the solution, so
+\begin{multline*}
+  \Eroots\log\frac{\kappa_{\mathrm{rel}}(x_d,R_{\mathrm{Cay}})}{\kappa_{\mathrm{rel,root}}}
+  = \Eroots\log\frac{\kappa(x_d,R_{\mathrm{Cay}})}{\kroot} \\
+  + \E\log\sup_{|x_d|\le1}\|R_{\mathrm{Cay}}(x_d)\|_2
+  - \E\log\max_i\sup_\Omega|p_i| + O(1),
+\end{multline*}
+the $O(1)$ collecting $\E\log(\|x^*\|/|x_d^*|)$.
+
+The data scales are Gaussian quantities. For the polynomials,
+$\E\log\sup_\Omega|p_i| = \frac d2\log n + O(\log(dn))$, since the field variance on the
+torus is $(n+1)^d$. For the resultant matrix, the Frobenius norm of the coefficient tensor
+$A$ carries a near-diagonal enhancement that a naive Parseval count misses: at $d=2$,
+Parseval in all three variables and the exact two-point formula
+\[
+  \E|f_{\mathrm{Cay}}(s,t,x)|^2
+  = \frac{2\,(n+1)^2\bigl[(n+1)^2 - |k_n(s\bar t)|^2\bigr]}{|s-t|^2}
+\]
+on the torus give $\E\|A\|_F^2\asymp n^5$: the Dirichlet-kernel integral over $s\bar t$
+contributes a factor $n^3$, not $n^2$. In general each eliminated pair contributes one
+extra factor of $n$, so $\E\|A\|_F^2\asymp_dn^{d^2+d-1}$.
+
+The operator norm behaves differently, and this is the key point, which can be closed for
+every $d$.
+
+\begin{proposition}\label{prop:opnorm}
+  For every fixed $d$,
+  $\E\log\sup_{|x|=1}\|R_{\mathrm{Cay}}(x)\|_2 = \frac{d^2}2\log n + O_d(\log\log n)$, and
+  the coefficient of $\log n$ in the average relative Cayley ratio is $0$.
+\end{proposition}
+
+\proofsketch
+Upper bound, by induction on $d$. Expanding the Cayley determinant along its first row
+gives $f_d = \sum_j\Delta_{s_1,t_1}(p_j)\cdot g_j$, where $\Delta_{s_1,t_1}$ is the divided
+difference in the first eliminated pair and $g_j$ is the Cayley function of the $j$-th
+$(d-1)\times(d-1)$ minor, which is divisible by each remaining $(s_i-t_i)$ individually
+because its defining rows coincide there. Hence
+$R_d(x_d) = \sum_jH(\Delta p_j)\circ R_{d-1}^{(j)}$, a sum of compositions of triangular
+Hankel--Toeplitz sections whose symbols are the polynomials on subtori and lower-order
+Cayley matrices; at $d=2$ this is the classical Gohberg--Semencul-type factorization of the
+B\'ezout matrix. Each finite triangular section of a bounded symbol costs a factor
+$C\log n$ (finite-section Riesz projection), and by Salem--Zygmund with Gaussian
+concentration $\E\log\sup_{\mathbb T^d}|p_j| = \frac d2\log n + O(\log\log n)$; unwinding
+the induction,
+$\log\sup_x\|R_d(x)\|_2\le\sum_{j=1}^d\log\sup|p_j| + O_d(\log\log n)
+= \frac{d^2}2\log n + O_d(\log\log n)$ in expectation. Lower bound:
+$\|R(x)\|_2\ge\|R(x)\|_F/\sqrt{(d-1)!\,n^{d-1}}$, with
+$\E\|R(x)\|_F^2\asymp_dn^{d^2+d-1}$ (exact at $d=2$ by the two-point formula above, one
+near-diagonal factor $n$ per eliminated pair in general, at the sketch level already
+flagged), and the lower deviation of the degree-$d$ Gaussian chaos $\|R(x)\|_F^2$ is
+controlled by Carbery--Wright, so
+$\E\log\|R(x)\|_2\ge\frac{d^2}2\log n - O_d(1)$ at any fixed torus point.
+\endproof
+
+The spectrum of $R(x)$ on the torus is flat: with rank $(d-1)!\,n^{d-1}$, the
+flat-spectrum operator norm is
+\[
+  n^{\frac{d^2+d-1}2 - \frac{d-1}2} = n^{\frac{d^2}2},
+\]
+the near-diagonal enhancement of the Frobenius norm exactly compensating the rank
+normalization. The measured exponents at $d=2$ confirm both statements: the fitted slope
+of $\log\sup_{|x|=1}\|R(x)\|_2$ over $n\le24$ is $2.05$ against $d^2/2 = 2$, while
+$\log\|R(x)\|_F$ and $\log\|A\|_F$ fit $2.4$ and drift toward $(d^2+1)/2 = 2.5$. A
+rigorous lower bound consistent with this comes from testing against the monomial vectors
+$v_s,v_t$ of the two groups of Cayley variables, for which
+$f_{\mathrm{Cay}}(s,t,x) = v_s^TR(x)\,v_t$; the matching upper bound is the content of
+Proposition~\ref{prop:opnorm}.
+
+Taking $\E\log\sup_x\|R(x)\|_2 = \frac{d^2}2\log n + O_d(1)$, the coefficient of $\log n$
+in the average relative ratio is
+\[
+  -\frac{d(d-1)}2 + \frac{d^2}2 - \frac d2 = 0:
+\]
+\emph{relative neutrality}. This is now supported on two independent fronts: the direct
+measurement of the relative ratio in Section~\ref{sec:verification}, which increases
+toward and then settles near $0.6$ in natural-log units over the accessible range, and the
+measured operator-norm exponent above. The picture is coherent: absolutely, the Cayley
+eigenvalue is typically better conditioned than the root by the polynomial factor of
+Theorem~\ref{thm:cayley}; relatively, the two are typically comparable; and the
+exponential worst cases of \cite{noferini2016numerical} are tail events in both metrics.
+
+\subsection{The general factorization, for other resultant matrices}
+
+Lemma~\ref{lem:hiddenvariable} is specific to the Cayley and Sylvester matrices with their
+canonical eigenvector normalizations. For other resultant matrices, or other weightings,
+the following general factorization applies; it is superseded by
+Lemma~\ref{lem:hiddenvariable} in the two canonical cases, through the identity
+$\gamma_j = r'(x_j)/\det J(z_j)$ noted above. Let $S(x)$ be the $2n\times2n$ Sylvester
+matrix polynomial in the $y$-coefficients of $p_1(x,\cdot),p_2(x,\cdot)$;
+$r(x) := \det S(x) = \Res_y(p_1,p_2)$ has degree $N=2n^2$ and its roots are the
+$x$-coordinates of the roots $z_j = (x_j,y_j)$. The method computes the $x_j$ as
+eigenvalues of the polynomial eigenvalue problem $S(x)v = 0$. With weights
+$\omega_0,\dots,\omega_n$ on the matrix coefficients, the normwise unstructured condition
+number of the eigenvalue $x_j$ is \cite{tisseur2000backward}
+\begin{equation}\label{eq:pep}
+  \kappa_{\mathrm{res}}(x_j)
+  = \frac{\bigl(\sum_{k=0}^n\omega_k|x_j|^k\bigr)\,\|w_j\|_2\,\|v_j\|_2}
+  {|w_j^*\,S'(x_j)\,v_j|},
+\end{equation}
+with $v_j,w_j$ right and left null vectors of $S(x_j)$. Unstructured is the honest choice:
+the QZ iteration perturbs the matrices, not the original coefficients, and the
+structured--unstructured gap is part of the instability mechanism of
+\cite{noferini2016numerical}.
+
+\begin{lemma}\label{lem:adjugate}
+  Let $x_j$ be a simple root of $r=\det S$ and $v_j,w_j$ null vectors of $S(x_j)$, in any
+  normalization. Then $\adj S(x_j) = \gamma_jv_jw_j^*$ for a unique $\gamma_j\ne0$, and:
+  \begin{enumerate}[(a)]
+    \item $r'(x_j) = \gamma_j\,w_j^*S'(x_j)v_j$;
+    \item $\gamma_j\,(w_j^*v_j) = \prod_{\mu\in\spec S(x_j)\setminus\{0\}}\mu$, the
+      deflated determinant of $S(x_j)$;
+    \item combining (a) and \eqref{eq:pep},
+      \[
+        \kappa_{\mathrm{res}}(x_j)
+        = \Bigl(\sum_{k=0}^n\omega_k|x_j|^k\Bigr)
+        \frac{\|v_j\|\,\|w_j\|\,|\gamma_j|}{|r'(x_j)|},
+        \qquad r'(x_j) = \lc(r)\prod_{i\ne j}(x_j-x_i),
+      \]
+      and the right-hand side is invariant under separate rescaling of $v_j$ and $w_j$.
+  \end{enumerate}
+\end{lemma}
+
+\proof
+Simplicity gives $\rank S(x_j) = 2n-1$, so $\adj S(x_j)$ has rank one; from
+$S\cdot\adj S = \adj S\cdot S = 0$ at $x_j$, its column space is $\ker S(x_j)$ and its row
+space the left kernel, whence $\adj S(x_j) = \gamma_jv_jw_j^*$. (a) is Jacobi's formula
+$r'(x) = \tr(\adj S(x)\,S'(x))$ evaluated at $x_j$. (b): for any matrix $A$ with a simple
+eigenvalue $0$ and null vectors $v,w$, one checks on a Schur form that
+$\adj A = \bigl(\prod_{\mu\ne0}\mu\bigr)\frac{vw^*}{w^*v}$; comparison gives (b). (c):
+substitute (a) into \eqref{eq:pep}; rescaling $v_j\mapsto cv_j$ forces
+$\gamma_j\mapsto\gamma_j/c$, leaving $\|v_j\|\|w_j\||\gamma_j|$ unchanged, and similarly
+for $w_j$.
+\endproof
+
+Each factor of $\kappa_{\mathrm{res}}/\kroot = \sigma_{\min}(J)\,\kappa_{\mathrm{res}}$
+sits at a known level:
+\begin{enumerate}[(i)]
+  \item $\sigma_{\min}(J)$ and the weight $\sum\omega_k|x_j|^k$ are local, computed by
+    Proposition~\ref{prop:local} and the argument used for $C_n$.
+  \item $\|v_j\|$ is local: for Sylvester, $v_j = (y_j^{2n-1},\dots,y_j,1)^T$, the
+    monomial vector of the other coordinate; its log-average is the $d=1$ functional of
+    Section~\ref{sec:outer} with degree $2n-1$, outer-root inflation included, hence
+    $\Theta(\log n)$ with a constant delivered by the computation behind \eqref{eq:logk}.
+  \item $\|w_j\|$ is local on the fiber: $w_j^*S(x_j) = 0$ encodes the cofactor identity
+    $u(y)p_1(x_j,y) + t(y)p_2(x_j,y)\equiv0$ with $u\propto p_2(x_j,y)/(y-y_j)$ and
+    $t\propto-p_1(x_j,y)/(y-y_j)$. Thus $\|w_j\|$ depends only on the two univariate fiber
+    polynomials at $x=x_j$, conditioned to share the root $y_j$; this is a Gaussian
+    conditioning on the fiber, within the reach of the same pipeline.
+  \item $|r'(x_j)|$ is a pair statistic:
+    \[
+      \frac1N\,\E\sum_j\log|r'(x_j)|
+      = \E\log|\lc(r)| + \frac1N\,\E\sum_j\sum_{i\ne j}\log|x_j-x_i|,
+    \]
+    the logarithmic pair energy of the $x$-marginal of the root set, computed at leading
+    order in Section~\ref{sec:verification}. For the canonical Sylvester and Cayley cases
+    this term cancels against $|\gamma_j|$ by Lemma~\ref{lem:hiddenvariable}; it survives
+    for the scalar-eliminant methods of Section~\ref{sec:elimination}.
+  \item $|\gamma_j|$ is the deflated determinant of $S(x_j)$; in the canonical
+    normalization it equals $|r'(x_j)|/|\det J(z_j)|$, so it needs no separate analysis
+    there.
+\end{enumerate}
+
+\subsection{Gr\"obner elimination and the rational univariate representation}
+\label{sec:elimination}
+
+Both methods pass through an intermediate univariate polynomial, and
+\cite{graf2026numerical} measures their instability by the conditioning
+$\kappa_{\mathrm{uni}} = 1/|g'|$ of its roots.
+
+For Gr\"obner elimination in the variable $x_1$, the eliminant $g$ generates
+$I\cap\C[x_1]$; generically $\deg g = N$, its roots are the $x_1$-coordinates, and, for a
+generic system, $g$ agrees with $\Res_{x_2,\dots}(p)$ up to a constant. With the monic
+normalization $g(x) = \prod_i(x-x_{1,i})$,
+\[
+  \kappa_{\mathrm{uni}}(x_{1,j})^{-1} = |g'(x_{1,j})| = \prod_{i\ne j}|x_{1,j}-x_{1,i}|,
+\]
+so
+\[
+  \frac1N\,\E\sum_j\log\frac{\kappa_{\mathrm{uni}}(x_{1,j})}{\kroot(z_j)}
+  = A_n - \frac1N\,\E\sum_j\sum_{i\ne j}\log|x_{1,j}-x_{1,i}|:
+\]
+the structural term of Gr\"obner elimination is the coordinate pair energy. Note the
+contrast with Lemma~\ref{lem:hiddenvariable}: the matrix formulation of elimination is
+local, the scalar one is not. The normalization of $g$ matters for
+$\kappa_{\mathrm{uni}}$, and monic is the natural theoretical choice, matching the
+examples of \cite{graf2026numerical}; other scalings contribute terms of the form
+$\E\log|\lc|$, controlled as above. For contrast, the worst case of this method in
+\cite[Ex.~3.1]{graf2026numerical} is $\sigma^{-2^d+2}$, while the average is a pair energy
+of $N$ points concentrated near a circle, which Section~\ref{sec:verification} shows to be
+$2n(\log n+C)(1+o(1))$ at $d=2$: the monic eliminant has exponentially large derivatives
+at its roots, so in the absolute metric elimination too is typically \emph{better}
+conditioned than the root, one more units effect; the relative version needs the
+coefficient scale of the eliminant, a Carbery--Wright quantity.
+
+For the rational univariate representation, one projects by a linear form
+$t(x) = u^Tx$ with $\|u\|\le1$ and solves $f(x) = \prod_i(x-t(z_i))$, which is monic, so
+\[
+  \kappa_{\mathrm{uni}}(t(z_j))^{-1} = \prod_{i\ne j}|t(z_j)-t(z_i)|:
+\]
+the pair energy of a one-dimensional linear projection of the whole root set. This energy
+can be computed at leading order, with a closed-form constant in the balanced case.
+
+\begin{proposition}\label{prop:rur}
+  Let $d=2$, $t(x) = u_1x_1+u_2x_2$ with $u_1,u_2>0$, $u_1^2+u_2^2 = 1$. Then
+  \[
+    \frac1N\,\E\sum_j\sum_{i\ne j}\log|t(z_j)-t(z_i)| = I(u)\,N\,(1+o(1)),
+    \qquad I(u) = \E\bigl[\log\max(u_1D,\,u_2D')\bigr],
+  \]
+  where $D,D'$ are independent copies of $2|\sin(\beta/2)|$ with $\beta$ uniform on
+  $(0,2\pi)$, the correlation correction being measured below five percent at the
+  accessible sizes, a constant-level bookkeeping step left at the flagged-sketch level. In
+  the balanced case $u_1=u_2=1/\sqrt2$,
+  \[
+    I = \frac{7\,\zeta(3)}{2\pi^2} - \frac{\log2}2 = 0.0797\ldots > 0.
+  \]
+\end{proposition}
+
+\proof
+At leading order the pairs decouple and, by Proposition~\ref{prop:rootscale}, the two
+coordinates of a single root become independent with uniform phases on the unit circle.
+Writing $e^{i\varphi} - e^{i\varphi'} = e^{i\alpha}D$ with $\alpha$ uniform and
+independent of $D = 2|\sin((\varphi-\varphi')/2)|$, the difference of two independent
+projected values is $u_1De^{i\alpha} + u_2D'e^{i\alpha'}$. The mean-value property of the
+harmonic function $\log|\cdot|$ gives
+$\E_\alpha\log|me^{i\alpha}+c| = \log\max(m,|c|)$ for any fixed $c$, and averaging over
+one phase yields $I(u)$. In the balanced case, with $F_D(2\sin y) = \frac2\pi\min(y,\pi-y)$,
+\[
+  \E\log\max(D,D') = \frac8{\pi^2}\int_0^{\pi/2}y\,\log(2\sin y)\,dy
+  = \frac{7\,\zeta(3)}{2\pi^2},
+\]
+by the classical log-sine evaluation
+$\int_0^{\pi/2}y\log(2\sin y)\,dy = \frac7{16}\zeta(3)$, and
+$\E\log(D/\sqrt2) = -\frac12\log2$ since $\E\log D = 0$.
+\endproof
+
+The sign is noteworthy: $I>0$ in the balanced case, so the monic eliminant of the rational
+univariate representation has \emph{exponentially large} derivatives at its roots, and in
+the absolute metric $\kappa_{\mathrm{uni}}$ is exponentially small on average, the most
+extreme units effect in the family. Near-coincidences of projected roots, the mechanism of
+the devastating example of \cite[Sec.~4]{graf2026numerical}, are integrated inside $I(u)$
+and only shape the constant; the example itself is a tail event. The finite-$n$ version of
+the statement, a one-point Monte Carlo of $(N-1)I_n$, matches the measured energies within
+five percent (Section~\ref{sec:verification}). For general $u$ the one-dimensional
+integral defining $I(u)$ is immediate, and for general $d$ the same harmonic reduction
+applies to the outermost phase, leaving a $(d-1)$-fold integral.
+
+\subsection{Multiparameter eigenvalue problems: local, computed for an explicit
+  representation}\label{sec:mep}
+
+The multiparameter approach represents each $p_k$ as the determinant of a matrix of
+affine-linear forms, $W_k(x) = A_{k,0} + \sum_lx_lA_{k,l}$ with $\det W_k = p_k$, and
+solves the resulting multiparameter eigenvalue problem through its operator determinants
+\cite{graf2026numerical}. For the representation to be computable directly from the
+coefficients one needs a \emph{uniform} determinantal representation in the sense of
+\cite{boralevi2017uniform}, with entries affine-linear in the $c_\alpha$ as well; the
+minimal size of such a representation is $\Theta(n^{d/2})$ for fixed $d$, and for $d=2$
+the explicit \textsc{MinUnif} construction of \cite[Ex.~5.1]{boralevi2017uniform} has size
+$2n+1$: $W = \bigl[\begin{smallmatrix}M_x&0\\L&M_y^T\end{smallmatrix}\bigr]$, with
+$M_x,M_y$ bidiagonal in $(-x,1)$ and $(-y,1)$, and the coefficients sitting, each exactly
+once, in the antitriangular block $L$. The first observation is that the method is local,
+for \emph{every} uniform representation, by the adjugate identity.
+
+\begin{proposition}\label{prop:mep}
+  Let $z^*$ be a simple root and, for each $k$, let $W_k(z^*)$ have a one-dimensional
+  kernel; normalize the null vectors by $\adj(W_k(z^*)) = v_kw_k^T$. Then:
+  \begin{enumerate}[(a)]
+    \item $\prod_j'\sigma_j(W_k(z^*)) = \|v_k\|\,\|w_k\|$ and
+      $J_{kl} = \partial_lp_k(z^*) = w_k^TA_{k,l}v_k$: the structural content of the
+      multiparameter method is $\sum_k\log(\|v_k\|\|w_k\|) - \log|\det J|$, of the same
+      form as for the resultant methods (Lemma~\ref{lem:hiddenvariable}), and in
+      particular local;
+    \item for \textsc{MinUnif} in two variables the null vectors are explicit:
+      $v_k = (1,x,\dots,x^n;\,b^{(k,y)})$ and $w_k = (b^{(k,x)};\,1,y,\dots,y^n)$, where
+      $b^{(k,y)}$ collects the Horner shifts of the fiber $p_k(x,\cdot)$ deflated at the
+      root, and symmetrically for $b^{(k,x)}$: the conditioned deflated-fiber objects of
+      the Sylvester analysis, now with the triangular variance profile $V_j = k_{n-j}(r)$,
+      for which the rank-one Schur complement generalizes verbatim:
+      \[
+        \E_{\mathrm{cond}}\|b\|^2 = \sum_k\frac{\bigl[\sum_{j>k}V_jr^{j-k-1}\bigr]
+        \bigl[\sum_{j\le k}V_jr^j\bigr]}{\sum_jV_jr^j}\,;
+      \]
+    \item in the total-degree model at $d=2$,
+      $\Eroots\log\|v_k\| = \frac52\log n + O(1)$, the window contributing
+      $\frac32\log n$ and the collective radial excursions of
+      Proposition~\ref{prop:totaldegree}(c) contributing $\log n$; hence
+      \[
+        \frac1N\,\E\sum_j\log\frac{\kappa_{\mathrm{MEP}}(z_j)}{\kroot(z_j)}
+        = (d+1)\log n + 4\log n + O(1) = 7\log n + O(1),
+      \]
+      the collective-tail step being at the same sketch level as in
+      Proposition~\ref{prop:totaldegree}.
+  \end{enumerate}
+\end{proposition}
+
+\proofsketch
+(a) At a simple singular point $\adj(W)$ has rank one with
+$\|\adj(W)\|_2 = \prod_j'\sigma_j$, and Jacobi's formula
+$\partial_l\det W = \tr(\adj W\,\partial_lW)$ gives the gradient identity,
+$\partial_lW_k = A_{k,l}$ being constant. (b) is back-substitution in the two bidiagonal
+blocks, the right-hand sides being the fiber sections $(Lv^{(1)})_i = a_{i-1}(x)$; the
+Schur computation is the Sylvester one with $V_j$ in place of a constant variance. (c) On
+the window the profile sums give $\E_{\mathrm{cond}}\|b\|^2\asymp n^3$; on a collective
+excursion of height $t$ the products $V_jr^j$ are flat in $j$ and the conditioned sum is
+$\asymp e^t(n/t)^2$, so $\log\|v\|^2\approx t + 2\log n - 2\log t$ there, and integrating
+the excess against the tail $d/t$ of Proposition~\ref{prop:totaldegree}(c) adds $2\log n$
+to the window value $3\log n$; the determinant and $\sigma_{\min}$ averages are those of
+Proposition~\ref{prop:totaldegree}(d).
+\endproof
+
+Numerically, at total-degree roots with the pipeline of
+Section~\ref{sec:verification}: the \textsc{MinUnif} determinant identity holds at machine
+precision; the adjugate identity of (a) holds to $10^{-3}$ in the log at $n=11$, degrading
+with the conditioning of $W_k$ at far roots but negligible against the means; and the
+measured structural term and full ratio are $3.2, 3.5, 4.2, 4.7$ and $4.7, 5.7, 7.1, 8.1$
+at $n=4,6,8,11$, with fitted slopes $1.5$ and $3.5$ and rising increments, the finite-size
+attenuation matching that of the certified local averages of the model at equal sizes.
+Two remarks are in order. First, the structural term depends on the chosen representation:
+smaller or better-scaled uniform representations change the constant, and possibly the
+coefficient, so the representation is a genuine design lever for the average-case
+conditioning of the method. Second, the qualitative conclusion stands regardless: in the
+absolute metric the multiparameter subproblem is, on average, polynomially worse
+conditioned than the root, and the exponential worst cases are tail events here as
+everywhere else in the family.
+
+\subsection{Macaulay resultant: back to the overlap class}\label{sec:macaulay}
+
+By \cite[Thm.~7.1]{graf2026numerical}, the Macaulay eigenvalue problem built with a random
+linear $h$ satisfies
+\[
+  \keig(\lambda^*) \;\ge\;
+  \frac{\|[\det Q]_\B\|_2\,\|V_{\mathrm{col}}(x^*)\|_2}{|\det J(x^*)\,h(x^*)|},
+\]
+where $\B$ is the basis given by the retained $h$-rows and $V_{\mathrm{col}}(x^*)$ is the
+vector of column labels (monomials of degree at most $\rho := \sum_i\deg p_i - d + 1$)
+evaluated at the root. Theorem~\ref{thm:reduction1} applies verbatim:
+$\|[\det Q]_\B\| = |\det J|\,\|[\ell_j]_\B\|$, so
+\[
+  \keig(\lambda^*) \;\ge\;
+  \frac{\|[\ell_j]_\B\|\,\|V_{\mathrm{col}}(x^*)\|}{|h(x^*)|}.
+\]
+The Macaulay method therefore sits in the overlap class together with the normal form: the
+same dual norm $\|[\ell_j]_\B\| = \|V^{-T}e_j\|$, with the identities of
+Lemma~\ref{lem:gram}, paired with a longer but local monomial vector
+(Section~\ref{sec:outer} machinery with staircase degrees up to $\rho$) and the harmless
+local factor $|h(x^*)|^{-1}$. The two-dimensional refinement of
+\cite[Sec.~8]{graf2026numerical}, which bounds the numerator below by $\sigma_{\min}$ of
+the Macaulay matrix, offers a complementary handle: that smallest singular value is again
+controlled in expectation by Carbery--Wright, and is a natural companion statistic for the
+numerical protocol.
+
+\subsection{The hierarchy}\label{sec:hierarchy}
+
+Table~\ref{tab:hierarchy} collects the classification established above, together with the
+average-case result now available at each level; it doubles as the scoreboard of this
+paper.
+
+\begin{table}[ht]
+  \centering
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{lllll}
+    Method & structural object & class & absolute & relative \\
+    \hline
+    Cayley resultant & null-vector norms, $\det J$ & local
+      & $-\frac{d(d-1)}2\log n$ (Thm.~\ref{thm:cayley}) & $0$ \\
+    Sylvester ($d=2$) & conditional fiber moment & local
+      & $+\frac12\log n$ (\S\ref{sec:cayley}) & $+\frac12\log n$ \\
+    Multiparameter EP & deflated dets of $W_k(x^*)$ & local
+      & $+7\log n$ at $d=2$ (\S\ref{sec:mep}) & $+\frac{13}2\log n$ \\
+    Gr\"obner elimination & coordinate pair energy & pairwise
+      & $\approx-2n\log n$ at $d=2$ & $\approx-n(\log n+C)$ \\
+    Rational univariate & projected pair energy & pairwise
+      & $-I(u)\,N$ (Prop.~\ref{prop:rur}) & $+\delta N$ \\
+    Normal form & overlap $\Theta_n(\B)$ & full config.
+      & $(d{+}1)\log n{+}O(1)$, $d\le2$ (Thm.~\ref{thm:overlap})
+      & $(\frac d2{+}1)\log n{+}\E\log\|M_g\|$ \\
+    Macaulay resultant & overlap $\|[\ell_j]_\B\|\,\|V_{\mathrm{col}}\|$ & full config.
+      & lower bounds (\S\ref{sec:macaulay}) & lower bounds
+  \end{tabular}}
+  \caption{Summary of the average-case results, per method: the structural object, its
+    class, and the leading behaviour of the average logarithmic conditioning ratio in the
+    absolute metric. Pairwise entries are stated at $d=2$; the relative column follows the
+    conversion of Section~\ref{sec:relative}.}
+  \label{tab:hierarchy}
+\end{table}
+
+The local terms are common to all methods, so any average-case comparison between methods
+reduces to comparing structural objects. And the ordering by average-case tractability
+does not follow the worst-case results of \cite{graf2026numerical}, where all methods are
+exponentially unstable; the local class already contains a complete theorem
+(Theorem~\ref{thm:cayley}), and the pairwise class requires only two-point information.
+
+\subsection{Basis choices within the normal-form family}
+
+The normal-form variants of \cite{graf2026numerical,telen2018stabilized} correspond to
+different quotient bases $\B$ and different $g$. Theorem~\ref{thm:reduction1} and
+Corollary~\ref{cor:wilkinson} hold for any basis, with $\Lambda_j = \Lambda_j(\B)$, and
+the local terms are basis-independent. Hence the average-case comparison between variants
+is the comparison of the overlap averages $\Theta_n(\B)$, and the protocol of
+Section~\ref{sec:protocol} should be run with one curve per basis, on the same sampled
+systems; the vertical offsets between the curves are the average-case ranking.

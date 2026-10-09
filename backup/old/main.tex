@@ -1,0 +1,873 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{mathtools}
+
+\usepackage{amsmath, amssymb,latexsym}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{fullpage}
+
+\usepackage{hyperref}
+
+\def\ans{\textcolor{red}{$\diamondsuit$\ }}
+
+%\def\TeXHOME{../..}
+%\input \TeXHOME/defnAMS.tex
+
+\def\dfn{\stackrel {{\mbox{\scriptsize\rm{def}}}}{=}}
+\def\wtd{\widetilde}
+\def\what{\widehat}
+\def\ue{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily u.e.}}}{\sim}}}
+\def\se{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily s.e.}}}{\sim}}}
+\def\Lpk{\mathcal{L}_{p_k}}
+%\def\F{\mbox{\scriptsize \rm F}}
+%\def\T{\mbox{\scriptsize \rm T}}
+
+\def\F{\mathbb{F}}
+\def\G{\mathbb{G}}
+\def\K{\mathbb{K}}
+\def\H{\mathbb{H}}
+\def\E{\mathbb{E}}
+\def\P{\mathbb{P}}
+\def\C{\mathbb{C}}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+
+% Added by Etna you can ask me to remove
+\def\Ei{\mathrm{Ei}}
+\def\B{\mathcal{B}}
+\usepackage{subcaption}
+
+
+
+\definecolor{brilliantrose}{rgb}{1.0, 0.33, 0.64}
+\definecolor{myviolet}{rgb}{0.21, 0.0, 0.85}
+\definecolor{amethyst}{rgb}{0.6, 0.4, 0.8}
+\definecolor{carrotorange}{rgb}{0.93, 0.57, 0.13}
+\newenvironment{vn}{\begin{quote}\color{myviolet} \small\sf VN $\diamondsuit$~}{\end{quote}}
+\newenvironment{el}{\begin{quote}\color{amethyst} \small\sf EL $\spadesuit$~}{\end{quote}}
+\newenvironment{ml}{\begin{quote}\color{carrotorange} \small\sf ML $\clubsuit$~}{\end{quote}}
+
+\def\bone{\boldsymbol{1}}
+
+\def\proof{\par{\it Proof}. \ignorespaces}
+
+\def\endproof{\vbox{\hrule height0.6pt\hbox{%
+   \vrule height1.3ex width0.6pt\hskip0.8ex
+   \vrule width0.6pt}\hrule height0.6pt
+  }}
+
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\eig}{eig}
+\DeclareMathOperator{\Rev}{Rev}
+\DeclareMathOperator{\cwRev}{cwRev}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\grade}{grade}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\cond}{cond}
+\DeclareMathOperator{\rev}{rev}
+\DeclareMathOperator{\tr}{trace}
+\DeclareMathOperator{\fchar}{char}
+\DeclareMathOperator{\mvec}{vec}
+\DeclareMathOperator{\unvec}{unvec}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{conjecture}{Conjecture}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{remark}{{\sc Remark}}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{problem}{Problem}[section]
+
+
+\def\sss{\scriptstyle}
+\title{Internal note}
+\author{Etna Lindy, Martin Lotz, Vanni Noferini}
+\begin{document}
+\maketitle
+\section{Smarter lower bounds for $|\det J| \|J^{-1}\|$.}
+Let us start with the interlacing theorem for singular values of projections.
+\begin{theorem}[Cauchy]\label{cauchy}
+    Let $A \in \C^{d \times d}$ and let $P$ and $Q$ be orthogonal projectors onto subspaces of dimension $d-1$. Denote the singular values of, resp., $A,PA,$ and $PAQ$ by
+    \[ \sigma_1 \geq \dots \geq \sigma_d;\]
+    \[ \mu_1 \geq \dots \geq \mu_{d-1} \geq 0;   \]
+     \[ \nu_1 \geq \dots \geq \nu_{d-1} \geq 0;   \]
+     Then it holds, for all $1\leq i \leq d-1$,
+     \[ \sigma_{i+1} \leq \mu_i \leq \sigma_i;   \]
+      \[ \sigma_{i+2} \leq \nu_i \leq \sigma_i;   \]
+      \[ \mu_{i+1} \leq \nu_i \leq \mu_i. \]
+      (To make sense of the last two sets of inequalities, we have formally set $\sigma_{d+1}:=0$ and $\mu_{d}:=0$.)
+\end{theorem}
+
+What we were discussing this morning was to use $PAQ$, which is Gaussian and its singular values are known, or in other words to use the following corollary of Theorem \ref{cauchy}:
+\[ 0 \leq \prod_{i=1}^{d-1} \nu_i \leq \prod_{i=1}^{d-1} \sigma_i.  \]
+But in fact, by the theorem above, using $PA$ yields a better bound:
+\[ \left( \prod_{i=1}^{d-1} \sigma_i \right) \frac{\sigma_d}{\sigma_1}  = \prod_{i=2}^{d} \sigma_i \leq \prod_{i=1}^{d-1} \mu_i \leq \prod_{i=1}^{d-1} \sigma_i.   \]
+On the other hand, we do not lose anything in terms of being able to characterize the distribution of $\prod_{i=1}^{d-1} \mu_i$ rather than $\prod_{i=1}^{d-1} \nu_i$. Indeed, by unitarily invariance, if $A$ is Gaussian then this has the same singular values of a $d \times (d-1)$ matrix, and hence their product is distributed (in the complex case) as the product of independent chi-distributed variables with degrees of freedom $2d,2d-2,\dots,4$. In particular, its expectation is
+\[ c^{d-1} \prod_{i=2}^{d} \frac{\Gamma(i+\frac12)}{\Gamma(i)} \]
+where $c$ is some constant that can be made equal to $1$ by setting appropriately the variance of the entries of $A$. This behaves approximately as $\sqrt{d!}$.
+In conclusion, we have
+\begin{corollary}
+If $A$ is a $d \times d$ random complex Gaussian matrix with mean $0$ and variance (to be added), let $T$ be the random variable equal to the product of the top $d-1$ singular values of $A$. Then,
+\[ \E[T] \geq \prod_{i=2}^{d} \frac{\Gamma(i+\frac12)}{\Gamma(i)}.  \]
+\end{corollary}
+
+\newpage
+
+\section{Random systems of polynomials}
+
+A related problem (which is needed for the norms of eigenvectors in the conditioning ratio problem, but that has in fact independent interest) is the following. Suppose that we have a random polynomial system $p_1(x)=\dots=p_d(x)=0$ where $x=(x_1,\dots,x_d)$ and
+\[  p_j(x) = \sum_{i_1 + \dots + i_d = n}  a_{j,i} x^i,   \]
+where the multi-index notation $x^i$ stands for $\prod_{j=1}^d x_j^{i_j}$ and the $a_{j,i}$ are independent random variables (for example they could all be Gaussians). What is the distribution of the roots of this polynomial system? This is probably too hard to answer for finite $n$ and $d$, but it could maybe be tackled for $n \rightarrow \infty$ or for $d \rightarrow \infty$.
+
+When $d=1$, this is in fact well studied, and it is known that in the limit $n \rightarrow \infty$, if the random coefficients have mean $0$ and finite variance, then one gets a universal distribution that only depends on the variances. For example, if all the variances are $1$, then one gets the uniform distribution on the unit circle. If, instead, one sets the variance of the coefficients of $x^j$ to be $\begin{pmatrix}
+    n\\
+    j
+\end{pmatrix}$, where $n$ is the degree, then one gets the uniform distribution on the Riemann sphere (after a stereographic projection).
+
+One way to tackle the problem could be via resultants. For example, suppose $d=2$. (For what I write below, it is slightly simpler to assume that the system has degree $n$ in each variable separately rather than total degree $n$, so I will take that model from now.) We can write
+\[  p_1(x,y) = \sum_{i=0}^n a_i(x) y^i, \quad p_2(x,y)=\sum_{i=0}^n b_i(x) y^i.  \]
+Here, $a_i(x)$ and $b_i(x)$ are univariate polynomials with random coefficients. Then, the $x$-components of the roots are the roots of the determinant of the Sylvester polynomial matrix
+\[  S(x) = \begin{bmatrix}
+a_n(x) & \dots & a_1(x) & a_0(x) & 0 & 0 & \dots & 0\\
+0& a_n(x) & \dots & a_1(x) & a_0(x) & 0 & \dots & 0\\
+&&\ddots&&\ddots&\ddots&&\\
+0&\dots&0&a_n(x)&\dots&a_1(x)&a_0(x)&0\\
+0&0&\dots&0&a_n(x)&\dots&a_1(x)&a_0(x)\\
+b_n(x) & \dots & b_1(x) & b_0(x) & 0 & 0 & \dots & 0\\
+0& b_n(x) & \dots & b_1(x) & b_0(x) & 0 & \dots & 0\\
+&&\ddots&&\ddots&\ddots&&\\
+0&\dots&0&b_n(x)&\dots&b_1(x)&b_0(x)&0\\
+0&0&\dots&0&b_n(x)&\dots&b_1(x)&b_0(x)
+\end{bmatrix}
+     \]
+$S(x)$ is a random polynomial matrix of size $2n$ and degree $n$. The limit distribution of the roots of $\det S(x)$, when $n \rightarrow \infty$ and the coefficients of $S(x)$ are i.i.d. complex random matrices with mean $0$ and finite variance, was obtained in \cite[Theorem 1.2]{BN}, which gives some hope that this problem may be tractable in this way. However, here there is an extra difficulty because the entries of the coefficients of $S(x)$ are not i.i.d.
+\newpage
+
+Given a random univariate polynomial $p_k(\omega,x)$ of degree $k$, define the associated empirical root distribution as $\mu_k = \sum_{i=1}^k \delta_{r_i(\omega)}$, where $r_1(\omega),\dots,r_k(\omega)$ are the roots of $p_k(\omega,x)$, i.e., $p_k(\omega,r_i(\omega))=0$ for all $i$. With this setting, $\mu_k(\omega)$ is itself a random variable that takes values on the space of probability measure on $\C$. Let us recall the following result.
+
+\begin{theorem}[Theorem 1.2 in \cite{BN}]\label{thm:logpot}
+    Let $a_i$ be a sequence of independent random complex variables, with mean $0$ and variance $1$, and with uniformly bounded (but not necessarily identical) distributions. Let $p_k(x)=\sum_{i=0}^k \alpha_{i,k} a_i x^i$, where $\alpha_{i,k}$ is a sequence of complex numbers with $\alpha_{k,k} \neq 0$ for all $k$. Then, when $k \longrightarrow \infty$, $\mu_k(\omega)$ converges almost surely to the deterministic measure $\mu$ satisfying (in the sense of distributions)
+    \[  \Delta_z U(z) = 2 \pi \mu   \]
+    where $\Delta_z$ is the Laplacian and the logarithmic potential is
+    \begin{equation}\label{eq:logpot}
+        U(z) = \lim_{k \rightarrow \infty} \frac{1}{2k} \log \sum_{i=0}^k \frac{|\alpha_{i,k}|^2}{|\alpha_{k,k}|^2} |z|^{2i}.  
+    \end{equation}  
+\end{theorem}
+
+Now we apply this result to system of polynomials. Again, given a zero-dimensional system of polynomials $p(x)=0$ having random coefficients, we can define the empirical root distribution as $\mu_k = \sum_{i=1}^N \delta_{r_i(\omega)}$, a random variable taking values on the space of probability measures on $\C^d$. Here we assume to take an appropriate sequence of random systems, indexed by $k$; unlike in the 1D case, there are several natural ways to do this. For instance, $k$ could be the total degree, or the separate degree in each variable. 
+
+\begin{vn}
+    Something a bit sloppy about these arguments is that we do the 1D limit first and later argue what the dD limit is. So in a sense we prove that, if there is a limit, then it must be what it is; but we do not really prove that the random measure converges.
+
+To be thought more carefully. We may need to slightly extend \cite[Lemma B.1]{BN}.
+\end{vn}
+
+\begin{corollary}
+    Let $p(x)=0$ be a random system of  $d$ polynomial equations in $d$ variables having separate maximal degree $n$ in each variable $x_1,\dots,x_d$. Suppose that the coefficients of the expansion of each $p_i(x)$ in the monomial basis are independent complex random variables with mean $0$ and variance $1$. Then, when $n \longrightarrow \infty$, $\mu_n(\omega)$ converges in probability to the deterministic measure $\mu = (\bone_{S^1})^d$.
+\end{corollary}
+\begin{proof}
+    Let us compute the distribution of the first component $x_1$, conditional to the other components $x_2,\dots,x_d$. Let $y^j$ denote the monomial $x_2^{j_2} \cdots x_d^{j_d}$. This yields univariate polynomials of the form
+    \[  \sum_{i=0}^n x_1^i \sum_{j} a_j y^j.\]
+    The coefficient of $x_1^i$ has thus variance $\sum_j |y^j|^2$, which is independent of $i$. By Theorem \ref{thm:logpot}, this corresponds to the measure whose logarithmic potential is
+    \[  U(z) = \lim_k \frac{\log(|z|^{2k+2}-1) - \log(|z|^2-1)}{2k} = \begin{cases}
+        \log|z| \ &\mathrm{if} \ |z| > 1;\\
+        0 \ &\mathrm{if} \ |z| \leq 1.
+    \end{cases}   \]
+Since $\log|z|$ is the fundamental solution of the Laplace equation on $\C$, this shows that $\mu$ is the uniform distribution on $S^1$, independently on $x_2,\dots,x_d$.
+
+Rotation invariance then implies that the joint distribution is uniform on the torus $(S^1)^d$.
+\end{proof}
+
+Total degree is a bit more difficult. Here is an argument for $d=2$, which may generalizable.
+
+\begin{theorem}
+     Let $p(x)=0$ be a random system of  $d$ polynomial equations in $2$ variables having total degree $n$. Suppose that the coefficients of the expansion of each $p_i(x)$ in the monomial basis are independent complex random variables with mean $0$ and variance $1$. Then, when $n \longrightarrow \infty$, $\mu_n(\omega)$ converges to the deterministic measure $\mu = (\bone_{S^1})^2$.
+\end{theorem}
+\begin{proof}
+    As before, let us compute the limit distribution of $x_1$ conditioned to $x_2$. We get univariate polynomials where the coefficient of $x_1^i$ is a random variable with mean $0$ and variance $$1+|x_2|^2+\dots+|x_2|^{2n-2i}=\frac{|x_2|^{2n-2i+2}-1}{|x_2|^2-1}.$$
+    Hence, for the logarithmic potential we get
+    \[ U(z)=\lim_k \frac{1}{2k} \log \left( \sum_{i=0}^k \frac{|x_2|^{2k-2i+2}-1}{|x_2|^2-1} |z|^{2i} \right) =\lim_k \frac{1}{2k} \left(\log(|x_2|^{2k+2}-|z|^{2k+2}) \right)\] 
+    and hence \[U(z)=\begin{cases}
+        \log|z| \ &\mathrm{if} \ |z| > |x_2|;\\
+        \log|x_2| \ &\mathrm{if} \ |z| \leq |x_2|,
+    \end{cases}    \]   
+    and therefore $\mu$ is the uniform distribution on the circle of radius $|x_2|$.
+
+Similarly, the limit distribution of $x_2$ conditional to $x_1$ is uniform on the circle of radius $|x_1|$. It follows that $|x_1|=|x_2|$ with probability $1$. Setting $r=x_2/x_1$, we can now observe
+\[  \sum_{i+j\leq n} a_{ij} x_1^i x_2^j = \sum_{i+j\leq n} a_{ij} r^j x_1^{i+j},\]
+and if $|r|=1$ we obtain that the $x_1$ components are the roots of a univariate polynomial of degree $n$ where the coefficient of $x^i$ has mean $0$ and variance $i+1$. The corresponding potential is
+\[ U(z) = \lim_{k} \frac{\log\left(\sum_{i=0}^{k} \frac{i+1}{k+1}|z|^{2i}\right)}{2k} =  \begin{cases}
+        \log|z| \ &\mathrm{if} \ |z| > 1;\\
+        0 \ &\mathrm{if} \ |z| \leq 1,
+    \end{cases}   \]
+    yielding again the uniform distribution on $S^1$.
+\end{proof}
+
+\begin{corollary}
+    Generalization of above for $d > 2$
+\end{corollary}
+\begin{proof}
+    We start by conditioning by the variables $x_2,\dots,x_d$, and compute the conditional distribution for the first coordinate. 
+    
+    Let $c \in \N^d$, and denote $x^c = \prod_{i=2}^d x_i^{c_i}$, $|c| = \sum c_i$. 
+    The polynomial in question is now univariate of form 
+    \[ p_k(x_1) = \sum_{i=0}^k  x_1^i \sum_{|c| \leq k-i} \alpha_{c} \prod_{i=2}^d x_i^{c_i} \]
+    Now the variances are $\alpha_{i,k} = \sum_{c \leq k-c_1} |x|^c$, with the leading coefficients $\alpha_{k,k} = 1$. The function $U(z)$ takes the form
+    \begin{align*}
+        U(z) = \lim_{k\to\infty} \frac{1}{2k} \log \left( \sum_{|c|\leq k} |z|^{2c_1} \prod_{i=2}^d |x_i|^{2c_i} \right).
+    \end{align*}
+    Let $|x_*| = \max_{i} |x_i|$. We have
+    \begin{align*}
+        U(z) &= \lim_{k\to \infty} \left[ \frac{1}{2k}\log(|x_*|^{2k}) + \log \left( \sum_{|c|\leq k} \frac{1}{|x_*|^{2k}} |z|^{2c_1}\prod_{i=2}^d |x_i|^{2c_i} \right) \right] \\
+        &=  \log(|x_*|) + \lim_{k\to \infty}\frac{1}{2k} \log \left( \sum_{|c|\leq k} \frac{1}{|x_*|^{2(k-|c|)}} \frac{|z|^{2c_1}}{|x_*|^{2c_1}} \prod_{i=2}^d \frac{|x_i|^{2c_i}}{|x_*|^{2c_i}} \right) \geq \log(|x_*|) .
+    \end{align*}
+    The last inequality follows from the limit being nonnegative; the sum is always at least $x_*^{2k}/x_*^{2k} = 1$. We may construct a similar bound by extracting $|z|^{2k}$ from the sum, and hence $U(z) \geq \max(\log(|x_*|),\log(|z|))$.
+
+    % Now, since $|x_*| \geq 1$, $|z| \leq |x_*|$, and $|x_*| = \max_j |x_j|$, we have
+    % \begin{align*} &\lim_{k\to \infty}\frac{1}{2k} \log \left( \sum_{|c|\leq k} \frac{1}{|x_*|^{2(k-|c|)}} \frac{|z|^{2c_1}}{|x_*|^{2c_1}} \prod_{i=2}^d \frac{|x_i|^{2c_i}}{|x_*|^{2c_i}} \right) \leq \lim_{k\to \infty}\frac{1}{2k} \log \left( \sum_{|c|\leq k} 1 \right)  \\
+    % &\leq \lim_{k\to \infty} \frac{1}{2k} \log( (k+d)^d) = 0.
+    % \end{align*}
+    % With similar reasoning, when $|z| \geq |x_*|, |z| \geq 1$, we have $U(z) = \log(|z|)$.
+
+    On the other hand, we have the following upper bound:
+    \begin{align*} \lim_{k\to \infty} &\frac{1}{2k} \log \left(\sum_{|c|\leq k} |z|^{2c_1} \prod_{i=2}^d |x_i|^{2c_i} \right) \leq \lim_{k\to \infty} \frac{1}{2k} \log \left( \sum_{|c|\leq k} |z|^{2c_1}|x_*|^{2|c|-2c_1} \right) \\
+    &\leq \lim_{k\to \infty} \frac{1}{2k} \log \left( (d+k)^k \sum_{i=0}^k \sum_{j=0}^{k-i} |z|^{2i} |x_*|^{2j} \right) = \max( \log (|z|), \log(|x_*|)).
+    \end{align*}
+    Hence $U(z) = \max(\log(|x_*|), \log(|z|))$, and the conditional distribution of $x_1$ is the uniform distribution on $S_{\max |x_i|}$.
+
+    \begin{el}
+        I hope that things above are now fine
+    \end{el}
+
+    This means, that $\Pr(|x_1| \geq |x_j|) = 1$ for all $j \in [d]$;
+    \begin{align*}
+       \Pr(|x_1|\geq |x_j|) = \int_0^\infty \stackrel{= 1}{\Pr(|x_1| \geq r \mid |x_j| = r)} \Pr(|x_j| = r) dr = 1. 
+    \end{align*}
+    Applying this for all pairs of indices $i,j \in [d]$, we have $|x_i| = |x_j|$ almost surely.
+    
+    
+    \begin{vn}
+    Thanks a lot Etna for filling up the details. For the last step, I am simply deducting from the conditional distributions that $\P[|x_i|>|x_j|]=0$ for all $i,j$.
+
+    I should be at the office on Wednesday (and maybe also on Friday), let us discuss in person then if you are also available.
+    \end{vn}
+    
+    \begin{el}
+        Now it is clear! Thank you!! I will be also available on Wednesday!
+    \end{el}
+
+    
+    Now define $r_i = x_i/x_1$ to write
+    \begin{align*}
+        \sum_{|c| \leq k} \alpha_c x^c =  \sum_{|c| \leq k} \alpha_c x_1^{|c|} \prod_{i=2}^d r_i^{c_i}.
+    \end{align*}
+    Let the marginal distribution of the roots with respect to the first coordinate be $f_k(x_1)$, and $g_k(|r|)$ be the joint distribution of $|r| = (|r_i|)_{i=2}^d \in \R^{d-1}$ at the roots. Then
+    \begin{align*}
+        \lim_{k\to \infty} f_k(x_1) &= \lim_{k\to \infty} \int_0^\infty f_k(x_1 \mid |r_i| = t_i) g_k( t) dt \\ 
+        &\stackrel{(*)}{=} \int_0^\infty \lim_{k\to \infty}  f_k(x_1 \mid |r_i| = t_i) \Pr(|r_i| = t_i) dt,
+    \end{align*}
+    where $\lim_{k\to \infty} \Pr(|r_i| = t_i) = \delta_{\mathbf{1}}(t)$ and $\lim_{k\to \infty} f_k(x_1 \mid |r_i| = t) \to S^{c(t)} (**)$ almost surely. 
+     
+    
+    
+    \begin{el}
+       Here $t \in \R^{n-1}$.
+
+       \begin{vn}
+           $d-1$ not $n-1$
+       \end{vn}
+
+        $(*)$ under what circumstances? (eg. bounded above by integrable function)
+
+        $(**)$ $c(t) = \max t_i$?
+    
+    \end{el}
+
+    \begin{vn}
+        Sketch idea: $g_k$ converge to $\delta_{\bf 1}$, so for $k$ large enough they must decay away from ${\bf 1}$. The $f_k$ are bounded by some constant on every compact set because they are the distrubution of a univariate polynomial with uniformaly bounded (above and below) variances. (There should be results on this in the literature.)
+
+        So we can probably control the integrand by something that looks like
+
+\[  C {\bf 1}_{\| t - {\bf 1}\| \leq K} + f_k g_k   {\bf 1}_{\| t - {\bf 1}\| > K}. \]
+
+For the tail part we should probably argue that $f_k$ grows at most polynomially and $g_k$ decays exponentially. 
+    \end{vn}
+
+  
+    
+    
+% \begin{vn}
+%     I'm not too sure about what you wrote above (probably I miss what you mean by ``symmetry argument" exactly), but you could argue as this: {\color{red}the conditional limit distribution of $x_i$ given $x_{j \neq i}$ is uniform on $\prod_{j \neq i} |x_j|$}, and hence $|x_i|^2=\prod_i |x_i|$ a.s. for all $i$, implying that, with probability $1$, $|x_i|$ does not depend on $i$. This sounds like a valid reasoning to me.
+    
+% (Still to be proved: The claim in red).
+% \end{vn}
+
+% \begin{el}
+%     About the "symmetry argument": looked nice yesterday, but did not work and made no sense today, please ignore!!
+
+%     Currently working on red, I really do not want to open up the sum (tried for a while, it splits into multiple sums that do not combine nicely), so right now attempting to determine which terms dominate in the limit without explicitly computing the sum. Right now I don't believe that it's uniform on $\prod |x_i|$ but probably something else (max $x_i$)
+% \end{el}
+
+% \begin{vn}
+%     Yes sure, take your time to figure out what the situation is. I don't mean to put pressure by commenting on work in progress, I'm just excited by this so from time to time I take a peek and I just do what would anyway happen if we were together in front of a blackboard :)
+
+% So here is another comment, it's equally good for our goals if you can instead show that {\color{red}in the limit, $x_i$ given $x_{j \neq i}$ is uniform on $\max_{j \neq i} |x_j|$}, in the sense that we would still reach the same conclusion. Indeed, take an arbitrary pair of indices $a \neq b$, then a.s. $|x_b|=\max_{i \neq b} |x_i| \geq |x_a|$, and similarly a.s. $|x_a|=\max_{j \neq a} |x_j|  \geq |x_b|$, so $|x_a|=|x_b|$ almost surely. So even if your last feeling is correct, this does not seem to spoil the following step in this possible proof.
+% \end{vn}
+    
+
+% \begin{vn}
+% Assuming that the previous steps are correct, the variance for $x^i$ should be just 
+%     \[ \begin{pmatrix}
+%    i+d-1\\
+%     i
+% \end{pmatrix} = \frac{\Gamma(i+d)}{\Gamma(d)\Gamma(i+1)}  \]
+% (as you are counting the numbers of ways of distributing $i$ undistinguishable objects into $d$ boxes).
+
+% Computing the limit as before, this yields again the uniform distribution on the circle of radius $1$. This is because the variance behaves as const. times $i^{d-1}$ as $i$ grows (for constant $d$).
+
+% Note: I am just assuming here that the last thing you wrote is true. I have not checked the previous steps, nor tried to fill in any gaps. But it seem that the idea is good and may lead to the conclusion we want... So I think that it would make sense for you to try to add the details in the next few days!
+
+% Another  direction to be possibly explored: can we consider some other choice of the variances for the original coefficients of the system (rather than all $1$) and still say what the limit distribution is?
+% \end{vn}
+
+
+\begin{vn}
+ By the way, I have also created a \begin{verbatim}
+    \begin{el}
+    \end{el}
+\end{verbatim} and a
+\begin{verbatim}
+    \begin{ml}
+    \end{ml}
+\end{verbatim}
+environment if you wish to also write coloured comments, similarly to my
+\begin{verbatim}
+    \begin{vn}
+    \end{vn}
+\end{verbatim}
+ Feel free to change the colour or symbols to your taste!
+\end{vn}
+
+\begin{el}
+    Thank you! I am currently working on this and will update here when I have more details :)
+\end{el}
+    
+\end{proof}
+
+\begin{vn}
+    The authors of \cite{PY15} seem to give the following sufficient conditions for the roots of a complex random polynomial $p(x)=\sum_{i=0}^n a_i x^i$, not necessarily with i.i.d. coefficients $a_i$, to converge to the uniform distribution on $S^1$: (1) $\E[|a_i|] < \infty$ for all $i$ (2) $\E[\log|a_i|] > -\infty$ for $i\in \{0,n\}$. If $p(x)$ is the resultant of a system of $n$ polynomial equations in $n$ variables (where $x_1$ is seen as a parameter) then the $a_i$ are polynomial functions of the coefficients of the original polynomials. If such coefficients are i.i.d. with finite moments (e.g. Gaussian) then
+    $$ \E[|a_i|] \leq \sqrt{\E[|a_i|^2]} < \infty  $$
+    yielding condition (1). If moreover the distributions of the original coefficients are absolutely continuous, uniformly bounded and rotationally invariant then the same properties (for boundedness this is not that obvious; to be checked --- update 5.11, this is actually false so probably this argument doesn't work after all in general; does it work if we start from Gaussians?) are inherited by $a_i = r_i \exp(i \theta_i)$, and if the letter has p.d.f $f(r)$, independent of $\theta$ and satisfying $\int_0^\infty f(r) r dr = (2 \pi)^{-1}$ and $0 \leq f(r) \leq M$; then
+    $$ \E[\log |a_i|] = 2 \pi \int_0^\infty \log(r) f(r) r dr \geq 2 \pi M \int_0^1 r \log(r) dr = -\frac{\pi M}{2}$$
+    yielding property (2). (All this is to be double checked.)
+\end{vn}
+
+
+   
+\subsection{Tail bounds}
+(VN 18.9.24)
+We discussed with Etna possible bounds for \emph{finite} degree. Here is something I could do for the univariate case. Given the polynomial $p(x)=\sum_{i=0}^n a_i x^i$ one has the upper bound on its roots (this can be proved by the H\"{o}lder inequality):
+
+\[  \frac{\sqrt{|a_0|^2+\cdots+|a_n|^2}}{|a_n|} \leq 1 +  \frac{\sqrt{|a_0|^2+\cdots+|a_{n-1}|^2}}{|a_n|}=:1+B.\]
+
+Hence, for the probability $\P_t$ that the largest root is $\geq 1+t$ we have
+
+\[ \P_t \leq \P[B \geq t] = 1 - \P[B \leq t] \]
+
+If the $a_i$ are complex Gaussian i.i.d. then $|a_n|$ is chi distributed with $2$ dof and the numerator in $B$ is independent and chi distributed with $2n$ d.o.f. Thus one can compute exact integral and get $\P[B \leq t]=\frac{t^{2n}}{(1+t^2)^n}$, thus yielding
+
+\[ \P_t \leq 1 - \frac{t^{2n}}{(1+t^2)^n}.   \]
+
+\begin{vn}
+    Something is not quite right here, or maybe it is correct but not what I wanted --- I'd like a bound that goes to $0$ when $n$ grows, not to $1$. This could be because the LARGEST root is not a good thing to study. Even if almost all of them are O(1) when $n \rightarrow \infty$, there could still be a very large largest one in the limit.
+
+Another idea could be to compute the expected value of $n^{-1}$ times the number of roots in the annulus of radii $1-\delta,1+\delta$. Not sure I'll have time for this in the next days though.
+\end{vn}
+
+
+\begin{el}
+    I was hoping to get something out of $1 + \max \{ |a_i|/|a_n|\}$, but the distribution is a bit nastier.
+    I am still looking for good enough bounds for the $\max$, but seems that  the sum is not good enough. 
+    The distributions $|a_i|/|a_n|$ are nice, but that is of little use, since all of the terms depend on $|a_n|$ and it's really $\max\{|a_i|\}/|a_n|$, where the $\max$ is something nasty.
+
+    I also briefly took a look at the expectation in the annulus, and it reduces to computing $\Pr(|r_i| \in 1 \pm \delta)$ for one root, which I'm not yet sure how to compute/estimate.
+\end{el}
+
+\begin{vn}
+What the authors of \hyperlink{
+https://arxiv.org/abs/1104.5360}{this paper} do (in a different setting)
+could be useful for the annulus approach 
+\end{vn}
+
+\begin{el}
+    Below is an attempt to utilize a similar approach to bound the number of roots outside $B(1+\delta)$. I am afraid that eventually this gives the same bound as above...
+\end{el}
+
+
+{\bf Application of Rouché's theorem.}
+Let $f = \sum_{i=0}^n a_i x^i = f_1 + f_2$. If $|f_2(x)| < |f_1(x)|$ for all $|x| = 1+\delta$, then $f$ and $f_1$ have the same number of roots in $B(1+\delta)$. More specifically, if $f_2(x) = \sum_{i=0}^k a_i x^i =: f_{2,k}(x)$ and $f_1(x) = \sum_{i=k+1}^n a_i x^i =: f_{1,k}(x)$, then $f$ has at least $k+1$ roots in $B(1+\delta)$.
+
+The expected number of roots in $B(1+\delta)$ is hence bounded by 
+\[
+\E \left( \max \{ k \in [n] \mid |f_{2,k}(x)| < |f_{1,k}(x)| ~\forall |x| = 1+\delta \} \right) 
+\]
+Not really sure if this is at all easier to compute. The probability of all of the roots being inside $1+\delta$ is 
+\[  \Pr \left( \left| \sum_{i=0}^{n-1} a_ix^i  \right| < |a_n|(1+\delta)^n, \forall |x| = 1+\delta \right) \geq \Pr \left(  \sum_{i=0}^{n-1} |a_i|(1+\delta)^i < |a_n|(1+\delta)^n \right) ,  \]
+or exact could we compute/approximate $\max_{\theta} \left| \sum_{i=0}^{n-1} a_j(1+\delta)^j e^{i\theta j}  \right|$ (generally difficult I guess).
+
+For the latter, at least the distributions for linear combinations of $\chi^2$-distrs exists, but it doesn't seem to be that easy-looking.
+
+\newpage
+
+From now on, this is older material that I copy here just for the sake of collection.
+
+\section{Product of positive random variables}
+
+Suppose that $X$ and $Y$ are (possibly dependent) random variables with absolutely continuous joint distribution $g(x,y)$ with values on $[0,\infty[^2$, and denote by $G(x,y)$ the cumulative joint distribution of $X,Y$, so that $g(x,y)=\frac{\partial^2 G}{\partial x \partial y}$. Moreover, let $Z=XY$. What is the distribution of $Z$, say, $f(z)$?
+
+It is easier to compute the cdf of $Z$:
+
+\[   F(z) =  \P[Z \leq z] =\int_0^\infty \P[Y \leq z/x \mid X=x] dx  =\int_0^\infty \frac{\partial G(x,z/x)}{\partial x} dx = \int_0^\infty dx \int_0^{z/x} g(x,y)dy.  \]
+
+Differentiating with respect to $z$ we obtain the pdf:
+
+\[ f(z) = \frac{\partial F}{\partial z}  = \frac{1}{x} \frac{\partial F}{\partial (z/x)}  = \int_0^\infty g(x,z/x) \frac{dx}{x}. \]
+
+By iterating this argument, we obtain a formula for the product $Z$ of $m+1$ random variables $X_i$ having joint pdf $g(x_1,\dots,x_{m+1})$:
+
+\[  f(z) = \int g\left(x_1,\dots,x_{m},\frac{z}{x_1 \cdots x_{m}} \right) \frac{d x_1 \cdots d x_{m}}{x_1 \cdots x_m}. \]  
+
+\section{Ratio of positive random variables}
+
+Let us now ask the same question as before, but this time we define $Z=X/Y$. In this case, 
+
+\[   F(z) =  \P[Z \leq z] =\int_0^\infty \P[Y \leq z x \mid X=x] dx  =\int_0^\infty \frac{\partial G(x,xz)}{\partial x} dx = \int_0^\infty dx \int_0^{xz} g(x,y)dy \]
+and hence
+\[ f(z) = \frac{\partial F}{\partial z}  = x \frac{\partial F}{\partial (xz)}  = \int_0^\infty g(x,xz) x dx. \]
+
+\section{Application}
+
+The condition number increase for algebraic-geometric method to solve polynomial systems is related to the quantity
+\begin{equation}
+\frac{1}{\| J^{-1}\| |\det J|} = \frac{1}{\sigma_1 \cdots \sigma_{d-1}},
+\end{equation}
+where $J$ is the Jacobian at the root and $\sigma_1 \geq \dots \geq \sigma_d$ are its singular values. Suppose now that $J$ is a random matrix, then it would be of interest to estimate the distribution of the random variable \[Z=\prod_{i=1}^{d-1} \sigma_i = \frac{|\det J|}{\sigma_d}.\]
+For the case of an i.i.d. Gaussian random matrix $J$ with mean $0$ and variance $1$, the joint distribution of the singular value is known to be 
+\begin{equation}\label{due}
+g(\sigma_1,\dots,\sigma_d) = c_\beta \exp\left(-\frac12 \sum_{i=1}^d \sigma_i^2\right) \prod_{i=1}^d \sigma_i^{\beta-1} \prod_{i<j} (\sigma_i^2 -\sigma_j^2)^\beta ,
+\end{equation}
+with domain $\sigma_1 \geq \dots \geq \sigma_d \geq 0$, and where $\beta=1,2$ depending on whether the matrix is real or complex and $c_\beta$ is a normalization constant. Moreover, it is known that $|\det J|$ is distributed as the product of $d$ chi-square random variables with degree of freedom $\beta d, \beta(d-1), \dots, \beta$. In the complex case, the p.d.f. of $\sigma_d$ is also known exactly and it is, as can be seen by integrating \eqref{due},
+\[ 2 d \sigma_n \exp(-d \sigma_d^2).\]
+This suggests two possibilities to estimate the distribution of $Z$:
+\begin{enumerate}
+\item Apply the rule for the product of random variables (and integrate over $\sigma_d)$ to obtain it from \eqref{due};
+\item Estimate from \eqref{due} the conditional distribution $f(\sigma_d \mid |\det J|)$ to obtain by Bayes theorem the joint distribution
+\[  f(\sigma_d, |\det J|) = f(|\det J|) f(\sigma_d \mid |\det J|), \]
+and hence apply the rule for the ratio of random variables.
+\end{enumerate}
+Neither approach seems to lead to particularly nice integrals, and it may be not possible to compute them exactly, but can we obtain reasonable estimates?
+
+\subsection{$d=2$}
+
+This case can be computed exactly. Let use denote by $X,Y$ the random variables corresponding to the larger (resp. smaller) singular value. Then, we want to compute
+
+\[ \int_0^x \frac14 e^{-\frac{-x^2-y^2}{2}} xy (x^2-y^2)^2 dy = \frac{x}{4} e^{-\frac{x^2}{2}} \int_0^x y e^{-\frac{y^2}{2}} (x^4 + y^4 - 2 x^2 y^2) y dy = \]
+\[  =  \frac{x}{4} e^{-\frac{x^2}{2}} \int_0^{\frac{x^2}{2}} (x^4 + 4 u^2 - 4 x^2 u ) e^{-u} du = \frac{x}{4} \left( (x^4-4x^2+8) e^{-\frac{x^2}{2}} -8 e^{-x^2} \right) \]
+
+Here, we have noted, by integrating by part, that $I_n(x)=\int_0^{\frac{x^2}{2}} u^n e^{-u} du$ satisfies the recurrence $I_n(x) = n I_{n-1}(x) - e^{-\frac{x^2}{2}} \frac{x^{2n}}{2^n}$, and hence
+\[ I_0(x)=1-e^{-\frac{x^2}{2}}, \quad I_1(x)=1-e^{-\frac{x^2}{2}}\left(1+\frac{x^2}{2}\right), \quad I_2(x)= 2-e^{-\frac{x^2}{2}}\left(2+x^2 + \frac{x^4}{4}\right).\]
+
+The cumulative distribution function is
+
+\[ F(x) = 1 + e^{-x^2} - \left(\frac{x^4}{4} +2\right) e^{-\frac{x^2}{2}}  \Rightarrow \P[X \leq t] \leq \frac{t^8}{192}.\]
+
+
+
+\subsection{$d=3$}
+
+
+To get an idea of what kind of distribution $Z = \lambda_1\lambda_2$ has, we computed numerically the integals below.
+One can see the distribution of $Z$ in Figure \ref{fig:distrofZ}.
+
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[height=0.7\textwidth]{figs/formoret.jpg}
+        \caption{Sorry if this is bad :(}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[height=0.7\textwidth]{figs/nearzero.jpg}
+        \caption{Near $t = 0$}
+    \end{subfigure}
+    \caption{Distr of $Z$ computed numerically for $n = 3$}
+    \label{fig:distrofZ}
+\end{figure*}
+
+
+
+Denote $\int_t^\infty e^{-x} x^k dx = \Ei_k(t)$.
+
+We aim to compute
+\begin{align*}
+    \P(\lambda_1\lambda_2 \leq t) &= \iiint_{R\lambda} e^{-\sum \lambda_i/2} \prod_{i < j} (\lambda_i - \lambda_j)^2 d\lambda_3 d\lambda_2 d\lambda_1 \\
+    &=  \int_0^{\sqrt{t}} \int_0^{\lambda_1} \int_0^{\lambda_2} f ~d\lambda_i + \int_{\sqrt{t}}^\infty \int_0^{t/\lambda_1} \int_0^{\lambda_2} f ~d\lambda_i.
+\end{align*}
+The first integral is equal to $\P(\lambda_1 \leq \sqrt{t})$, and one may find its value from literature (eg. Thm 2 in Khatri 1964).
+The goal is to compute integrals of form
+\[ I_n(t) = \int_{\sqrt{t}}^\infty \int_0^{\frac{t}{x_1}} \int_0^{x_2} e^{-\sum x_i/2} \prod x_i^{n_i} dx_3 dx_2 dx_1, \]
+where $n \in \N^3$.
+
+Bruteforcing this open gives
+\begin{align*}
+    I_n(t) &= 2^{n_3 + 1} n_3! \left( 2^{n_2+1} n_2! - \sum_{i=0}^{n_3} \frac{(i+n_2)!}{2^i i!}\right) 2^{n_1 + 1} \Ei_{n_1}(\sqrt{t}/2) \\
+    &-  2^{n_3 + 1} n_3! 2^{n_2+1} \int_{\sqrt{t}}^\infty e^{-x_1/2} x_1^{n_1} \Ei_{n_2}(t/(2x_1)) dx_1 + 2^{n_3 + 1} n_3!\sum_{i=0}^{n_3} \frac{1}{2^i i!}  \int_{\sqrt{t}}^\infty e^{-x_1/2} x_1^{n_1}  \Ei_{i+n_2}(t/x_1).
+\end{align*}
+
+The difficult part are the last two terms, since we integrate over function of form $e^{-x/2 + t/x} x^n$, where $n \in \Z$.
+We will attempt bounding the functions from below and above. Since we have $x_1 \geq \sqrt{t}$, we get
+\[  x_1/2 + \sqrt{t}  \geq x_1/2 + t/x_1 \geq x_1/2 \Leftrightarrow e^{-x_1/2} \geq e^{-x_1/2} e^{-t/x_1} \geq e^{-x_1/2}e^{-\sqrt{t}}, \]
+and similarly
+\[  e^{-x_1/2} \geq e^{-x_1/2} e^{-(t/2)/x_1} \geq e^{-x_1/2}e^{-\sqrt{t}/2} \]
+We get 
+\[ e^{-\sqrt{t}} 2^{n_1-i+1}\Ei_{n_1-i}(\sqrt{t}/2) \leq \int_{\sqrt{t}}^\infty e^{-\frac{1}{2}(x_1-t/x_1)} x_1^{n_1-i} dx_1 \leq 2^{n_1-i+1}\Ei_{n_1-i}(\sqrt{t}/2) \]
+and
+\[ e^{-\sqrt{t}/2} 2^{n_1-i+1}\Ei_{n_1-i}(\sqrt{t}/2) \leq \int_{\sqrt{t}}^\infty e^{-x_1/2 - t/x_1} x_1^{n_1-i} dx_1 \leq 2^{n_1-i+1}\Ei_{n_1-i}(\sqrt{t}/2).  \]
+
+Putting everything together...
+\begin{align*}
+    I_{n}(t) &\geq 2^{n_3 + 1} n_3! \left( 2^{n_2+1} n_2! - \sum_{i=0}^{n_3} \frac{(i+n_2)!}{2^i i!}\right) 2^{n_1 + 1} \Ei_{n_1}(\sqrt{t}/2) \\
+    &-  2^{n_3 + 1} n_3! 2^{n_2+1}  n_2!  \sum_{i=0}^{n_2} \frac{t^i}{2^i i!} 2^{n_1-i+1}\Ei_{n_1-i}(\sqrt{t}/2) \\
+    &+ 2^{n_3 + 1} n_3!\sum_{j=0}^{n_3} \frac{1}{2^jj!} \sum_{i=0}^{i+n_2}  \frac{(i+n_2)!t^i}{i!} e^{-\sqrt{t}} 2^{n_1-i+1}\Ei_{n_1-i}(\sqrt{t}/2).
+\end{align*}
+
+\begin{align*}
+    I_{n}(t) &\leq 2^{n_3 + 1} n_3! \left( 2^{n_2+1} n_2! - \sum_{i=0}^{n_3} \frac{(i+n_2)!}{2^i i!}\right) 2^{n_1 + 1} \Ei_{n_1}(\sqrt{t}/2) \\
+    &-  2^{n_3 + 1} n_3! 2^{n_2+1}  n_2!  \sum_{i=0}^{n_2} \frac{t^i}{2^i i!} e^{-\sqrt{t}} 2^{n_1-i+1}\Ei_{n_1-i}(\sqrt{t}/2) \\
+    &+ 2^{n_3 + 1} n_3!\sum_{j=0}^{n_3} \frac{1}{2^j j!} \sum_{i=0}^{j+n_2}  \frac{(i+n_2)!t^i}{i!} 2^{n_1-i+1}\Ei_{n_1-i}(\sqrt{t}/2).
+\end{align*}
+
+
+
+\subsubsection{Trying $d=3$ piecewise (not finished)}
+
+
+Estimate $\int e^{-t/x} e^{-x/2} x^n dx$ from above using approximations of $e^{-t/x}$. 
+We split the integral in intervals $\{n,n+1\}$ for $n \in \N, n \geq \sqrt{t}$ and approximate each part separately.
+
+The function $e^{-1/x}$ is concave in $x \geq 1$. Hence linear bounds for $n \geq x \geq 1$  are given by 
+\[  e^{-t/(n+1)}(x-n) + e^{-t/n}(n+1-x) \leq e^{-t/x} \leq e^{-t/(n+1)} + \frac{t}{(n+1)^2} e^{-t/(n+1)}(x-n-1)   \]
+In $x \in [\sqrt{t},1]$ we have
+\[  \max(0, x + e^{-t} - 1) \leq e^{-t/x} \leq e^{-t}x.  \]
+... lower bound currently bad, can be improved
+
+
+\subsubsection{Empirical distributions for $d \leq 8$}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figs/singproddistr.jpg}
+    \caption{Empirical distributions for $\log \prod_{i=1}^{d-1} \sigma_i$}
+    \label{fig:singproddistr}
+\end{figure}
+
+
+    
+\subsection{Parametrizing $R_\lambda$}
+
+In the end, we have $n-1$ (verify) integrals -- one for each $k \in  [n-1]$ -- with bounds
+\[ \lambda_{n} \leq \dots \leq \lambda_{n-k},~ \lambda_{n-k}^k \leq \frac{t}{\prod_{i=1}^{n-k-1} \lambda_i},~ \lambda_{n-j}^j \geq \frac{t}{\prod_{i=1}^{n-j-1} \lambda_{i}} ~\text{for }j = k+1,\dots,n-1. \]
+
+
+We have $\lambda_n \in [0,\lambda_{n-1}]$. For $\lambda_{n-1}$ we have the constraints
+\begin{align*}
+    \lambda_{n-1} \leq \frac{t}{\prod_{i=1}^{n-2} \lambda_i} \text{ and } \lambda_{n-1} \leq \lambda_{n-2}.
+\end{align*}
+The inequality
+\[ \lambda_{n-2} \leq \frac{t}{\prod_{i=1}^{n-2} \lambda_i} \Leftrightarrow \lambda_{n-2}^2 \leq \frac{t}{\prod_{i=1}^{n-2} \lambda_i} \]
+determines which one is active. In other words, we have
+\[ \iint_{\lambda_{n-2}^2 \leq \frac{t}{\prod_{i=1}^{n-3} \lambda_i}} \int_{0}^{\lambda_{n-2}} f d\lambda_{n-2} \dots d\lambda_1 + \iint_{\lambda_{n-2}^2 \geq \frac{t}{\prod_{i=1}^{n-3} \lambda_i}} \int_{0}^{\frac{t}{\prod_{i=1}^{n-2} \lambda_i}} f d\lambda_{n-2} \dots d\lambda_1. \]
+On the other hand, $\lambda_{n-2}$ is also constrained by $\lambda_{n-3}$, and hence we also have the bounds
+\[ \lambda_{n-2} \leq \min\left( \lambda_{n-3}, \sqrt{\frac{t}{\prod_{i=1}^{n-3} \lambda_i}} \right).  \]
+Again, the first is active when $\lambda_{n-3}^3 \leq \frac{t}{\prod_{i=1}^{n-4} \lambda_i}$, and the integrals can again be split into two parts.
+This continues recursively until we reach $\lambda_1$, for which we get the bound $\lambda_1 \leq \sqrt[n-1]{t}$.
+
+
+
+
+
+
+
+
+\section{Sampling}
+
+\subsection{$\| [\det Q]_\B\|$}
+
+In \cite{GT}, they show that the condition number for the normal form method at the root $x^*$ takes the form
+\[  \kappa_\mathrm{eig}(x^*) = \frac{\|[q]_\mathcal{B}\|_2 \|\mathcal{B}(x^*)\|_2 }{|\det(J(x^*)|} (1+|\lambda|),  \]
+where $\mathcal{B}$ is some basis for the $\C$-vector space $R/I$, $q$ is the Lagrange interpolant that does not vanish at $x^*$, and $\lambda$ is the corresponding eigenvalue.
+The polynomial $q$ can be also given as the determinant of the matrix $Q$ that satisfies 
+\[ P(x) = Q(x) (x-x^*).  \]
+One may note, that though the matrix $Q$ is not unique, its determinant in $R/I$ is.
+
+To be able to easily determine $Q$, we inspect the following random polynomial systems with a root at zero;
+\begin{align}
+    P(x) = \diag(x^2) + Gx, \label{eq:diagsys}
+\end{align}  
+where $G$ is complex Gaussian. Then  we have $Q = \diag(x) + G$, and $J = G$. Now   
+    \[  \det Q = \sum_{I \subseteq [d]} \det(G_I) x^I \]
+    and since $x^I := \prod_{i\in I} x_i$ is in the basis for all $I \subseteq [d]$, we directly have
+    \[ \| [ \det Q]_\B \|^2 = \sum_{I \subseteq [d]} |\det(G_I)|^2. \]
+Same reasoning applies at least for systems of form
+\[  \diag (f_i(x_i)) + Gx  \]
+where $f_i$ have degree $k$? 
+
+
+    \begin{vn}
+9/4/2026 Spotted + corrected some minor mistakes below
+
+    
+        The above looks good! Indeed we have
+        \[  \E[\| [\det Q] \| ] \leq \sqrt{ \E[\sum |\det(G_I)|^2]} = \sqrt{\sum \E[|\det(G_I)|^2]} = \sqrt{1 + \sum_{k=1}^d \begin{pmatrix}
+            d\\
+            k
+        \end{pmatrix} k!} = \sqrt{1+e \Gamma(d+1,1)}. \]
+This grows not as fast as $|\det(J)|\|J^{-1}\|$, so it actually is in agreement with Figure 2. 
+
+
+We can compute more precisely 
+ \[ \E[\log \frac{\|[\det(Q)]_\B\|_2}{|\det(J)|\|J^{-1}\|}] \leq \E[\log \frac{\|[\det(Q)]_\B\|_2}{B}] \]
+ where $B$ is the bound on the product of top $d-1$ singular values discussed above, based on the expected logarithm of a chi variable with $2k$ dofs, which is
+\[ \frac{2}{2^k\Gamma(k)} \int_0^\infty \log(x) x^{2k-1} e^{-\frac{x^2}{2}} dx = \frac12 \left(\log2 - \gamma + \sum_{i=1}^{k-1} \frac{1}{i} \right) =: f_k  \]
+
+Namely, we  get
+
+\begin{align*}
+    \E[ \log \| \det(Q) \| ] - \E[\log B] = \frac12 \E[ \log \| \det(Q) \|^2 - \sum_{k=2}^d f_k \\ \leq \frac12 \log \E[\| \det(Q) \|^2] + \frac12 \left( (d-1) (\gamma-\log 2) -\sum_{k=2}^d \sum_{i=1}^{k-1} \frac1i \right)\\
+    =\frac12 \left( \log[1+e \Gamma(d-1,1)] +(d-1)\gamma - (d-1)\log 2 - d \sum_{i=2}^d \frac1i    \right)\\
+    \leq \frac{\gamma-1}{2} - \log 2 \frac{d-2}{2}.
+\end{align*}
+(This calculation can likely be improved, I just wanted to show that Figure 2 is probably absolutely correct, as in expectation we do expect the average case to actually improve with size in this model)
+ \end{vn}
+
+    We computed $\|[\det Q]_\B\|^2$ for \eqref{eq:diagsys}for randomly sampled $G$, and inspected the conditioning at $x^* = 0$.
+    In Figure \ref{fig:samplecondQ}, one can see histograms of
+    \[ \log \frac{\|[\det(Q)]_\B\|_2}{|\det(J)|\|J^{-1}\|}\]
+    for $d = 2,\dots,7$.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\linewidth]{figs/samplelogcond2.jpg}
+        \caption{Histograms of $ \kappa_\mathrm{eig}/\|J^{-1}\|_2$ for $d = 2,\dots,7$ for randomly sampled Gaussian $G$ ($N=10^5$).}
+        \label{fig:samplecondQ}
+    \end{figure}
+    
+
+
+\begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\linewidth]{figs/logdetQ2.jpg}
+        \caption{Histograms of $\|[\det Q]_\B\|_2$ for $d = 2,\dots,7$ for randomly sampled Gaussian $G$ ($N=10^5$). }
+        \label{fig:samplecondQ}
+    \end{figure}
+
+
+We also inspected $Q$ for bivariate systems with increasing degree.
+The sampled systems were of form
+\[  p_k(x,y) = \sum_{1 \leq i+j \leq n} g_{ij} x^iy^j  \]
+for $k= 1,2$, where $g_{ij}$ are complex Gaussian.
+In Figure \ref{fig:bivardetQ} we have a frequency diagram of the relative condition number at the root $x^* = 0$ for different maximum degrees $n = 2,\dots, 6$.
+The norm $\| [\det Q]_\B\|_2$ has been computed by explicitly finding the Gröbner basis and reducing $\det Q$ with that basis.
+Since the GB computations were unreliable sometimes, the results where the GB computations failed {\it too much} have been removed.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figs/bivardetQ.jpg}
+    \caption{$\| [\det Q]_\B\|_2 / |\det(J)|\|J^{-1}\| $ with sample size $N = 1000$. Since the GB computations are unstable, unreliable results have been filtered out (where the computed GB does not generate the same ideal anymore).}
+    \label{fig:bivardetQ}
+\end{figure}
+
+
+\subsection{Distribution of roots for bivariate systems}
+
+When $\deg p_i \to \infty$, we know that the roots of Gaussian polynomials tend to the unit circle.
+We sampled bivariate systems
+\[p_k(x,y) = \sum_{j \in [n]} \sum_{i \in [n]} g_{ij} x^iy^j, ~k \in \{1,2\} \]
+with complex Gaussian $g_{ij}$.  In Figure \ref{fig:rootdistr} one can see scatter plots of the $x$ coordinate of the (complex) roots for $n = 2,\dots,10$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figs/rootdistr.jpg}
+    \caption{The $x$-coordinate of the roots of bivariate random systems with increasing degree.}
+    \label{fig:rootdistr}
+\end{figure}
+
+Stupid idea: let $(v,w)\in \C^2$ be some random vector, $\|(v,w)\|^2=1$. Consider the random variable $Z=vX+wY$, where $(X,Y)$ is a root of $p_k(x,y)=0$. Show that
+\begin{equation*}
+    \P(|Z|\geq 1+t) \leq C\mathrm{e}^{-t^2}
+\end{equation*}
+
+
+
+\section{New ideas by VN 10 April 2026}
+
+\section*{Bombieri Basis}
+These ideas are from \cite[Chapters 16-17-18]{BC}.
+Consider the vector space of homogeneous polynomials of degree exactly $n$ in $d+1$ variables, $z = (z_0, z_1, \dots, z_d) \in \mathbb{C}^{d+1}$. We can wlog normalize $\| z \|=1$.
+
+Similarly to the non-homogenous notation, we introduce the multi-index $\alpha = (\alpha_0, \alpha_1, \dots, \alpha_d) \in \mathbb{N}^{d+1}$ now with strict equality $|\alpha| = \sum_{i=0}^d \alpha_i = n$.
+Define the multinomial 
+\[
+    \binom{n}{\alpha}: = \frac{n!}{\alpha_0! \alpha_1! \cdots \alpha_d!}
+\]
+For two homogeneous polynomials $p(z) = \sum_{|\alpha|=n} a_\alpha z^\alpha$ and $q(z) = \sum_{|\alpha|=n} b_\alpha z^\alpha$, the Bombieri inner product is defined as:
+\[
+    \langle p,q \rangle_{B} = \sum_{|\alpha|=n} \binom{n}{\alpha}^{-1} a_\alpha b_\alpha^*.\]
+The \emph{Bombieri basis}
+\[
+    e_\alpha(x) = \sqrt{\binom{n}{\alpha}} \cdot z^\alpha
+\]
+is an orthonormal basis in this inner product. An interesting property of this inner product is that it is unitary invariant. To see it, expand by the multinomial theorem
+
+\[ \sum_{|\alpha|=n} e_\alpha(z) e_\alpha(w)^* = \sum_{|\alpha|=n} \binom{n}{\alpha} z^\alpha (w^\alpha)^* = \left(\sum_{i=0}^d z_i w_i^*\right)^n.  \] 
+
+
+Let now $U \in U(d+1)$ be a unitary matrix, $U^*U=UU^*=I$. If we perform a change of variable $x \leftarrow Ux$, the inner product changes as
+\[ (w^*z)^n \leftarrow (w^*U^*Uz)^n = (w^*z)^n.  \]
+
+
+
+
+\section*{Idea of a model: Gaussian homogeneous polynomials}
+Coonsider a random homogeneous polynomial $P = \begin{bmatrix}
+P_1(z)\\
+\vdots\\
+P_d(z)
+\end{bmatrix} : \mathbb{C}^{d+1} \to \mathbb{C}^d$, where each component has Gaussian coefficients in the Bombieri basis:
+\begin{equation}
+    P_i(z) = \sum_{|\alpha|=n} c_{i, \alpha} \sqrt{\binom{n}{\alpha}} z^\alpha, \qquad c_{i, \alpha} \sim \mathbb{C}\mathcal{N}(0,1)
+\end{equation}
+
+Of course, one may normalize $\|z\|=1$ and restrict $z$ on the unit sphere. (Note that for all $0 \neq \alpha$, $P(\alpha z)=\alpha^n P(z)$ so $P(z)=0 \Leftrightarrow P(\alpha z)=0$.) By the unitary invariance, for every unitary matrix $U$ the random polynomial $Q_U(z)=P(Uz)$ has precisely the same distribution of $P(z)$. This immediately implies that all points $z$ on the complex sphere are equal, in particular (i) the distribution of the roots (in homegenous coordinates) of $P(z)$ must be uniform on $S^d$ (ii) any statistics of $P(z)$ cannot depend on $z$, in particular we can with no loss of generality assume that $z=\begin{bmatrix}
+1\\
+0\\
+\vdots\\
+0
+\end{bmatrix}$. 
+\section*{Dehomogenizing}
+
+We now have random polynomials of total degree $n$ of the form
+
+\begin{equation}
+p_i(x) = \sum_{|\beta| \leq n} c_{i,\alpha} \sqrt{\binom{n}{\alpha}} x^\beta
+\end{equation}
+where $c_{i,\alpha}$ is a Gaussian random variable and $\alpha=(\alpha_0,\beta), \beta=(\alpha_1,\dots,\alpha_d)$. Let us fix a point $X$. Then $p_i(X)$ is a linear combination of Gaussian random variable, hence Gaussian. It is obvious that $p_i(X),p_j(X)$ are independent for $i \neq j$. The Jacobian entries are
+
+\[  J_{ij} =\partial_j p_i(X) = \sum_{|\beta| \leq n} c_{i,\alpha} \beta_j \sqrt{\binom{n}{\alpha}} x^{\beta-e_j}. \] 
+
+Once again, they are Gaussian random variable as they are linear combinations of Gaussian random variable. Manifestly, differnt rows of the Jacobian are independent, but different columns generally are not.
+
+
+\begin{proposition}
+One has the covariance formula
+\[  \E[J_{ij} J_{ik}^*] = n (1 + \| X \|^2)^{n-1} \delta_{jk} + (n^2-n) (1+\| X \|^2)^{n-2} X_j X_k^*.   \]
+\end{proposition}
+
+\begin{proof}
+Again using the multinomial theorem as before, we can compute the sought covariance as
+
+\[ \left[ \frac{\partial^2}{\partial x_j \partial y_k^*}(1+x^* y)^n    \right]_{x=y=X}. \]
+The formula then follows as a boring computation.
+\end{proof}
+
+We can arrange the covariance between columns in matrix form,
+
+\[  C   = a I + b X X^*, \qquad a=n(1+\|X\|^2)^{n-1}, b = (n^2-n) (1+\| X \|^2)^{n-2}.  \]
+\begin{lemma}
+$C$ has eigenvalues $a+b \|X\|^2 \geq a = \dots = a$.
+\end{lemma}
+\begin{proof}
+By the matrix determinant lemma,
+\[  \det(C-\lambda I) = \det ( (a-\lambda)I + b XX^*) = (a-\lambda)^{d-1} \cdot (a + b \| X\|^2- \lambda) .\]
+\end{proof}
+
+It follows that the Jacobian can be written as $J=G C^{1/2}$, where $G$ is i.i.d. normal. This is very useful becuase it yields
+
+\[   \sigma_i(J) \geq \sigma_i(G) \sigma_{\min}(C^{1/2}) = \sqrt{n} (1+\|X\|^2)^{(n-1)/2} \sigma_i(G),\]
+and we know how to compute expectations of functions of the singular values of $G$.
+
+
+\section*{Distribution of the root}
+
+The idea is to compute (lower bounds for) the log-expectation of the ratio of condiotion numbers \emph{conditioned to a root being $X$}. Then, we can integrate to get the average. For this task, we need to know the distribution of the roots; this can be obtained in different ways.
+
+An intuitive argument is the following. By unitarily invariance, in projective coordinates there is no preferred point, and hence we expect a uniform distribution of the roots $Z$. We can normalize $\| Z \|=1$, and hence
+\[  \| X \|^2 = \frac{\sum_{i=1}^d |Z_i|^2}{|Z_0|^2}  \]
+it follows that $\|X\|^2$ is distributed as the ratio of two chi-squared random variables. Hence, we could obtain the distribution of $X$ by some routine calculations.
+
+A more top-down approach is to directly apply \cite[Theorem 8.1]{EK}. A tedious but elementary calculation gives the pdf
+
+\[ f(X) =  \frac{d!}{\pi^d (1 + \|X\|^2)^{d+1}} \]
+
+\begin{vn}
+    I have done this twice in the two ways described above, and I got the same  formula twice, which is sort of good.
+
+    On the other hand, Theorem 8.1 looks powerful and it may give us the distribution also for finite degree, at least for fixed maximum degree. Total degree looks ugly.
+\end{vn}
+
+\begin{vn}
+    OK I did it. Here is the density in the case of i.i.d. maximum degree:
+
+
+    \[  f(X) = 
+   \frac{1}{\pi^d n^d} \prod_{k=1}^d \left[ \frac{1}{(1 - |X_k|^2)^2} - \frac{(n+1)^2 |X_k|^{2n}}{(1 - |X_k|^{2n+2})^2} \right]
+   \]
+\end{vn}
+
+\newpage
+\begin{thebibliography}{9}
+
+
+\bibitem{BN} G. Barbarino and V. Noferini.
+\newblock {\em The limit empirical spectral distribution of complex matrix polynomials.}
+\newblock Random Matrices: Theory and Applications 11(3), 2250023, 2021.
+
+\bibitem{BC} P. B\"{u}rgisser and F. Cucker. \newblock Condition. The Geometry of Numerical Algorithms. \newblock {\em Springer-Verlag, Berlin, Germany, 2013.}
+
+\bibitem{GT}E. Graf and A.Townsend. 
+\newblock {\em Numerical instability of algebraic rootfinding methods.}
+\newblock Submitted to SIAM J. Appl. Algebra Geom., 2024.
+
+\bibitem{EK} A. Edelman and E. Kostlan.
+\newblock {\em How many zeros of a random polynomial are real?}
+\newblock Bull. AMS 32(1), 1--37, 1995.
+
+\bibitem{NT} V. Noferini and A. Townsend.
+\newblock {\em Numerical instability of resultant methods for multidimensional rootfinding.}
+\newblock SIAM J. Numer. Anal. 54(2), 719--743, 2016.
+
+\bibitem{PY15} I. E. Pritsker and A. M. Yeager. \newblock {\em Zeros of polynomials with random coefficients.} \newblock J. Approx. Theory 189, 88--100, 2015.
+
+
+
+
+
+
+\end{thebibliography}
+
+\end{document}

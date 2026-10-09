@@ -1,0 +1,50 @@
+\section{Reduction II, part 3: the weight is a rectangular Gaussian matrix}\label{sec:weight}
+
+\begin{lemma}\label{lem:rectangular}
+  Let $\wtd G$ be a $(d+1)\times d$ matrix of i.i.d.\ $\CN(0,1)$ entries. For every
+  measurable $f\ge0$ of the singular values,
+  \[
+    \frac{\E\bigl[|\det G|^2 f(\sigma_1(G),\dots,\sigma_d(G))\bigr]}{\E|\det G|^2}
+    = \E\bigl[f(\sigma_1(\wtd G),\dots,\sigma_d(\wtd G))\bigr],
+    \qquad \E|\det G|^2 = d!.
+  \]
+\end{lemma}
+
+\proof
+The eigenvalues of $G^*G$ have joint density proportional to
+$\prod_ie^{-\lambda_i}\prod_{i<j}(\lambda_i-\lambda_j)^2$ on $\lambda_i>0$; more generally,
+for an $m\times d$ Gaussian matrix the density carries the extra factor
+$\prod_i\lambda_i^{m-d}$. Multiplying by $|\det G|^2 = \prod_i\lambda_i$ turns $m=d$ into
+$m=d+1$.
+\endproof
+
+\begin{corollary}\label{cor:weighted}
+  Write $\EW[\cdot] := \E[\,\cdot\,|\det G|^2]/d!$. Then:
+  \begin{enumerate}[(a)]
+    \item $\EW[\log|\det G|^2] = \sum_{j=2}^{d+1}\psi(j)$, exactly, since
+      $\det(\wtd G^*\wtd G)$ has the law of a product of independent Gamma variables with
+      shapes $2,\dots,d+1$;
+    \item $\EW[\log\sigma_{\min}(G)] = -\frac12\log d + O(1)$: the smallest eigenvalue of
+      $\wtd G^*\wtd G$ is of order $1/d$ with uniformly integrable logarithm
+      \cite{edelman1988eigenvalues,forrester2010log};
+    \item all quantities $\EW[\log\prod_{i\in T}\sigma_i(G)]$ reduce likewise to the
+      $(d+1)\times d$ ensemble; for instance
+      $\EW[\log\prod_{i=1}^{d-1}\sigma_i]
+      = \frac12\sum_{j=2}^{d+1}\psi(j) + \frac12\log d + O(1)$. This upgrades the
+      interlacing bound of our earlier notes to the weighted setting.
+  \end{enumerate}
+\end{corollary}
+
+Item (b) quotes asymptotics rather than an identity, but the constant is exactly computable:
+the tilt $|\det G|^2$ turns the eigenvalue density of $G^*G$ into the $\nu=1$ Laguerre
+ensemble $\propto\Delta(\lambda)^2\prod_i\lambda_ie^{-\lambda_i}$, whose moments expand in
+incomplete-gamma sums; using
+$\int_0^\infty x^m\log x\,e^{-2x}dx = \frac{m!}{2^{m+1}}(H_m-\gamma-\log2)$ one finds, at
+$d=2$,
+\[
+  \EW[\log\sigma_{\min}(G)] = \tfrac12\,\E[\log\lambda_{\min}]
+  = \tfrac9{16} - \tfrac{\gamma+\log2}2 = -0.07268\dots,
+\]
+matching the Monte Carlo value $-0.072$; the same finite expansion yields a closed form,
+rational plus rational multiples of $\gamma+\log2$, for every fixed $d$
+(cf.~\cite{forrester2010log}).

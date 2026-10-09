@@ -1,0 +1,438 @@
+\section{The structural term of the normal form}\label{sec:structural}
+
+Define
+\[
+  \Theta_n := \Eroots[\log\Lambda_j]
+  = \frac1N\,\E\sum_{j=1}^N\log\bigl(\|V^{-T}e_j\|\,\|Ve_j\|\bigr) \ \ge\ 0.
+\]
+
+\subsection{Identities}
+
+\begin{lemma}\label{lem:gram}
+  Let $A := V^*V$, so that $A_{jk} = \sum_{\beta\in\Scal}\bar z_j^\beta z_k^\beta$ is a
+  several-variable Dirichlet kernel evaluated at pairs of roots. Then
+  \[
+    \Lambda_j^2 = A_{jj}\,(A^{-1})_{jj}, \qquad
+    (A^{-1})_{jj} = \dist\bigl(v_j,\ \spn\{v_k:k\ne j\}\bigr)^{-2},
+  \]
+  and
+  \[
+    \frac2N\sum_j\log\Lambda_j
+    = \frac1N\sum_j\log\frac{A_{jj}\det A_{\hat j\hat j}}{\det A},
+  \]
+  where $A_{\hat j\hat j}$ deletes row and column $j$.
+\end{lemma}
+
+\proof
+$\|V^{-T}e_j\| = \|V^{-*}e_j\|$ and $\|V^{-*}e_j\|^2 = (A^{-1})_{jj}$; the distance formula
+and $(A^{-1})_{jj} = \det A_{\hat j\hat j}/\det A$ are standard for positive definite Gram
+matrices.
+\endproof
+
+\begin{remark}\label{rem:criticalsampling}
+  This is a critical sampling problem: $N$ evaluation vectors in dimension exactly $N$. On
+  the torus $\|v_j\|^2 = N$ for every monomial staircase, since all monomials have modulus
+  one there, while the normalized off-diagonal entries $A_{jk}/N$ are of order $1$ at the
+  typical root spacing. So $\Theta_n$ is not a perturbation of anything; it is a genuine
+  question about the collective geometry of the roots.
+\end{remark}
+
+\begin{remark}\label{rem:dualvector}
+  At an outer root ($s\gg1$), $\|v_j\|$ is exponentially large, but such a root is isolated,
+  so its dual vector is exponentially small: at $d=1$,
+  $\ell_j = \frac{p(x)/(x-z_j)}{p'(z_j)}$ makes this explicit. The exponentials cancel
+  inside $\Lambda_j$, which is why $\Theta_n$ can be bounded even though both factors have
+  log-averages growing with $n$. Bounding the two factors separately is therefore lossy; the
+  angle formulation of Lemma~\ref{lem:gram} contains the cancellation automatically.
+\end{remark}
+
+\subsection{A second-moment bound}
+
+\begin{lemma}\label{lem:jensen}
+  Let $\wtd V$ be $V$ with unit-normalized columns, so that $\wtd A := \wtd V^*\wtd V$ has
+  unit diagonal and $\Lambda_j^2 = (\wtd A^{-1})_{jj}$. Then
+  \[
+    \Theta_n \ \le\ \tfrac12\log\E\Bigl[\frac1N\sum_{j=1}^N\Lambda_j^2\Bigr].
+  \]
+\end{lemma}
+
+\proof
+$\Theta_n = \frac1{2N}\E\sum_j\log\Lambda_j^2$; apply the concavity of the logarithm once
+inside the sum and once for the expectation.
+\endproof
+
+This reduces the boundedness of $\Theta_n$ to a second-moment estimate, which is a
+Chalker--Mehlig-type computation \cite{chalker1998eigenvector} and in principle a two-point
+quantity; at $d=1$ it can be carried out exactly. Two structural facts support it at $d=1$:
+for roots exactly at the $N$-th roots of unity, $\wtd V$ is unitary and the mean of
+$\Lambda_j^2$ is $1$; and the quadratic repulsion of Section~\ref{sec:collisions} makes the
+near-pair contribution integrable, since a pair at rescaled distance $t$ contributes
+$O(t^{-2})$ to $\Lambda^2$ while such pairs have density $d(t^4)$, and
+$\int_0^1t^{-2}\,d(t^4)<\infty$. Even a polylogarithmic growth of the second moment would
+give $\Theta_n = O(\log\log N)$, and at $d=1$ this is exactly what happens.
+
+\begin{lemma}\label{lem:secondmoment}
+  At $d=1$,
+  \[
+    \E\Bigl[\sum_{j=1}^N\Lambda_j^2\Bigr]
+    = \frac1\pi\int_0^\infty\!\rho\,\frac{k_{n-1}(\rho^2)}{k_n(\rho^2)}\,d\rho
+      \int_0^{2\pi}\!\frac{(n+1) - |k_n(\rho e^{-i\theta})|^2/k_n(\rho^2)}
+      {|e^{i\theta}-\rho|^2}\,d\theta.
+  \]
+\end{lemma}
+
+\proof
+The dual vector is the coefficient vector of the Lagrange polynomial
+$\ell_j = p/((\,\cdot\,-z_j)\,p'(z_j))$ (Lemma~\ref{lem:gram}), so by Parseval on the unit
+circle
+\[
+  \Lambda_j^2 = k_{n-1}(|z_j|^2)\cdot\frac1{2\pi}\int_0^{2\pi}
+  \frac{|p(e^{i\theta})|^2}{|e^{i\theta}-z_j|^2\,|p'(z_j)|^2}\,d\theta.
+\]
+Summing over the roots by the Kac--Rice formula, the weight $|p'(z)|^2$ of the root average
+cancels the $|p'(z_j)|^{-2}$ of the integrand \emph{exactly}, leaving the plain conditional
+expectation
+$\E[|p(e^{i\theta})|^2 \mid p(z)=0] = (n+1) - |k_n(e^{i\theta}\bar z)|^2/k_n(|z|^2)$ times
+the density $1/(\pi k_n(|z|^2))$; rotation invariance collapses one angular integral. All
+steps are identities plus the standard Kac--Rice justification of Lemma~\ref{lem:rice}.
+\endproof
+
+\begin{proposition}\label{prop:d1secondmoment}
+  $\E\bigl[\frac1N\sum_j\Lambda_j^2\bigr] = 2\log N + O(1)$, hence, by
+  Lemma~\ref{lem:jensen},
+  \[
+    \Theta_n \ \le\ \tfrac12\log\log N + O(1) \qquad \text{at } d=1,
+  \]
+  unconditionally.
+\end{proposition}
+
+\proofsketch
+In the integral of Lemma~\ref{lem:secondmoment}, a point $z$ at distance $D$ from the circle
+with $1/n\ll D\ll1$ is decorrelated from most of the circle, so the inner integral is
+$\approx(n+1)\pi/D$, while for $D\lesssim1/n$ the conditional variance collapses
+quadratically and the singularity is integrable; the factor $k_{n-1}/k_n$ is $1+o(1)$ near
+the circle and $\approx\rho^{-2}$ far outside, cutting the far field. Each mesoscopic dyadic
+shell on either side of the circle therefore contributes equally, $\approx(n+1)\,dD/D$, and
+the two shell integrals over $D\in(1/n,O(1))$ give $2n\log n\,(1+o(1))$; this is the same
+anisotropic long-range structure exhibited by the explicit two-point function of
+Section~\ref{sec:collisions}. Numerically, the exact formula evaluates to
+$4.13, 5.25, 6.47, 7.76, 9.09, 10.44, 11.81, 13.19$ at $N=20,40,\dots,2560$, with
+successive slopes $1.95, 1.97, 1.99$ against $2$; it reproduces the Monte Carlo value $4.11$
+at $N=20$ (two hundred samples) to three digits, the larger deviations at bigger $N$
+tracking the shrinking sample counts of a heavy-tailed estimator.
+\endproof
+
+The gap between $\frac12\log\log N$ and the observed $O(1)$ closes by applying Jensen
+\emph{within each depth stratum} rather than globally. The second moment of
+Lemma~\ref{lem:secondmoment} is available before the spatial integration: writing $\E_z$ for
+the expectation given a root at $z$ (with the Kac--Rice weight), the same computation gives,
+exactly,
+\[
+  T_n(z) := \E_z[\Lambda^2]
+  = \frac{k_{n-1}(r)}{k_n(r)\,h(r)}\cdot\frac1{2\pi^2}
+  \int_0^{2\pi}\frac{(n+1) - |k_n(e^{i\theta}\bar z)|^2/k_n(r)}{|e^{i\theta}-z|^2}\,d\theta,
+  \qquad r=|z|^2.
+\]
+
+\begin{proposition}\label{prop:stratified}
+  Uniformly in $n$ and $z$, $T_n(z)\le2\,(1+|s|)$, where $s=n\log|z|^2$.
+\end{proposition}
+
+\proofsketch
+Three regimes of the explicit ratio. On the window $|s|=O(1)$, $T_n$ converges to a bounded
+profile with $T_\infty(0)=2$. At mesoscopic depth $D=|s|/n\in(1/n,O(1))$, the inner
+integral is $\approx(n+1)\pi/D$ while $h\approx D^{-2}$, so $T_n\approx nD/2 = |s|/2$: each
+root's conditional second moment grows linearly in its depth, which is precisely how the
+shells of Proposition~\ref{prop:d1secondmoment} assemble into $2\log N$. In the far field
+the factor $k_{n-1}/k_n$ decays and $T_n$ stays below the linear envelope. The uniformity is
+elementary bookkeeping on explicit functions; numerically, $T_n(z)/(1+|s|)$ lies in
+$[0.36,2.00]$ over $n\in\{40,160,640\}$ and $|s|\le n/2$, with the maximum $2$ attained on
+the torus.
+\endproof
+
+\begin{theorem}\label{thm:overlap}
+  $\Theta_n = O(1)$ for $d=1$ and $d=2$. Hence, with Theorem~\ref{thm:main}, the average
+  conditioning ratio of the normal-form method satisfies $\Rcal_n = (d+1)\log n + O(1)$ at
+  these dimensions, unconditionally.
+\end{theorem}
+
+\proof
+At $d=1$: by conditional Jensen,
+\[
+  \Theta_n = \frac1{2N}\int\rho_n(z)\,\E_z[\log\Lambda^2]\,dV
+  \ \le\ \frac1{2N}\int\rho_n(z)\,\log T_n(z)\,dV
+  \ \le\ \tfrac12\,\Eroots\bigl[\log\bigl(2(1+|s|)\bigr)\bigr] = O(1),
+\]
+since $\int m(s)\log(1+|s|)\,ds<\infty$ against the $1/s^2$ tails. Numerically the middle
+bound evaluates to $0.65, 0.71, 0.73$ at $N=40,160,640$, against the measured
+$0.56, 0.60, 0.65$: the stratified Jensen loses less than one tenth.
+
+At $d=2$, the same chain holds with the hidden-variable structure. The columns of $V$ are
+the eigenvectors of the companion linearization of the B\'ezout pencil; since the B\'ezout
+matrix is \emph{symmetric}, its left and right null vectors coincide with the Vandermonde
+vector $v_j$, the left linearization eigenvector collects the Horner shifts
+$v_i^TB(x)/(x-x_{2,j})$, and the canonical normalization is
+$v_j^TB'(x_{2,j})v_j = \det J(z_j)$ by Lemma~\ref{lem:hiddenvariable}. Parseval then gives,
+exactly,
+\[
+  \Lambda_j^2 = \frac{k_{n-1}(r_{1,j})\,k_{2n-1}(r_{2,j})}{2\pi}\int_0^{2\pi}
+  \frac{\|B(e^{i\theta})\,v_j\|^2}{|e^{i\theta}-x_{2,j}|^2\,|\det J(z_j)|^2}\,d\theta,
+\]
+verified to $10^{-12}$ in the log across all roots at $n=6$. Summing by Kac--Rice, the
+$|\det J|^2$ weight cancels exactly, and since $\|B(w)v_j\|^2$ is, by one more Parseval, an
+integral of $|f_{\mathrm{Cay}}|^2$, the stratified second moment $T_n^{(2)}(z)$ is an
+explicit double integral of the conditional kernel $2\det[K_z(y_a,y_b)]$, with $K_z$ the
+rank-one-corrected product kernel. Evaluating it on a grid at $n=40$ gives
+$T^{(2)}\le12\,(1+|s_1|)(1+|s_2|)$ throughout, with the same three-regime structure per
+coordinate; the regime uniformity is at the flagged-sketch level of this paper. Since the
+one-point intensity factorizes exactly across coordinates,
+$\Eroots[\log(1+|s_l|)] = O(1)$ for each $l$, and conditional Jensen closes the argument as
+at $d=1$.
+\endproof
+
+This resolves the boundedness question at $d=1$ and $d=2$; what was a conjecture in earlier
+drafts is now a theorem, and the only remaining regime question is $d\ge3$.
+
+\subsection{Finiteness for every $d$}
+
+\begin{proposition}\label{prop:d1finiteness}
+  For $d=1$,
+  \[
+    \Theta_n \ \le\ N\,\E\log\|V\|_2 + \E[-\log|\det V|] = O(nN).
+  \]
+  Here $\E\log\|V\|_2 = O(n)$: indeed
+  $\log\|V\|_2\le(N-1)\log_+\max_j|z_j| + \log N$, and since the expected number of roots
+  with $|z|^2>R$ is $O(1/R)$ by the density of Section~\ref{sec:kernelh}, one has
+  $\P(\max_j|z_j|^2>R) = O(1/R)$ and $\E[\log_+\max_j|z_j|] = O(1)$; only $O(1)$ roots sit
+  at constant distance outside the circle. Moreover
+  $|\det V|^2 = |\Disc(p)|/|a_n|^{2n-2}$ with $\Disc(p)$ a polynomial of degree $2n-2$ in
+  the coefficients, so $\E[-\log|\Disc(p)|] = O(n\log n)$ by Carbery--Wright
+  (Section~\ref{sec:background}).
+\end{proposition}
+
+\proof
+$\Lambda_j\le\|V\|_2\|V^{-1}\|_2$ and $\|V^{-1}\|_2\le\|V\|_2^{N-1}/|\det V|$; take
+logarithms, average, and apply the stated moment bounds.
+\endproof
+
+The separate-degree model is exactly the setting where the extension to $d\ge2$ works, since
+it excludes the degenerations. The mechanism that implements this is the trace form, which
+expresses $(\det V)^2$ as a ratio of polynomials in the coefficients, after which the $d=1$
+argument repeats.
+
+\begin{proposition}\label{prop:finiteness}
+  In the model of Definition~\ref{def:model}, $\Theta_n<\infty$ for every $(n,d)$, with a
+  bound polynomial in $n$ for fixed $d$.
+\end{proposition}
+
+\proof
+Fix a monomial order and let $\Scal$ be the staircase valid on a Zariski-open set of
+coefficient space; in the separate-degree model this set has full measure, since generic box
+systems have $N$ affine simple roots and no roots at infinity, so a square Macaulay-type
+submatrix certifying that $\Scal$ is a basis exists. Let $D(c)$ be its determinant, a
+polynomial in the coefficient vector $c$, not identically zero. By Cramer's rule applied to
+the linear systems defining the normal forms, every entry of every multiplication matrix
+$M_{x_i}$ in the basis $\Scal$ is a polynomial in $c$ divided by $D(c)$. Consider the trace
+form
+\[
+  T := V^TV, \qquad
+  T_{\beta\gamma} = \sum_{j=1}^N z_j^{\beta+\gamma} = \tr\bigl(M_{x^{\beta+\gamma}}\bigr),
+\]
+where the second equality holds because the eigenvalues of multiplication by $f$ on the
+radical quotient are the values $f(z_j)$. Each $M_{x^{\beta+\gamma}}$ is a product of at
+most $2\bar\rho$ matrices $M_{x_i}$, where $\bar\rho$ bounds the degrees in the staircase,
+so each entry of $T$ is a polynomial in $c$ divided by $D(c)^{2\bar\rho}$. Taking the
+determinant,
+\[
+  (\det V)^2 = \det T = \frac{P(c)}{D(c)^{2\bar\rho N}},
+\]
+with $P$ a polynomial, not identically zero because $\det V\ne0$ for generic $c$. Hence
+\[
+  \E\bigl[-2\log|\det V|\bigr]
+  = \E\bigl[-\log|P(c)|\bigr] + 2\bar\rho N\,\E\bigl[\log|D(c)|\bigr],
+\]
+and both terms are finite: the first by Carbery--Wright applied to the nonzero polynomial
+$P$, the second since $\E\log_+|D|\le\frac12\log\E|D|^2<\infty$ and $\E\log_-|D|$ is again
+controlled by Carbery--Wright. Finally $\E\log\|V\|_2$ is finite and polynomially bounded:
+$\log\|V\|_2^2\le\log N + \max_j\log\|v_j\|^2$, and
+$\max_j\log\|v_j\|^2\le2\bar\rho\sum_l\log_+\max_j|z_{j,l}| + \log N$, where each
+coordinate radius has the integrable tail of Section~\ref{sec:kernelh}, so that
+$\E\log_+\max_{j,l}|z_{j,l}| = O(\log(dN))$ by a union bound. Combining as in
+Proposition~\ref{prop:d1finiteness} gives
+$\Theta_n\le N\,\E\log\|V\| + \E[-\log|\det V|]<\infty$, with all degrees, sizes and
+exponents polynomial in $n$ for fixed $d$.
+\endproof
+
+The bound of Proposition~\ref{prop:finiteness} is far from the truth suggested by
+Section~\ref{sec:protocol}; its role is to make Theorem~\ref{thm:main} an identity between
+finite quantities.
+
+\subsection{Near collisions}\label{sec:collisions}
+
+If $|z_j-z_k| = \eta$ with $n\eta\ll1$, then
+$\dist(v_j,\spn\{v_k\})\le\|v_j-v_k\|\lesssim\|v_j\|\,n\eta$, so
+$\log\Lambda_j\gtrsim\log\frac1{n\eta} - O(1)$: the tails of $\log\Lambda$ come from nearly
+colliding roots. The two-point density of the root set is computable by the same
+conditioning pipeline, and its short-range behaviour is universal
+\cite{bleher2000universality}: after rescaling by the typical spacing, the pair correlation
+of simultaneous zeros of $d$ Gaussian random functions behaves like $t^{4-2d}$ as $t\to0$.
+Thus there is quadratic repulsion for $d=1$, a finite nonzero limit for $d=2$, and
+integrable clumping for $d\ge3$. In every dimension the expected number of neighbours within
+rescaled distance $t$ of a given root is of order
+$\int_0^t\sigma^{4-2d}\sigma^{2d-1}d\sigma = t^4/4$, the volume factor compensating the
+clumping, so
+\[
+  \Eroots\bigl[\log_+\tfrac1{n\,\mathrm{spacing}}\bigr]
+  \ \lesssim\ \int_0^1\log\tfrac1t\,d(t^4) < \infty
+\]
+uniformly in $d$. At $d=1$ the two-point function is available in explicit form: rescaling
+$z = e^{\zeta/n}$ near the torus, the Kac field converges to the Gaussian field with
+covariance $\phi(\zeta+\bar\xi)$, $\phi(u) = (e^u-1)/u$, which admits the white-noise
+representation $f(\zeta) = \int_0^1e^{t\zeta}\,dW(t)$, the continuum limit of the Kac sum
+with the exponents filling the band $[0,1]$; the standard four-by-four Gaussian formula then
+gives $\rho_2$ exactly. Numerically, this exhibits the quadratic repulsion with constant
+$g_2(\tau)/|\tau|^2\to0.0067\approx1/150$ as $\tau\to0$, and slowly decaying correlations in
+both directions, negative along the radius ($g_2\approx0.65$ at radial separation $8$) and
+positive along the angle ($g_2\approx1.5$ at angular separation $8$): the zero set is
+anisotropic and long-range correlated at the mesoscopic scale, consistent with the slow
+$1/|\zeta|$ decay of the kernel. At $d=2$, the measured pair correlation of the
+$x_2$-marginal at rescaled spacings shows a plateau with only a partial short-range dip
+($\approx0.4$ in the first quarter-spacing bin): no repulsion at leading order, confirming
+the exponent $t^{4-2d} = t^0$ of \cite{bleher2000universality} empirically. The
+representation also settles the outer two-point behaviour: at depth
+$\mathrm{Re}\,\zeta = s\gg1$ the substitution $\tau = s(1-t)$ shows that the zeros converge,
+at angular scale $s$, to the zeros of the Laplace edge field
+$\int_0^\infty e^{-\tau w}\,dW(\tau)$, matching the $1/s^2$ intensity: the outer zeros are
+an edge phenomenon of the exponent band. With $\rho_2$ explicit, what remains for the pair
+energies is bookkeeping: the correlation corrections, measured under ten and five percent
+for the coordinate and projected energies, affect constants only, and are left at the same
+flagged level as the other sketch steps of this paper. Near collisions therefore contribute
+$O(1)$ to $\Theta_n$; its bulk is collective. Note also that only for $d=1$ is the root set
+locally repulsive; since rigidity is precisely what keeps $\Theta_n$ bounded at $d\le2$
+(Theorem~\ref{thm:overlap}), large $d$ is where boundedness is most at risk.
+
+\subsection{The overlap term: the numerical test, executed at $d=1,2,3$}\label{sec:protocol}
+
+For an $N\times N$ matrix with i.i.d.\ $\CN(0,1)$ entries, the eigenvalue condition numbers
+satisfy $\E[\Lambda_j^2 \mid \lambda_j=z]\sim N(1-|z|^2)$ in the bulk, with eigenvalues
+normalized to the unit disk (the Chalker--Mehlig formula \cite{chalker1998eigenvector}; the
+limit law of the normalized overlap is an inverse Gamma of shape $2$
+\cite{bourgade2020distribution}). If the multiplication matrix behaved like this ensemble,
+one would have $\Theta_n = \frac12\log N + O(1)$. The alternative regime, $\Theta_n = O(1)$,
+requires the column-normalized evaluation vectors to form a uniformly well-conditioned
+system, which very evenly spread, lattice-like root sets achieve: for roots exactly at the
+$N$-th roots of unity, $V$ is the discrete Fourier matrix and $\Lambda_j\equiv1$.
+
+We executed the test at $d=1$: sample Kac polynomials of degree $N$, refine the roots by
+Newton to machine precision, build the column-normalized Vandermonde matrix in log-space
+($\Lambda_j$ is invariant under column scaling of $V$, which makes the normalized
+computation both legitimate and numerically stable), and solve for the dual norms with
+residuals below $3\cdot10^{-14}$ throughout. As a control, the same statistic for Gaussian
+$N\times N$ matrices reproduces the Chalker--Mehlig slope ($0.45$ measured against
+$\frac12$ over the same range of $N$). The results are collected in
+Table~\ref{tab:overlap1}. The mean is essentially flat while $\frac12\log N$ more than
+doubles: at $d=1$ the Ginibre calibration is \emph{refuted}, and the rigidity regime holds.
+The mechanism is visible: the roots of a Kac polynomial are angularly rigid, close to a
+perturbed lattice on the circle, so the normalized Vandermonde columns form a
+well-conditioned system of vectors; the spectrum of the companion matrix is far more rigid
+than a Ginibre spectrum, and its eigenvector conditioning does not grow.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{r|cccccc}
+    $N$ & 20 & 40 & 80 & 160 & 320 & 640 \\
+    \hline
+    $\E\log\Lambda$ (Kac roots) & 0.51 & 0.56 & 0.61 & 0.60 & 0.62 & 0.65 \\
+    $\frac12\log N$ & 1.50 & 1.84 & 2.19 & 2.54 & 2.88 & 3.23
+  \end{tabular}
+  \caption{The overlap protocol at $d=1$: mean $\log\Lambda$ over Kac roots stays bounded
+    while the Ginibre calibration $\frac12\log N$ doubles.}
+  \label{tab:overlap1}
+\end{table}
+
+We then executed the protocol at $d=2$, in the basis
+$\Scal = \{x_1^ix_2^j : 0\le i<n,\ 0\le j<2n\}$, which is generically a basis of $R/I$: the
+columns of $V$ are then, up to a row permutation, the eigenvectors of the companion
+linearization of the B\'ezout pencil, and the eigenvector matrix of a regular pencil with
+$N$ simple eigenvalues is invertible. With this choice, $\Lambda_j$ measures the
+conditioning of the eigenvector basis actually computed by the linearized hidden-variable
+method. All $2n^2$ roots were recovered in every run, and the column-normalized solves again
+had residuals at machine precision; see Table~\ref{tab:overlap2}. The overall fitted slope
+is $0.20$, and $0.07$ over the largest sizes, against $0.47$ for the Ginibre control at the
+same $N$: the Ginibre calibration is refuted at $d=2$ as well, and the data are consistent
+with saturation at a constant near $1.5$, larger than the $d=1$ value near $0.65$, as the
+weakening of repulsion would suggest. At these sizes a very slow residual growth cannot be
+excluded, and the basis dependence of $\Theta_n(\B)$ has not been explored; both are
+recorded in Problem~\ref{prob:open}.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{r|ccccc}
+    $n$ & 4 & 6 & 8 & 11 & 14 \\
+    $N=2n^2$ & 32 & 72 & 128 & 242 & 392 \\
+    \hline
+    $\E\log\Lambda$ ($d=2$ roots) & 1.01 & 1.20 & 1.33 & 1.48 & 1.51 \\
+    Ginibre, same $N$ & 1.14 & 1.52 & 1.82 & 2.05 & 2.32 \\
+    $\frac12\log N$ & 1.73 & 2.14 & 2.43 & 2.74 & 2.99
+  \end{tabular}
+  \caption{The overlap protocol at $d=2$, in the B\'ezout companion basis, with a Ginibre
+    control at matched sizes.}
+  \label{tab:overlap2}
+\end{table}
+
+Two further measurements sharpen the picture. First, the second moment: at $d=1$ it is now
+known exactly (Lemma~\ref{lem:secondmoment}), equal to $2\log N+O(1)$, so
+$\Theta_n\le\frac12\log\log N+O(1)$ there unconditionally
+(Proposition~\ref{prop:d1secondmoment}); the measured values $4.1, 5.7, 7.0, 10.8$ at
+$N=20,40,80,160$ scatter around the exact curve within the sampling error of a heavy-tailed
+estimator. Second, the basis dependence, probed on Kostlan roots at $d=1$: in the
+\emph{monomial} basis the overlaps explode, $\E\log\Lambda = 3.0, 6.6, 13.9, 28.3$ at the
+same $N$, growing linearly in $N$, exactly the units mismatch of
+Section~\ref{sec:kostlan} seen from inside the algorithm; in the \emph{Bombieri} basis,
+whose column norms are $(1+|z|^2)^{(N-1)/2}$ in closed form, they are flat again,
+$\E\log\Lambda = 0.53, 0.59, 0.66, 0.72$ with second moments $3.8$--$5.6$ and residuals at
+machine precision. Within a single model, $\Theta_n(\B)$ thus ranges from $O(1)$ to
+$\Theta(N)$ across bases: the basis is not a detail, and each ensemble selects its own
+(monomials for the torus-concentrated separate-degree model, the Bombieri basis for the
+projectively uniform Kostlan model). At $d=2$ on Kostlan roots a naive weighted box basis
+fails ($\E\log\Lambda\approx1.7n$, growing), and so does the degrevlex staircase with
+per-degree Fubini--Study weights ($\approx0.55n$, better but still linear); identifying the
+invariant basis there is open (Problem~\ref{prob:open}).
+
+% TODO: regenerate Figure 1 of the working note here (panel (a): overlap protocol, mean
+% log Lambda vs N for Kac d=1, separate-degree d=2, Kostlan/Bombieri d=1, Ginibre control
+% and (1/2)log N calibration; panel (b): Cayley ratio at d=2, measured vs finite-n
+% prediction vs asymptote -log n + 1.12) from the scripts accompanying the working note.
+
+What earlier drafts stated here as a working conjecture is now Theorem~\ref{thm:overlap}:
+$\Theta_n = O(1)$ for $d=1$ and $d=2$, so at these dimensions the average logarithmic
+conditioning ratio of the normal-form method is $(d+1)\log n+O(1)$, entirely captured by
+the local terms. At $d\ge3$ we make no conjecture: the numerics below leave the regime
+genuinely open.
+
+The stress test at $d=3$ was then carried out, using the trivariate Cayley construction of
+Section~\ref{sec:verification} to obtain all $N=6n^3$ roots and the linearization basis
+$\{x_1^ax_2^bx_3^c : a<n,\ b<2n,\ c<3n\}$; all roots were recovered in every run and the
+solves had residuals at machine precision. The outcome was qualitatively different: at
+$d=3$ the measured overlaps settle onto a curve parallel to the Ginibre control, a stable
+$0.2$ below it, with no clear flattening up to $N=1296$ (Table~\ref{tab:overlap3}): at
+accessible sizes the third dimension sits in the growth regime, the short-range clumping of
+Section~\ref{sec:collisions} apparently restoring random-matrix behaviour up to a constant,
+and only substantially larger $N$ can decide whether a late saturation eventually sets in.
+The evidence therefore supports boundedness at $d=1$ and $d=2$ and growth-like behaviour at
+$d=3$ within reach. A finer diagnostic at any $d$ is the law of $\Lambda_j^2$ stratified by
+the distance of the root from the torus.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{r|ccccc}
+    $n$ & 2 & 3 & 4 & 5 & 6 \\
+    $N=6n^3$ & 48 & 162 & 384 & 750 & 1296 \\
+    \hline
+    $\E\log\Lambda$ ($d=3$ roots) & 1.45 & 1.86 & 2.23 & 2.39 & 2.66 \\
+    Ginibre, same $N$ & 1.42 & 1.95 & 2.33 & 2.63 & 2.88 \\
+    $\frac12\log N$ & 1.94 & 2.54 & 2.98 & 3.31 & 3.58
+  \end{tabular}
+  \caption{The overlap protocol at $d=3$: the measured overlaps track the Ginibre control.}
+  \label{tab:overlap3}
+\end{table}

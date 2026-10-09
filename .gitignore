@@ -1,0 +1,24 @@
+# Superseded July 2026 material, kept locally only
+# backup/
+
+# macOS
+.DS_Store
+
+# latexmk / TeX intermediates (PDFs and .bbl stay tracked)
+*.aux
+*.log
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+*.toc
+
+.chktexrc
+.claude/
+.editorconfig
+.latexindent.yaml
+.vscode/
+CLAUDE.md
+makewatch.sh
+tmp/

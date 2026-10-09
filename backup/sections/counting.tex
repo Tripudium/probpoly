@@ -1,0 +1,97 @@
+\section{Reduction II, part 2: the counting formula, rigorously}\label{sec:counting}
+
+\begin{lemma}\label{lem:rice}
+  Let $\varphi(X;P)$ be jointly measurable in the point $X\in\C^d$ and in the coefficient
+  array; in particular, $\varphi(X;\cdot)$ may depend on the whole system, not only on its
+  germ at $X$. If
+  \begin{equation}\label{eq:integrability}
+    \int_{\C^d}\E\bigl[\,|\varphi(X;P)|\,|\det J(X)|^2 \bigm| P(X)=0\,\bigr]\,
+    (\pi S(X))^{-d}\,dX < \infty,
+  \end{equation}
+  then \eqref{eq:counting} holds with both sides finite. For $\varphi\ge0$,
+  \eqref{eq:counting} holds unconditionally, with both sides in $[0,\infty]$.
+\end{lemma}
+
+\proof
+Identify $\C^d\simeq\R^{2d}$ and let $Z:\R^{2d}\to\R^{2d}$ denote the real field underlying
+$P$, with coordinates the real and imaginary parts of the $p_i$. We verify the hypotheses of
+the Rice formulas of Aza\"is--Wschebor \cite[Thms.~6.2 and~6.4]{azais2009level} for the
+level $u=0$, then build up the class of admissible $\varphi$.
+
+\emph{Hypotheses.} (i) $Z$ is Gaussian: every coordinate of $Z$ and of its derivatives is a
+real-linear functional of the Gaussian coefficient array. (ii) The paths are polynomial
+maps, hence of class $C^\infty$. (iii) For each $X$, $P(X)\sim\CN(0,S(X)I_d)$ with
+$S(X)\ge1$, so $Z(t)$ is a nondegenerate centered Gaussian vector in $\R^{2d}$, with
+density at the origin $p_{Z(t)}(0) = (\pi S(X))^{-d}$, jointly continuous and bounded by
+$\pi^{-d}$. (iv) $\P\{\exists t:\ Z(t)=0,\ \det Z'(t)=0\}=0$: a system with a degenerate
+root lies in the set of degenerate systems, a proper algebraic subset of the coefficient
+space (Section~\ref{sec:model}), which is Lebesgue-null and hence null for the Gaussian
+law; alternatively, (iv) follows from \cite[Prop.~6.5, condition~(a)]{azais2009level},
+since the paths are of class $C^2$ and $p_{Z(t)}$ is uniformly bounded near $0$. Finally,
+by holomorphy (Cauchy--Riemann), the real Jacobian determinant satisfies
+$\det Z'(t) = |\det J(X)|^2\ge0$ at every point.
+
+\emph{Step 1: counts.} By \cite[Thm.~6.2]{azais2009level}, for every Borel set
+$B\subseteq\C^d$,
+\[
+  \E\,N_0(P,B) = \int_B\E\bigl[\,|\det J(X)|^2 \bigm| P(X)=0\,\bigr]\,
+  (\pi S(X))^{-d}\,dX,
+\]
+both sides being finite for compact $B$. This is \eqref{eq:counting} for
+$\varphi=\mathbf1_B$, and it shows that the measure
+$\mu(dX) := \E[\,|\det J|^2\mid P(X)=0\,](\pi S)^{-d}dX$ is locally finite.
+
+\emph{Step 2: bounded continuous weights.} Write $\Ccal\cong\C^{d(n+1)^d}$ for the
+coefficient space. Let $\varphi:\C^d\times\Ccal\to\R$ be bounded and continuous, and let
+$I\subset\C^d$ be compact. Apply \cite[Thm.~6.4]{azais2009level} with the following data:
+$W$ is the finite discrete set indexing the real coefficient coordinates, so that
+$C(W,\R)\cong\R^{\dim_\R\Ccal}$ with the product topology; the auxiliary field is $Y^t := $ the coefficient array itself,
+independent of $t$; and the weight is $g(t,Y):=\varphi(X;c(Y))$. Condition (a) of
+\cite[Thm.~6.4]{azais2009level} (joint measurability and a.s.\ continuity of
+$(t,w)\mapsto Y^t(w)$) holds trivially, condition (b) holds because
+$(Z(s),Y^t(w))$ is a Gaussian vector, all its coordinates being linear in the array, and
+$g$ is bounded and continuous. Formula (6.6) of \cite{azais2009level} then reads
+\[
+  \E\Bigl[\sum_{z\in I:\,P(z)=0}\varphi(z;P)\Bigr]
+  = \int_I\E\bigl[\varphi(X;P)\,|\det J(X)|^2 \bigm| P(X)=0\bigr]\,(\pi S(X))^{-d}\,dX,
+\]
+which is \eqref{eq:counting} restricted to $I$. The choice of $Y^t$ as the full array is
+what allows $\varphi(X;\cdot)$ to depend on the whole system.
+
+\emph{Step 3: bounded measurable weights.} Fix $I$ and let $\Hcal$ be the class of bounded
+Borel $\varphi$ for which the identity of Step 2 holds. $\Hcal$ is a vector space
+containing the constants and the bounded continuous functions, which form a multiplicative
+class generating the Borel $\sigma$-algebra of the metric space $\C^d\times\Ccal$. If
+$0\le\varphi_k\uparrow\varphi$ with $\varphi_k\in\Hcal$ and $\varphi$ bounded, then
+$\varphi\in\Hcal$: on the left, $\sum_{z\in I}\varphi_k(z;P)$ is dominated by
+$\sup\varphi\cdot N_0(P,I)$, which is integrable by Step 1; on the right, the integrand is
+dominated by $\sup\varphi$ against the finite measure $\mu(I)$. By the functional monotone
+class theorem, $\Hcal$ contains every bounded Borel function.
+
+\emph{Step 4: nonnegative weights.} For measurable $\varphi\ge0$, apply Step 3 to
+$(\varphi\wedge M)$ on $I=\bar B_R$ and let $M,R\uparrow\infty$: monotone convergence on
+both sides gives \eqref{eq:counting} with both sides in $[0,\infty]$, unconditionally.
+
+\emph{Step 5: integrable weights.} If \eqref{eq:integrability} holds, Step 4 applied to
+$|\varphi|$ shows $\E\sum_j|\varphi(z_j;P)|<\infty$; both sides of \eqref{eq:counting} for
+$\varphi^\pm$ are then finite, and subtracting the two identities proves the lemma.
+\endproof
+
+\begin{lemma}\label{lem:integrability}
+  Condition \eqref{eq:integrability} holds for
+  $\varphi\in\{\log\sigma_{\min}(J(X)),\ \log(1+|X_1|),\ \log S(X),\ \log h(r_l)\}$.
+\end{lemma}
+
+\proofsketch
+Condition on $P(X)=0$ and use Lemma~\ref{lem:jacobian}. For diagonal $D=\Sigma^{1/2}$,
+\begin{equation}\label{eq:sandwich}
+  \sigma_{\min}(G)\,\sigma_{\min}(D) \le \sigma_{\min}(GD)
+  \le \sigma_{\min}(G)\,\sigma_{\max}(D),
+\end{equation}
+where the upper bound follows by testing $GD$ on $D^{-1}y/\|D^{-1}y\|$ with $y$ a minimal
+singular vector of $G$. By Cauchy--Schwarz it then suffices that $\E|\det G|^4<\infty$ and
+$\E[\log^2\sigma_{\min}(G)]<\infty$, both true by Section~\ref{sec:background}(3), plus the
+finiteness of the deterministic integral
+$\int_0^\infty h(r)\bigl(1+|\log k_n(r)|+|\log h(r)|\bigr)\,dr$, which holds since
+$h(r)\sim r^{-2}$ and $\log k_n(r)\sim n\log r$ at infinity, and $h(0)=1$.
+\endproof

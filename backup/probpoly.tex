@@ -1,0 +1,210 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{mathtools}
+
+\usepackage{amsmath, amssymb,latexsym}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{fullpage}
+
+\usepackage{hyperref}
+
+\def\ans{\textcolor{red}{$\diamondsuit$\ }}
+
+%\def\TeXHOME{../..}
+%\input \TeXHOME/defnAMS.tex
+
+\def\dfn{\stackrel {{\mbox{\scriptsize\rm{def}}}}{=}}
+\def\wtd{\widetilde}
+\def\what{\widehat}
+\def\ue{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily u.e.}}}{\sim}}}
+\def\se{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily s.e.}}}{\sim}}}
+\def\Lpk{\mathcal{L}_{p_k}}
+%\def\F{\mbox{\scriptsize \rm F}}
+%\def\T{\mbox{\scriptsize \rm T}}
+
+\def\F{\mathbb{F}}
+\def\G{\mathbb{G}}
+\def\K{\mathbb{K}}
+\def\H{\mathbb{H}}
+\def\E{\mathbb{E}}
+\def\P{\mathbb{P}}
+\def\C{\mathbb{C}}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+
+% Added by Etna you can ask me to remove
+\def\Ei{\mathrm{Ei}}
+\def\B{\mathcal{B}}
+\usepackage{subcaption}
+
+% Macros for the paper body
+\def\Rcal{\mathcal{R}}
+\def\Scal{\mathcal{S}}
+\def\Eroots{\E_{\mathrm{roots}}}
+\def\EW{\E_{W}}
+\def\kroot{\kappa_{\mathrm{root}}}
+\def\keig{\kappa_{\mathrm{eig}}}
+\def\CN{\mathbb{C}\mathcal{N}}
+\def\proofsketch{\par{\it Proof sketch}. \ignorespaces}
+
+\definecolor{brilliantrose}{rgb}{1.0, 0.33, 0.64}
+\definecolor{myviolet}{rgb}{0.21, 0.0, 0.85}
+\definecolor{amethyst}{rgb}{0.6, 0.4, 0.8}
+\definecolor{carrotorange}{rgb}{0.93, 0.57, 0.13}
+\newenvironment{vn}{\begin{quote}\color{myviolet} \small\sf VN $\diamondsuit$~}{\end{quote}}
+\newenvironment{el}{\begin{quote}\color{amethyst} \small\sf EL $\spadesuit$~}{\end{quote}}
+\newenvironment{ml}{\begin{quote}\color{carrotorange} \small\sf ML $\clubsuit$~}{\end{quote}}
+
+\def\bone{\boldsymbol{1}}
+
+\def\proof{\par{\it Proof}. \ignorespaces}
+
+\def\endproof{\vbox{\hrule height0.6pt\hbox{%
+   \vrule height1.3ex width0.6pt\hskip0.8ex
+   \vrule width0.6pt}\hrule height0.6pt
+  }}
+
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\eig}{eig}
+\DeclareMathOperator{\Rev}{Rev}
+\DeclareMathOperator{\cwRev}{cwRev}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\grade}{grade}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\cond}{cond}
+\DeclareMathOperator{\rev}{rev}
+\DeclareMathOperator{\tr}{trace}
+\DeclareMathOperator{\fchar}{char}
+\DeclareMathOperator{\mvec}{vec}
+\DeclareMathOperator{\unvec}{unvec}
+\DeclareMathOperator{\Disc}{Disc}
+\DeclareMathOperator{\Vol}{Vol}
+\DeclareMathOperator{\lc}{lc}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\spec}{spec}
+
+\newcommand{\vec}[1]{\mathbf{#1}}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{conjecture}{Conjecture}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{remark}{{\sc Remark}}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{problem}{Problem}[section]
+
+\def\sss{\scriptstyle}
+
+\title{A Probabilistic Analysis of the Conditioning of Algebraic Rootfinding Methods}
+\author{Etna Lindy, Martin Lotz, Vanni Noferini}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+  To be written.
+\end{abstract}
+
+\section{Introduction}
+It was shown in~\cite{noferini2016numerical,graf2026numerical} that all known algebraic methods for numerically
+finding a solution to a system of polynomial equations $p_1(x) = \cdots = p_d(x) = 0$, $x\in \C^d$, are
+exponentially unstable: the condition number of the subproblems involved --- specifically, eigenvalue or univariate polynomial rootfinding problems --- can have exponentially (in $d$) worse conditioning than the original problem.
+These results, however, rest on carefully designed perfidious examples, akin to the Wilkinson polynomial in the univariate case~\cite{wilkinson1984perfidious}. In this article, we investigate whether this deterioration is a typical phenomenon or a pathology of the examples, by subjecting the methods to a probabilistic analysis. The probabilistic analysis of conditioning has been central to another popular class of rootfinding methods, homotopy continuation methods~\cite{shub1993complexity,blum1998complexity,burgisser2013condition},
+where it plays a key role in the solution of Smale's 17th problem~\cite{beltran2009smale,burgisser2011smale,lairez2017deterministic}. 
+The present paper brings this average-case viewpoint to the algebraic rootfinders.
+
+The methods considered in this paper can be grouped into three categories: hidden-variable resultant methods --- Cayley and Sylvester resultants, multiparameter eigenvalue problems (MEP) ---, scalar elimination methods --- Gr\"obner elimination, rational univariate represantation (RUP) ---, and normal form methods. 
+
+Let $P=(p_1,\dots,p_d)\colon \C^d\to \C^d$ be a polynomial map with $N$ simple roots $z_1,\dots,z_N\in \C^d$ (that is, roots for which the Jacobian $J(z_i):=\mathrm{d}P(z_i)$ has rank $d$). The {\em intrinsic condition number} of a root $z$ is defined as 
+\begin{equation*}
+  \kappa_{\mathrm{root}}(z) = \|J(z)^{-1}\| = \sigma_{\min}(J(z))^{-1},
+\end{equation*}
+where $\|\cdot\|$ is the Euclidean norm.
+
+\subsection{Notation}
+For a multi-index $\vct{\alpha} = (\alpha_1, \dots, \alpha_d) \in \N^d$, we write $x^{\vct{\alpha}} := x_1^{\alpha_1} \cdots x_d^{\alpha_d}$. We denote by $\CN(0,1)$ the complex normal distribution, where real and imaginary parts are independent and have variance $\frac12$.
+
+\section{Probabilistic background}
+Let $d$ and $n$ be positive integers. For $i\in \{1,\dots,d\}$, we consider random polynomials of the form
+\begin{equation}\label{eq:poly-model}
+  p_i(x) = \sum_{\vct{\alpha}\in \{0,\dots,n\}} c_{i,\vct{\alpha}} x^{\vct{\alpha}}, \quad c_{i,\vct{\alpha}} \sim \CN(0,1).
+\end{equation}
+The space of coefficients $c_{i,\alpha}$ is naturally identified with $\mathcal{V}:=\C^{d}\times (\C^{n+1})^{\otimes d}$ and the random coefficients define a $\mathcal{V}$-valued random variable $P$. 
+There are practical and conceptual reason for using the maximal-degree model of \cite{noferini2016numerical}, 
+rather than taking $n$ to be the total degree. 
+On the one hand, it is motivated by its
+link to tensor-product constructions \cite[Sec.~2.1]{noferini2016numerical}. A further reason
+is that fixing the maximal degree in each variable
+keeps the Newton polytopes - the convex hull of the exponent vectors - equal to boxes, for which the resultant constructions of
+Section~\ref{sec:family} are generically nonsingular and there are generically no roots at
+infinity. Each $p_i$ is a Gaussian random function with covariance kernel
+\begin{equation}\label{eq:kernel}
+  K(x,y) := \E\bigl[p_i(x)\overline{p_i(y)}\bigr] = \prod_{\ell=1}^d k_n(x_\ell\bar y_\ell),
+  \qquad k_n(t):=\sum_{j=0}^n t^j,
+\end{equation}
+and the $d$ functions are independent. Write $S(X):=K(X,X)\ge1$ and $r_\ell=|X_\ell|^2$.
+
+By the Bernstein--Kushnirenko--Khovanskii (BKK) theorem~\cite{bernstein1975roots}, using the
+normalization $\mathrm{MV}(Q,\dots,Q)=d!\Vol(Q)$ for the mixed volumes ($Q$ a polytope), a generic system with exponent vectors in the box $[0,n]^d$ has
+\begin{equation}\label{eq:count}
+  N = d!\,\Vol([0,n]^d) = d!\,n^d
+\end{equation}
+simple roots in the torus $(\C^*)^d$. Moreover, the set of coefficients for which equality is not attained is a proper algebraic subset of $\mathcal{V}$, so almost surely all $N$ roots are simple. 
+For such a generic system, for which all $N$ roots are simple, the ideal $I=\langle p_1,\dots,p_d\rangle$ is radical and zero-dimensional, and evaluation at the roots identifies $\C[x]/I$ with $\C^N$. 
+
+\subsection{The Kac-Rice formula}
+The main probabilistic tool in our analysis is a corollary of the Kac-Rice formula. 
+Let $\{X(t)\colon t\in U\}$ be a random field indexed by an open set $U\subseteq \R^d$.
+For $u\in \R^d$ and $S\subseteq U$, define the counting function 
+\begin{equation*}
+  N_u(X;S) = \#\{t\in S: X(t) = u\} \in \N\cup \{\infty\}.
+\end{equation*}
+If $X$ is $C^1$ a.s. and $u$ is a regular value a.s., then $N_u(X;S)$ is locally finite a.s., and finite if $S$ is compact.
+
+\begin{theorem}[Kac-Rice formula~\cite{azais2009level}]\label{thm:rice}
+Let $U\subseteq \R^d$ be an open set, and let $X\colon U\to \R^d$ be a non-degenerate Gaussian random field
+such that almost surely the trajectories $t\mapsto X(t)$ are $C^1$. Let $u\in \R^d$ be a point such that almost surely, $u$ is a regular value of $X$, that is,
+\begin{equation*}
+   \P\{\exists t\in U\colon X(t)=u \text{ and } \det(dX(t)) = 0\} = 0.
+\end{equation*}
+Then
+\end{theorem}
+
+A random polynomial system $P$ can be seen as a random field. 
+ 
+
+\begin{lemma}\label{lem:rice}
+  Let $\varphi\colon \C^d\times \mathcal{V}\to \R$ be measurable. If
+  \begin{equation}\label{eq:integrability}
+    \int_{\C^d}\E\bigl[\,|\varphi(x;P)|\,|\det J(x)|^2 \bigm| P(x)=0\,\bigr]\,
+    S(x)^{-d}\,dx < \infty,
+  \end{equation}
+  then 
+  \begin{equation}\label{eq:counting}
+    \E\Bigl[\sum_{z:\,P(z)=0} \varphi(z;P)\Bigr]
+    = \int_{\C^d} \E\bigl[\varphi(X;P)\,|\det J(X)|^2 \bigm| P(X)=0\bigr]\, p_{P(X)}(0)\,dX,
+  \end{equation}
+  holds with both sides finite. For $\varphi\ge0$,
+  \eqref{eq:counting} holds unconditionally, with both sides in $[0,\infty]$.
+\end{lemma}
+
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

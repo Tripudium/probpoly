@@ -1,0 +1,140 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{mathtools}
+
+\usepackage{amsmath, amssymb,latexsym}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{fullpage}
+
+\usepackage{hyperref}
+
+\def\ans{\textcolor{red}{$\diamondsuit$\ }}
+
+%\def\TeXHOME{../..}
+%\input \TeXHOME/defnAMS.tex
+
+\def\dfn{\stackrel {{\mbox{\scriptsize\rm{def}}}}{=}}
+\def\wtd{\widetilde}
+\def\what{\widehat}
+\def\ue{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily u.e.}}}{\sim}}}
+\def\se{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily s.e.}}}{\sim}}}
+\def\Lpk{\mathcal{L}_{p_k}}
+%\def\F{\mbox{\scriptsize \rm F}}
+%\def\T{\mbox{\scriptsize \rm T}}
+
+\def\F{\mathbb{F}}
+\def\G{\mathbb{G}}
+\def\K{\mathbb{K}}
+\def\H{\mathbb{H}}
+\def\E{\mathbb{E}}
+\def\P{\mathbb{P}}
+\def\C{\mathbb{C}}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+
+% Added by Etna you can ask me to remove
+\def\Ei{\mathrm{Ei}}
+\def\B{\mathcal{B}}
+\usepackage{subcaption}
+
+% Macros for the paper body
+\def\Rcal{\mathcal{R}}
+\def\Scal{\mathcal{S}}
+\def\Hcal{\mathcal{H}}
+\def\Ccal{\mathcal{C}}
+\def\Eroots{\E_{\mathrm{roots}}}
+\def\EW{\E_{W}}
+\def\kroot{\kappa_{\mathrm{root}}}
+\def\keig{\kappa_{\mathrm{eig}}}
+\def\CN{\mathbb{C}\mathcal{N}}
+\def\proofsketch{\par{\it Proof sketch}. \ignorespaces}
+
+\definecolor{brilliantrose}{rgb}{1.0, 0.33, 0.64}
+\definecolor{myviolet}{rgb}{0.21, 0.0, 0.85}
+\definecolor{amethyst}{rgb}{0.6, 0.4, 0.8}
+\definecolor{carrotorange}{rgb}{0.93, 0.57, 0.13}
+\newenvironment{vn}{\begin{quote}\color{myviolet} \small\sf VN $\diamondsuit$~}{\end{quote}}
+\newenvironment{el}{\begin{quote}\color{amethyst} \small\sf EL $\spadesuit$~}{\end{quote}}
+\newenvironment{ml}{\begin{quote}\color{carrotorange} \small\sf ML $\clubsuit$~}{\end{quote}}
+
+\def\bone{\boldsymbol{1}}
+
+\def\proof{\par{\it Proof}. \ignorespaces}
+
+\def\endproof{\vbox{\hrule height0.6pt\hbox{%
+   \vrule height1.3ex width0.6pt\hskip0.8ex
+   \vrule width0.6pt}\hrule height0.6pt
+  }}
+
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\eig}{eig}
+\DeclareMathOperator{\Rev}{Rev}
+\DeclareMathOperator{\cwRev}{cwRev}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\grade}{grade}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\cond}{cond}
+\DeclareMathOperator{\rev}{rev}
+\DeclareMathOperator{\tr}{trace}
+\DeclareMathOperator{\fchar}{char}
+\DeclareMathOperator{\mvec}{vec}
+\DeclareMathOperator{\unvec}{unvec}
+\DeclareMathOperator{\Disc}{Disc}
+\DeclareMathOperator{\Vol}{Vol}
+\DeclareMathOperator{\lc}{lc}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\spec}{spec}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{conjecture}{Conjecture}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{remark}{{\sc Remark}}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{problem}{Problem}[section]
+
+\def\sss{\scriptstyle}
+
+\title{A Probabilistic Analysis of the Conditioning of Algebraic Rootfinding Methods}
+\author{Etna Lindy, Martin Lotz, Vanni Noferini}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+  To be written.
+\end{abstract}
+
+\input{sections/intro}
+\input{sections/model}
+\input{sections/reduction1}
+\input{sections/jacobian}
+\input{sections/kernel}
+\input{sections/counting}
+\input{sections/weight}
+\input{sections/local}
+\input{sections/structural}
+\input{sections/family}
+\input{sections/theorem}
+\input{sections/relative}
+\input{sections/conclusion}
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

@@ -1,0 +1,44 @@
+\section{The kernel function $h$}\label{sec:kernelh}
+
+\begin{lemma}\label{lem:h}
+  Define $h(r) := \partial_z\partial_{\bar z}\log k_n(z\bar z)$ at $|z|^2=r$. Then:
+  \begin{enumerate}[(a)]
+    \item $h(r) = \dfrac{d}{dr}\Bigl[\dfrac{r\,k_n'(r)}{k_n(r)}\Bigr]
+      = \dfrac{1}{(1-r)^2} - \dfrac{(n+1)^2r^n}{(1-r^{n+1})^2}$ for $r\ne1$, extended by
+      continuity;
+    \item $h(1) = \dfrac{n(n+2)}{12}$;
+    \item $\Sigma(X) = S(X)\diag(h(r_1),\dots,h(r_d))$; on the unit torus,
+      $\Sigma = (n+1)^d\,\frac{n(n+2)}{12}\,I_d$, a scalar matrix;
+    \item $h(1/r) = r^2h(r)$ for all $r>0$; equivalently, the law of the root radii is
+      invariant under $r\mapsto1/r$.
+  \end{enumerate}
+\end{lemma}
+
+\proof
+(a) With $r=z\bar z$, $\partial_z\partial_{\bar z}\log k(z\bar z) =
+\frac{d}{dr}[r(\log k)'(r)]$ by the chain rule, and $k_n = (1-r^{n+1})/(1-r)$ gives
+\[
+  \frac{r\,k_n'}{k_n} = \frac{(n+1)r^{n+1}}{r^{n+1}-1} - \frac{r}{r-1},
+\]
+whose derivative is the stated expression. (b) Put $r=1-\varepsilon$ and write
+$1-r^{n+1} = (n+1)\varepsilon(1-a\varepsilon+b\varepsilon^2+O(\varepsilon^3))$ with
+$a=\frac n2$, $b=\frac{n(n-1)}6$. Then
+\[
+  \frac{(n+1)^2r^n}{(1-r^{n+1})^2}
+  = \frac{(1-\varepsilon)^n}{\varepsilon^2}
+    \bigl(1+2a\varepsilon+(3a^2-2b)\varepsilon^2+O(\varepsilon^3)\bigr)
+  = \frac1{\varepsilon^2} + c_2 + O(\varepsilon),
+\]
+where the coefficient of $\varepsilon$ vanishes because $2a=n$, and
+$c_2 = \binom n2 - 2an + 3a^2 - 2b = -\frac{n(n+2)}{12}$. Hence $h(1)=\frac{n(n+2)}{12}$.
+Checks: $n=1$ gives $h(r) = (1+r)^{-2}$ and $h(1)=\frac14$; $n=2$ gives $h(1)=\frac23$ by
+direct differentiation. (c) Immediate from \eqref{eq:kernel} and Lemma~\ref{lem:jacobian},
+since $\log K$ is a sum of single-variable terms. (d) Direct substitution:
+\[
+  h(1/r) = \frac{r^2}{(r-1)^2} - \frac{(n+1)^2r^{-n}r^{2n+2}}{(r^{n+1}-1)^2} = r^2h(r).
+\]
+The probabilistic restatement follows since the per-coordinate root measure is $h(r)\,dr$ and
+$h(1/r)\,d(1/r) = -h(r)\,dr$. It can also be deduced with no computation from the invariance
+of the coefficient law under the reversal $\alpha_l\mapsto n-\alpha_l$, which sends roots to
+coordinatewise reciprocals; the analytic identity is a consistency check of (a).
+\endproof

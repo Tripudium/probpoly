@@ -1,0 +1,77 @@
+\section{Model and probabilistic background}\label{sec:model}
+
+\begin{definition}[separate-degree i.i.d.\ model]\label{def:model}
+  Fix $d\ge1$ and $n\ge1$. For $i=1,\dots,d$,
+  \[
+    p_i(x) = \sum_{\alpha\in\{0,\dots,n\}^d} c_{i,\alpha}\,x^\alpha,
+    \qquad c_{i,\alpha}\sim\CN(0,1)\ \text{i.i.d.},
+  \]
+  where $x^\alpha := \prod_l x_l^{\alpha_l}$ and $\CN(0,1)$ has independent real and imaginary
+  parts of variance $\frac12$.
+\end{definition}
+
+This is the maximal-degree model of \cite{noferini2016numerical}, where it is motivated by its
+link to tensor-product constructions \cite[Sec.~2.1]{noferini2016numerical}. A further reason
+to prefer it here: fixing the maximal degree in each variable, rather than the total degree,
+keeps the Newton polytopes equal to boxes, for which the resultant constructions of
+Section~\ref{sec:family} are generically nonsingular and there are generically no roots at
+infinity. Each $p_i$ is a Gaussian random function with covariance kernel
+\begin{equation}\label{eq:kernel}
+  K(x,y) := \E\bigl[p_i(x)\overline{p_i(y)}\bigr] = \prod_{l=1}^d k_n(x_l\bar y_l),
+  \qquad k_n(t):=\sum_{j=0}^n t^j,
+\end{equation}
+and the $d$ functions are independent. Write $S(X):=K(X,X)\ge1$ and $r_l=|X_l|^2$.
+
+By the Bernstein--Kushnirenko--Khovanskii (BKK) theorem \cite{bernstein1975roots}, with the
+normalization $\mathrm{MV}(Q,\dots,Q)=d!\Vol(Q)$, generic systems with box supports have
+\begin{equation}\label{eq:count}
+  N = d!\,\Vol([0,n]^d) = d!\,n^d
+\end{equation}
+simple roots in $(\C^*)^d$; since all $d$ supports coincide, this is in fact the unmixed case
+due to Kushnirenko. For $d=2$ this is the bidegree count $2n^2$. Bernstein's equality
+criterion \cite{bernstein1975roots} makes the genericity explicit: the count \eqref{eq:count}
+is attained unless some facial subsystem has a root in the torus, and each such failure is a
+proper algebraic condition on the coefficients. Since the coefficient law has a density and
+the degenerate systems thus form a proper algebraic subset, almost surely all $N$ roots are
+simple, the ideal $I=\langle p_1,\dots,p_d\rangle$ is radical and zero-dimensional, and
+evaluation at the roots identifies $R/I$ with $\C^N$. We fix a monomial
+basis $\B=\{x^\beta : \beta\in\Scal\}$ of $R/I$ (from a Gr\"obner or border basis for a fixed
+order), and set
+\[
+  V\in\C^{N\times N}, \quad V_{\beta j} = z_j^\beta, \qquad v_j := Ve_j = \B(z_j).
+\]
+The Lagrange idempotents $\ell_j\in R/I$ satisfy $\ell_j(z_k)=\delta_{jk}$ and have coordinate
+vectors $[\ell_j]_\B = V^{-T}e_j$.
+
+\subsection{Probabilistic background in brief}\label{sec:background}
+
+Four tools are used, none deeper than linear algebra plus calculus.
+
+(1) \emph{Counting formula.} Identity \eqref{eq:counting} converts a sum over roots into an
+integral, exactly as one converts a sum over eigenvalues into a contour integral. The only
+probabilistic inputs are the density of $P(X)$ at $0$ and a conditional expectation.
+
+(2) \emph{Gaussian conditioning is least squares.} If $(u,v)$ is jointly Gaussian, the law of
+$u$ given $v=0$ is again Gaussian, with covariance the Schur complement of the joint
+covariance. Applied to $(J(X),P(X))$ this gives Lemma~\ref{lem:jacobian}. No other property of
+Gaussians is used.
+
+(3) \emph{One random matrix.} $G$ denotes a $d\times d$ matrix with i.i.d.\ $\CN(0,1)$
+entries. We use two classical facts: $\E|\det G|^2 = d!$ (a two-line computation), and the
+smallest eigenvalue of $G^*G$ is exponentially distributed with rate $d$
+\cite{edelman1988eigenvalues}, so $\sigma_{\min}(G)\approx d^{-1/2}$ and all moments of
+$\log\sigma_{\min}(G)$ are finite.
+
+(4) \emph{A change of measure.} The weight $|\det G|^2$ from \eqref{eq:counting} multiplies
+the eigenvalue density of $G^*G$ by $\prod_i\lambda_i$. Lemma~\ref{lem:rectangular}
+identifies the result with the eigenvalue law of $\wtd G^*\wtd G$ for a $(d+1)\times d$
+Gaussian matrix $\wtd G$. So all weighted expectations reduce to unweighted ones for a
+slightly rectangular matrix.
+
+We also use the digamma function $\psi=\Gamma'/\Gamma$, for which
+$\psi(k) = -\gamma+\sum_{i=1}^{k-1}\frac1i$ at integer arguments, and the anti-concentration
+inequality of Carbery and Wright \cite{carbery2001distributional}: if $q$ is a polynomial of
+degree $k$ in standard Gaussian variables, then
+$\P\bigl(|q|\le\varepsilon\,\|q\|_{L^2}\bigr) \le C\,k\,\varepsilon^{1/k}$, whence
+$\E\bigl[-\log(|q|/\|q\|_{L^2})\bigr] = O(k\log k)$. This replaces, for our purposes, any
+finer information about the law of $q$.

@@ -1,0 +1,231 @@
+\section{Introduction}\label{sec:intro}
+
+\subsection{Overview of the main contributions}
+
+The results of \cite{noferini2016numerical} and \cite{graf2026numerical} say that every known
+algebraic rootfinder is exponentially unstable in the worst case: there exist systems for which
+the intermediate subproblem (an eigenvalue problem or a univariate polynomial) is worse
+conditioned than the original root by a factor $\sigma^{-(d-1)}$, or even $\sigma^{-2^d+2}$ for
+elimination. These statements rest on carefully designed examples. This paper asks what happens
+for typical systems. We model ``typical'' by i.i.d.\ complex Gaussian coefficients with fixed
+degree $n$ in each of the $d$ variables, the same degree model chosen in
+\cite{noferini2016numerical}, and we study the expected value of the logarithm of the
+conditioning ratio, averaged over all roots of the system. Probabilistic analysis of this
+kind has long been central to the other main family of polynomial system solvers, homotopy
+continuation methods: the average-case programme initiated by Shub and Smale
+\cite{shub1993complexity}, and systematized in the monographs of Blum, Cucker, Shub, and
+Smale \cite{blum1998complexity} and of B\"urgisser and Cucker \cite{burgisser2013condition},
+led, through the probabilistic solution of Smale's
+seventeenth problem by Beltr\'an and Pardo \cite{beltran2009smale} and the deterministic
+near-solution of B\"urgisser and Cucker \cite{burgisser2011smale}, to Lairez's
+deterministic average polynomial-time algorithm \cite{lairez2017deterministic}. The present
+paper brings the same average-case viewpoint to the algebraic rootfinders.
+
+The first outcome is structural. For every method in the family, the ratio at a root factorizes
+into a \emph{local} part, depending only on the root and on the system near it, and a
+\emph{structural} part, encoding how the method couples distinct roots. The local part is the
+same for all methods, and we compute it exactly: it equals $(d+1)\log n$ up to an additive
+$O(d)$. It should be read as a change of units between ``conditioning of the root'' and
+``conditioning of the subproblem'', not as an instability; a scale-free version of the
+comparison removes it entirely (Remark~\ref{rem:tworeadings}).
+
+The second outcome is a hierarchy. The structural parts fall into three classes. For the
+hidden-variable resultant methods in their canonical Cayley and Sylvester forms there is none:
+an exact identity of \cite{noferini2016numerical} makes the ratio a purely local quantity, and
+for Cayley we obtain a complete and unconditional average-case theorem, verified numerically,
+with the conclusion that the exponential worst-case instability of \cite{noferini2016numerical}
+is a tail event, not the typical behaviour; in the relative metric the method is, on average,
+neutral with respect to the root conditioning. Multiparameter eigenvalue problems are also
+purely local. For Gr\"obner elimination and the rational univariate representation, the
+structural part is a logarithmic energy of pairs of roots, which requires only the two-point
+statistics of the root set. For normal form and Macaulay methods it is the eigenvector
+conditioning of the multiplication matrix, a quantity involving all roots at once. We prove
+that this hardest term is finite for every $d$, and the numerical protocol, executed at
+$d=1,2,3$, shows that it does not follow the random-matrix calibration at $d=1$ and $2$, where
+it appears bounded and the multiplication matrix is far more rigid than a Ginibre matrix; at
+$d=3$ the measured overlaps run parallel to the Ginibre control, a constant below it, up to
+$N=1296$: the third dimension appears to sit in the growth regime at accessible sizes. If so,
+the average loss of the normal-form method is fully described by the local terms; the
+pairwise-class terms are computed at leading order: one is an outer-root effect, the other a
+closed-form logarithmic energy. Section~\ref{sec:relative} converts everything to the relative
+metric, the one in which conclusions should be drawn, and the family separates cleanly there:
+only the rational univariate representation pays an exponential average penalty, with a
+closed-form constant. The message is that the exponential instability of the worst case is
+produced by atypical configurations, chiefly nearly colliding roots; for random systems the
+expected loss is modest, in agreement with our earlier numerical evidence.
+
+A byproduct of independent interest is what we call the outer-root phenomenon. For Kac-type
+random systems, logarithmic averages over the roots are not dominated by the roots near the
+unit torus. About half of the roots lie outside, at rescaled distances with a heavy $1/u$ tail,
+and the local scales of the system at such roots are exponentially large. Their total
+contribution to every ``average of a logarithm'' is of the same order as that of the bulk.
+Several natural heuristics fail at leading order for exactly this reason. The Kostlan ensemble
+exhibits the same effect in extreme form: its root measure does not concentrate at all, the
+affine average ratio grows linearly in $n$, and the projectively invariant normalization is
+identified as the only sensible yardstick there. The total-degree model, by contrast,
+reproduces the separate-degree coefficients exactly, through a different mechanism: its heavy
+tail is carried by roots receding radially in all coordinates at once.
+
+All local components are established rigorously, as is the finiteness of every structural term,
+and the overlap term is proved bounded at $d=1$ and $d=2$; what remains open is the sharp
+growth of the full-configuration terms, together with the rigor items collected in
+Section~\ref{sec:open}.
+
+\subsection{The quantity of interest}\label{sec:quantity}
+
+Let $P=(p_1,\dots,p_d):\C^d\to\C^d$ be a square polynomial system with $N$ simple roots
+$z_1,\dots,z_N$. An algebraic rootfinder computes the roots through an intermediate problem:
+normal-form methods diagonalize a multiplication matrix on the quotient ring; hidden-variable
+resultant methods solve $\det R(x_1)=0$ for a resultant matrix polynomial; Gr\"obner
+elimination and the rational univariate representation produce a univariate polynomial;
+multiparameter eigenvalue methods and the Macaulay resultant produce generalized eigenvalue
+problems. Each method M has a condition number $\kappa_{\mathrm{M}}(x^*)$ for the subproblem it
+constructs at a root, defined in \cite{graf2026numerical,noferini2016numerical}. The intrinsic
+condition number of the root is $\kroot(x^*):=\|J(x^*)^{-1}\|_2 = 1/\sigma_{\min}(J(x^*))$,
+with $J$ the Jacobian. The object of study is the average logarithmic conditioning ratio
+\begin{equation}\label{eq:ratio}
+  \Rcal_n^{\mathrm{M}} := \frac1N\, \E\Bigl[\sum_{j=1}^N \log
+  \frac{\kappa_{\mathrm{M}}(z_j)}{\kroot(z_j)}\Bigr],
+\end{equation}
+where the expectation is over the random coefficients (Section~\ref{sec:model}) and the sum
+runs over all roots. We use $\E[\log]$ rather than $\log\E$ because it measures the typical
+number of digits lost, it is additive under the factorizations below, and it is robust to the
+heavy tails that condition numbers have.
+
+All the methods above are treated, and the plan rests on one structural fact, proved case by
+case below: for every method, the ratio in \eqref{eq:ratio} factors at each root into a
+\emph{local} part, a function of the root and of the system near it, and a \emph{structural}
+part, encoding how the method couples distinct roots. The local part turns out to be the same
+for all methods, so it is computed once, in
+Sections~\ref{sec:jacobian}--\ref{sec:local}; the methods differ only in their structural
+parts, which are classified and analysed in Sections~\ref{sec:structural}
+and~\ref{sec:family}. The common machinery is developed first, and among the structural parts
+the normal form's is treated before the others, for two reasons. First, its condition number,
+by \cite[Thm.~6.2]{graf2026numerical},
+\begin{equation}\label{eq:keig}
+  \keig(x^*) = \frac{\|[\det Q]_\B\|_2\, \|\B(x^*)\|_2}{|\det J(x^*)|}\,(1+|\lambda|),
+\end{equation}
+where $\B$ is a monomial basis of the quotient ring $R/I$, $Q$ is any matrix polynomial with
+$P(x)=Q(x)(x-x^*)$, and $\lambda=g(x^*)$ is the eigenvalue of the multiplication matrix $M_g$
+associated with the root ($g$ a fixed generic polynomial such as $g=x_1$), leads to the first
+of the two exact reductions on which everything rests. Second, its structural part is the only
+genuinely global one, the eigenvector conditioning of $M_g$, so it is the case that needs the
+full machinery; the other methods are then treated on the same footing, at little extra cost,
+and some, like the Cayley resultant, end up completely solved. We write
+$\Rcal_n := \Rcal_n^{\mathrm{eig}}$ for the normal-form instance.
+
+To avoid any ambiguity about which condition numbers enter \eqref{eq:ratio}: for the normal
+form we take \eqref{eq:keig}, the exact formula of \cite[Thm.~6.2]{graf2026numerical}, as the
+definition; for the hidden-variable resultants we use the eigenvalue condition number of the
+resultant matrix polynomial as defined in \cite[Def.~2.10]{noferini2016numerical}, for which
+\cite[Lem.~2.11]{noferini2016numerical} is an equality; for Gr\"obner elimination and the
+rational univariate representation we use the conditioning $1/|g'|$ of the univariate
+subproblem, as in \cite{graf2026numerical}. All of these are actual condition numbers, not
+bounds. The single exception is the Macaulay method, for which
+\cite[Thm.~7.1]{graf2026numerical} provides only a lower bound; the corresponding statements
+in Section~\ref{sec:macaulay} are lower bounds and are marked as such.
+
+\subsection{Root averages carry a Jacobian weight}
+
+One identity organizes the whole computation. For any measurable quantity $\varphi(X;P)$
+depending on a point and on the system,
+\begin{equation}\label{eq:counting}
+  \E\Bigl[\sum_{z:\,P(z)=0} \varphi(z;P)\Bigr]
+  = \int_{\C^d} \E\bigl[\varphi(X;P)\,|\det J(X)|^2 \bigm| P(X)=0\bigr]\, p_{P(X)}(0)\,dX,
+\end{equation}
+where $p_{P(X)}(0)$ is the value at the origin of the probability density of the Gaussian
+vector $P(X)\in\C^d$. This is a change of variables (the coarea formula), not a probabilistic
+subtlety; the factor $|\det J|^2$ is the real Jacobian determinant of the map $\C^d\to\C^d$,
+and the square comes from holomorphy. Identity \eqref{eq:counting} is, in other words, the
+Kac--Rice formula for the zero set of the Gaussian field $P$, in the weighted (or marked)
+form in which the summand $\varphi$ may depend on the whole field, specialized to the
+holomorphic case: the Kac--Rice weight $|\det DF|$ of a real field $F$ becomes $|\det J|^2$,
+which is sign-definite and polynomial in the field and its derivatives, so none of the
+absolute-value smoothness issues of the real theory arise. We refer to
+Aza\"is--Wschebor \cite[Ch.~6]{azais2009level} for the general theory, and to
+Berzin--Latour--Le\'on \cite{berzin2022kacrice} for a contemporary overview of the formula's
+variants and applications. The practical content
+is that ``conditioning on a root at $X$'' is not the naive conditioning on $\{P(X)=0\}$: the
+correct conditional law -- in point-process language, the Palm distribution of the root set
+-- carries the weight $|\det J(X)|^2$, which down-weights badly conditioned roots.
+Forgetting the weight gives wrong answers; keeping it turns out to simplify the
+computations, because the weighted Gaussian ensembles that appear are again classical
+(Section~\ref{sec:weight}). The same mechanism underlies the moment computations of Shub and
+Smale \cite{shub1993complexity} and, at $d=1$, the root-density computations of Edelman and
+Kostlan \cite{edelman1995howmany}. Hypotheses and an extension to unbounded $\varphi$ are
+checked in
+Section~\ref{sec:counting}, where the identity is deduced from the Rice formulas of
+\cite[Thms.~6.2 and~6.4]{azais2009level}.
+
+\subsection{Results}\label{sec:results}
+
+Items (a)--(c) below are common to all methods; (d) and (e) concern the structural part of the
+normal form; (f) the other methods.
+
+\begin{enumerate}[(a)]
+  \item \emph{Reduction I} (Section~\ref{sec:reduction1}, exact). In $R/I$ one has
+    $[\det Q] = \det J(z_j)\,[\ell_j]$, with $\ell_j$ the Lagrange idempotent at $z_j$. Hence
+    $\keig(z_j) = \Lambda_j\,(1+|\lambda_j|)$, where $\Lambda_j\ge1$ is exactly the Wilkinson
+    condition number of the eigenvalue $\lambda_j$ of $M_g$, and
+    \[
+      \frac{\keig(z_j)}{\kroot(z_j)}
+      = \sigma_{\min}(J(z_j))\cdot\Lambda_j\cdot(1+|\lambda_j|).
+    \]
+    The reduction of $\det Q$ modulo $I$, which had appeared to be the main obstacle,
+    disappears from the problem.
+  \item \emph{Reduction II} (Sections~\ref{sec:jacobian}--\ref{sec:weight}, exact).
+    Conditionally on $P(X)=0$, the Jacobian is $G\,\Sigma(X)^{1/2}$ with $G$ a $d\times d$
+    matrix of i.i.d.\ standard complex Gaussians and $\Sigma(X)$ explicit and diagonal in our
+    model. The weight $|\det G|^2$ maps the singular values of $G$ to those of a
+    $(d+1)\times d$ Gaussian matrix. Every local root average is thereby an explicit integral.
+  \item \emph{Local terms} (Section~\ref{sec:local}). With
+    $A_n:=\frac1N\E\sum_j\log\sigma_{\min}(J(z_j))$ and
+    $C_n:=\frac1N\E\sum_j\log(1+|\lambda_j|)$,
+    \[
+      A_n = (d+1)\log n + O(d), \qquad C_n = \log2 + o(1).
+    \]
+    The computation requires the exact law of the root radii at scale $1/n$
+    (Proposition~\ref{prop:rootscale}) and reveals the outer-root phenomenon
+    (Section~\ref{sec:outer}).
+  \item \emph{The structural term} (Section~\ref{sec:structural}). Everything nonlocal sits in
+    $\Theta_n := \frac1N\E\sum_j\log\Lambda_j\ge0$. We give exact identities, prove
+    $\Theta_n<\infty$ for every $d$ (Proposition~\ref{prop:finiteness}), identify the
+    mechanism of its tails, prove $\Theta_n=O(1)$ at $d=1$ and $d=2$
+    (Theorem~\ref{thm:overlap}), and execute the numerical test at $d=1,2,3$: at $d=3$ the
+    overlaps run parallel to the Ginibre control, leaving the regime open there.
+  \item \emph{Main theorem} (Section~\ref{sec:theorem}, conditional):
+    \[
+      \Rcal_n = (d+1)\log n + \Theta_n + O(d), \qquad 0\le\Theta_n<\infty,
+    \]
+    and, by Theorem~\ref{thm:overlap}, $\Rcal_n = (d+1)\log n + O(1)$ unconditionally at
+    $d=1,2$; the regime at $d\ge3$ is open.
+  \item \emph{The full family} (Section~\ref{sec:family}). The other methods of
+    \cite{graf2026numerical} obey the same skeleton with structural terms classified as: none
+    (hidden-variable resultants in their canonical Cayley and Sylvester forms, by an exact
+    identity from \cite{noferini2016numerical}; multiparameter eigenproblems), pair energies
+    (Gr\"obner elimination, rational univariate representation), full-configuration overlaps
+    (Macaulay). For the Cayley method this yields an unconditional theorem: the average ratio
+    equals $-\frac{d(d-1)}{2}\log n + O_d(1)$ (Theorem~\ref{thm:cayley}), confirmed
+    numerically at $d=2$ down to the finite-$n$ constants (Section~\ref{sec:verification});
+    in the absolute metric of \cite{noferini2016numerical} the eigenproblem is typically
+    \emph{better} conditioned than the root, a units effect that disappears in the relative
+    metric, where the average ratio is neutral (Section~\ref{sec:relativeCayley}).
+\end{enumerate}
+
+\subsection{Notation}
+
+$\|\cdot\|_2$ denotes the Euclidean norm of a vector and the spectral norm of a matrix,
+$\|\cdot\|_F$ the Frobenius norm, and $\sigma_1\ge\dots\ge\sigma_{\min}$ the singular values.
+$G$ always denotes a $d\times d$ matrix with i.i.d.\ $\CN(0,1)$ entries, and
+$\EW[\cdot] := \E[\,\cdot\,|\det G|^2]/d!$ the associated weighted expectation
+(Section~\ref{sec:weight}). The roots of the system are $z_1,\dots,z_N$ with $N=d!\,n^d$;
+$\Scal$ is a monomial staircase, $\B$ the corresponding basis of $R/I$,
+$V=(z_j^\beta)_{\beta\in\Scal,\,j}$ the evaluation matrix with columns $v_j$, $\ell_j$ the
+Lagrange idempotents with coordinate vectors $V^{-T}e_j$, and
+$\Lambda_j := \|V^{-T}e_j\|_2\,\|Ve_j\|_2$. $\psi=\Gamma'/\Gamma$ is the digamma function,
+$H_d=\sum_{k=1}^d 1/k$, $\gamma$ Euler's constant, and $k_m(r):=\sum_{j=0}^m r^j$. Following
+\cite{noferini2016numerical}, $\Omega$ denotes the closed unit polydisk
+$\bar{\mathbb{D}}^d$, the reference domain of the rootfinding problem, so that
+$\sup_\Omega|p_i|$ is the sup-norm of $p_i$ there (equal to the sup on the torus
+$\mathbb{T}^d$ by the maximum principle). Asymptotic notation $O_d(\cdot)$ indicates
+constants depending on $d$ only; all logarithms are natural.

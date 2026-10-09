@@ -1,0 +1,467 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{fullpage}
+\usepackage{hyperref}
+
+\def\C{\mathbb{C}}
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\E{\mathbb{E}}
+\def\P{\mathbb{P}}
+\def\ddc{dd^c}
+\DeclareMathOperator{\supp}{supp}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{remark}{Remark}[section]
+
+\title{Convergence of the empirical root measure of random polynomial
+systems:\\ completing the argument}
+\author{Note for the ProbPoly project}
+\date{July 2026}
+
+\begin{document}
+\maketitle
+
+\noindent
+This note supplies the convergence proof that is missing from the section
+\emph{Random systems of polynomials} of the working notes. There, the limit of the
+empirical root measure is identified by computing, for each coordinate, the conditional
+limit distribution given the remaining coordinates, and then assembling the joint limit.
+As the notes themselves observe, that argument shows only that \emph{if} the random
+measures converge, the limit is the uniform measure on the torus; the convergence itself
+(the interchange of limit and integral marked $(*)$) is never established, and the
+conditioning step is delicate because at a root the coordinates are functions of the same
+random coefficients. Rather than patching that argument, we replace it by a
+potential-theoretic one, in the spirit of Shiffman--Zelditch and
+Bloom--Shiffman~\cite{BS07}: the empirical root measure is the wedge product of the
+normalized zero currents of the $d$ polynomials, each of which concentrates around an
+explicit deterministic current. The conditional computations of the working notes are
+recovered as one-variable slices of the limiting potential (Remark~\ref{rem:slices}).
+Closely related equidistribution theorems exist in the literature (\cite{BS07} for the
+total-degree model; see also Bayraktar~\cite{Bay16} for ensembles adapted to general
+Newton polytopes), so the theorem below should not be considered new; the point of this
+note is a self-contained, quantitative proof tailored to the two models used in the
+working notes, under assumptions matching~\cite{BN}.
+
+\section{Setup and statement}
+
+Fix $d \geq 1$. For $n \in \N$ consider a random system $p_1 = \dots = p_d = 0$ of
+polynomials in $z = (z_1,\dots,z_d) \in \C^d$,
+\[
+  p_l(z) \;=\; \sum_{c \,\in\, \Lambda_n} a^{(l)}_c\, z^c, \qquad l = 1,\dots,d,
+\]
+where the index set is either
+\[
+  \Lambda_n = \{0,\dots,n\}^d \quad \text{(\emph{model P}: separate degree $n$ in each
+  variable)}, \qquad \text{or}
+\]
+\[
+  \Lambda_n = \{c \in \N^d : |c| \le n\} \quad \text{(\emph{model T}: total degree $n$)}.
+\]
+
+\medskip\noindent
+\textbf{Assumption (A).} The coefficients $a^{(l)}_c$ (over all $l$ and $c$) are
+independent complex random variables with mean $0$, variance
+$\E|a^{(l)}_c|^2 = 1$, and laws that are absolutely continuous with densities on $\C$
+bounded by a common constant $M$. (Standard complex Gaussians satisfy this with
+$M = 1/\pi$; the densities need not be identical.)
+
+\medskip
+Write
+\[
+  K_n(z) \;=\; \E\,|p_l(z)|^2 \;=\; \sum_{c\in\Lambda_n} |z^c|^2,
+\]
+so that in model P, $K_n(z) = \prod_{i=1}^d s_n(|z_i|^2)$ with
+$s_n(t) = 1 + t + \dots + t^n$. Let $\sigma$ denote the uniform probability measure on
+the unit circle $S^1 \subset \C$, and $\sigma^{\otimes d}$ the Haar probability measure
+on the unit torus $(S^1)^d \subset \C^d$.
+
+By Lemma~\ref{lem:generic} below, almost surely the system has exactly $N_n$ isolated
+simple roots in $\C^d$, where $N_n = d!\,n^d$ in model P (the BKK number of the cube
+$[0,n]^d$) and $N_n = n^d$ in model T (B\'ezout). Define the empirical probability
+measure
+\[
+  \bar\mu_n \;=\; \frac{1}{N_n} \sum_{r \,:\, p_1(r)=\dots=p_d(r)=0} \delta_r .
+\]
+
+\begin{theorem}\label{thm:main}
+Under Assumption (A), in both models, $\bar\mu_n \to \sigma^{\otimes d}$ weakly in
+probability as $n \to \infty$. Quantitatively, for every $f \in C^\infty_c(\C^d)$ there
+is $C(f,d,M)$ with
+\[
+  \E\,\bigl|\langle \bar\mu_n , f\rangle - \langle \sigma^{\otimes d}, f\rangle\bigr|
+  \;\le\; C(f,d,M)\,\frac{\log n}{n}.
+\]
+\end{theorem}
+
+\section{Conventions and genericity}
+
+We use the operator $\ddc \coloneqq \frac{i}{\pi}\partial\bar\partial$, normalized so
+that in one variable $\ddc u = \frac{1}{2\pi}\Delta u \cdot \mathrm{Leb}$ and
+$\ddc \log|z| = \delta_0$. By the Poincar\'e--Lelong formula, for a polynomial $p$ the
+current $[Z_p] = \ddc \log|p|$ is the current of integration over the zero divisor of
+$p$. For locally bounded plurisubharmonic (psh) potentials, wedge products of the
+currents $\ddc u$ are defined by Bedford--Taylor theory \cite{BT82}; for the currents
+$[Z_{p_l}]$, whose potentials $\log|p_l|$ are unbounded on the divisors, the products
+\[
+  [Z_{p_1}] \wedge \dots \wedge [Z_{p_q}]
+\]
+are well defined as soon as the divisors intersect properly (each partial intersection
+has the expected codimension); see \cite[Ch.~III, \S3--4]{Dem} for the definition, the
+associated Fubini--Stokes integration-by-parts formulas, and King's formula, which for a
+proper complete intersection identifies
+$[Z_{p_1}]\wedge\dots\wedge[Z_{p_d}] = \sum_r m_r \delta_r$, the sum running over the
+isolated common roots with their multiplicities. Throughout, $\omega_0 = \ddc |z|^2$ is
+the standard K\"ahler form, and the mass of a positive current $S$ of bidimension
+$(k,k)$ on a set $A$ is $\|S\|_A = \int_A S \wedge \omega_0^{k}$ (all our currents are
+wedges of closed positive $(1,1)$-currents and smooth positive forms, hence strongly
+positive, so this is comparable to the total variation of the coefficients). We use
+repeatedly: if $\beta$ is a real smooth $(1,1)$-form with $C^0$-norm $\le M_\beta$ on a
+compact $K$, then $-c_d M_\beta\, \omega_0 \le \beta \le c_d M_\beta\, \omega_0$ against
+strongly positive currents supported in $K$.
+
+\begin{lemma}\label{lem:generic}
+Under Assumption (A), almost surely: the divisors $Z_{p_1},\dots,Z_{p_d}$ intersect
+properly, all common roots are simple, none lies on a coordinate hyperplane, and their
+number is exactly $N_n$. Consequently, almost surely
+$\bigwedge_{l=1}^d [Z_{p_l}] = \sum_r \delta_r$ and $\bar\mu_n$ is a probability
+measure.
+\end{lemma}
+
+\begin{proof}
+Each stated property fails only on a proper algebraic (or constructible) subset of the
+coefficient space $\C^{d\,|\Lambda_n|}$: for the count this is Bernstein's theorem
+\cite{Ber75} in model P (the BKK bound $d!\,n^d = d!\operatorname{vol}([0,n]^d)$ is
+attained unless some facial subsystem has a toric root, a proper algebraic condition;
+none of the finitely many exceptional conditions holds generically) and B\'ezout in
+model T (all $n^d$ projective intersection points are affine and simple outside a proper
+subvariety). Roots on $\{z_i = 0\}$ require $d$ equations in $d-1$ variables to have a
+common solution, again a proper algebraic condition. A proper algebraic subset has
+Lebesgue measure zero, and by Assumption (A) the law of the coefficient vector is
+absolutely continuous.
+\end{proof}
+
+\section{Deterministic asymptotics of the potentials}
+
+Define
+\[
+  \bar u_n(z) \;=\; \tfrac{1}{2n} \log K_n(z), \qquad
+  \bar T_n \;=\; \ddc \bar u_n ,
+\]
+a smooth closed positive $(1,1)$-form ($K_n \ge 1 > 0$ everywhere, and $\bar u_n$ is psh
+as a logarithm of a sum of squared moduli of holomorphic monomials). Define the limit
+potentials
+\[
+  V_P(z) = \sum_{i=1}^d \log^+ |z_i| , \qquad
+  V_T(z) = \max_{1\le i\le d}\, \log^+ |z_i| = \log^+ \max_i |z_i| .
+\]
+
+\begin{lemma}\label{lem:potconv}
+In model P (resp.\ T), with $V = V_P$ (resp.\ $V_T$),
+\[
+  \sup_{z \in \C^d}\, \bigl| \bar u_n(z) - V(z) \bigr| \;\le\; \frac{d \log (n+d)}{2n}
+  \;=:\; \delta_n .
+\]
+\end{lemma}
+
+\begin{proof}
+Model P: $\max(1,t^n) \le s_n(t) \le (n+1)\max(1,t^n)$ for $t\ge0$, so
+$\bigl|\frac{1}{2n}\log s_n(|z_i|^2) - \log^+|z_i|\bigr| \le \frac{\log(n+1)}{2n}$ for
+each $i$; sum over $i$. Model T: every monomial obeys
+$|z^c|^2 \le \max\bigl(1,\max_i|z_i|\bigr)^{2n}$, and the terms $c = 0$ and $c = n e_i$
+give $K_n \ge \max\bigl(1, \max_i |z_i|^{2n}\bigr)$, while
+$|\Lambda_n| = \binom{n+d}{d} \le (n+d)^d$.
+\end{proof}
+
+\begin{lemma}\label{lem:limitMA}
+$\frac{1}{d!} (\ddc V_P)^{\wedge d} = \sigma^{\otimes d}$ and
+$(\ddc V_T)^{\wedge d} = \sigma^{\otimes d}$.
+\end{lemma}
+
+\begin{proof}
+For $V_P$: $\ddc \log^+|z_i|$ is, in one variable, the measure $\sigma(z_i)$; as a
+$(1,1)$-current on $\C^d$ it has only a $dz_i \wedge d\bar z_i$ component. For a sum
+$u = \sum_i u_i(z_i)$ of locally bounded psh functions of one variable each, smoothing
+each $u_i$ separately and using Bedford--Taylor convergence \cite{BT82},
+$(\ddc u)^{\wedge d} = d!\, \bigwedge_i \ddc u_i$, because in the expansion of the
+$d$-fold wedge every term repeating an index vanishes and the $d!$ orderings of
+$\{1,\dots,d\}$ each contribute $\ddc u_1 \wedge \dots \wedge \ddc u_d$, i.e.\ the
+product measure. Hence $(\ddc V_P)^{\wedge d} = d!\, \sigma^{\otimes d}$.
+
+For $V_T$: $V_T$ is the pluricomplex Green function (Siciak--Zaharjuta extremal
+function) of the closed unit polydisk, and its Monge--Amp\`ere measure is the
+equilibrium measure of the polydisk, namely the Haar probability measure on the
+distinguished boundary $(S^1)^d$; this is classical, see \cite[\S5.1]{Kli} (also
+\cite{BT82}).
+\end{proof}
+
+\section{Pointwise anti-concentration estimate}
+
+For $l = 1,\dots,d$ set
+\[
+  u_l \;=\; \tfrac1n \log |p_l|, \qquad
+  w_l \;\coloneqq\; u_l - \bar u_n \;=\; \tfrac{1}{2n} \log \frac{|p_l|^2}{K_n},
+\]
+so that $\frac1n [Z_{p_l}] = \bar T_n + \ddc w_l$.
+
+\begin{lemma}\label{lem:pointwise}
+There is $C_0 = C_0(d,M)$ such that for every $z \in \C^d$ with $K_n(z) \neq 0$ (i.e.\
+all $z$) and every $l$,
+\[
+  \E\,|w_l(z)| \;\le\; C_0\, \frac{\log (n+2)}{n}.
+\]
+\end{lemma}
+
+\begin{proof}
+Fix $z$ and write $\xi = p_l(z)/\sqrt{K_n(z)} = \sum_{c} b_c\, a^{(l)}_c$ with
+$b_c = z^c / \sqrt{K_n(z)}$, $\sum_c |b_c|^2 = 1$. Then
+$2n\,|w_l(z)| = |\log |\xi|^2| \le \log^+ |\xi|^2 + \log^- |\xi|^2$.
+
+\emph{Upper tail.} By Jensen's inequality,
+$\E \log^+ |\xi|^2 \le \E \log (1 + |\xi|^2) \le \log\bigl(1 + \E|\xi|^2\bigr) = \log 2$.
+
+\emph{Lower tail (anti-concentration).} Choose $c^*$ with $|b_{c^*}| = \max_c |b_c|$, so
+$|b_{c^*}|^2 \ge 1/|\Lambda_n| \ge (n+d)^{-d}$. Conditioning on all coefficients except
+$a^{(l)}_{c^*}$, the conditional law of $\xi$ has a density on $\C$ bounded by
+$M/|b_{c^*}|^2$, hence for every $\varepsilon > 0$,
+\[
+  \P\bigl( |\xi| \le \varepsilon \bigr) \;\le\; \pi M\, \varepsilon^2\, (n+d)^d .
+\]
+Therefore
+\[
+  \E \log^- |\xi|^2
+  = \int_0^\infty \P\bigl(|\xi|^2 \le e^{-s}\bigr)\, ds
+  \le \int_0^\infty \min\bigl( 1,\; \pi M (n+d)^d e^{-s} \bigr)\, ds
+  \le \log\bigl(\pi M (n+d)^d\bigr) + 1 .
+\]
+Combining, $\E|w_l(z)| \le \frac{1}{2n}\bigl( \log 2 + 1 + \log(\pi M) + d\log(n+d)
+\bigr)$.
+\end{proof}
+
+Note that only this pointwise-in-$z$ expectation bound is needed; no uniform control of
+$w_l$ over $z$, and in particular no control near the zero divisors, enters the
+argument.
+
+\section{Mass bounds and the telescoping estimate}
+
+The heart of the proof is the following telescoping device. All currents below are
+understood on a fixed open set containing the (compact) support of the test data, and
+all wedge products are a.s.\ well defined by Lemma~\ref{lem:generic} and
+\cite[Ch.~III]{Dem}.
+
+\begin{lemma}[uniform mass bounds]\label{lem:mass}
+Let $\chi \in C^\infty_c(\C^d)$, $\chi \ge 0$. For $0 \le q \le d$ and $L \subseteq
+\{1,\dots,d\}$ with $|L| = q$, let $\Phi_n$ be any wedge of $d - q$ factors, each equal
+to $\bar T_n$ or to $\omega_0$. Then there is $C_1 = C_1(\chi, d, M)$, independent of
+$n$, $L$ and the choice of factors, such that
+\[
+  \E \int \chi\; \Bigl( \bigwedge_{l \in L} \tfrac1n [Z_{p_l}] \Bigr) \wedge \Phi_n
+  \;\le\; C_1 .
+\]
+\end{lemma}
+
+\begin{proof}
+Induction on $q$.
+
+\emph{Base case $q = 0$.} The integrand is a smooth positive $(d,d)$-form. Since the
+potentials $\bar u_n$ are psh, smooth, and uniformly bounded on compacts (by
+Lemma~\ref{lem:potconv} they converge uniformly to $V$, which is locally bounded), the
+Chern--Levine--Nirenberg inequality gives the bound; concretely, integrating by parts
+one factor at a time,
+$\int \chi\, \ddc \bar u_n \wedge \Phi = \int \bar u_n\, \ddc\chi \wedge \Phi$, and
+$\ddc \chi$ is dominated by $c_d \|\chi\|_{C^2}\, \omega_0$ against positive currents,
+so each step trades a $\bar T_n$ for an $\omega_0$ at the cost of a factor
+$c_d \|\chi\|_{C^2} \sup_{\supp\chi} |\bar u_n|$ (after replacing $\chi$ by a fixed
+larger cutoff). After $\le d$ steps only powers of $\omega_0$ remain.
+
+\emph{Induction step.} Let $q \ge 1$, pick $m \in L$, and write
+\[
+  \bigwedge_{l\in L} \tfrac1n [Z_{p_l}] \wedge \Phi_n
+  \;=\; R \wedge \tfrac1n [Z_{p_m}],
+  \qquad
+  R \coloneqq \bigwedge_{l\in L\setminus\{m\}} \tfrac1n [Z_{p_l}] \wedge \Phi_n .
+\]
+Since $\tfrac1n [Z_{p_m}] = \bar T_n + \ddc w_m$,
+\[
+  \int \chi\, R \wedge \tfrac1n [Z_{p_m}]
+  \;=\; \int \chi\, R \wedge \bar T_n
+  \;+\; \int w_m \, \ddc\chi \wedge R ,
+\]
+where we integrated by parts (\cite[Ch.~III, \S3]{Dem}; $R$ is closed and positive, $w_m$
+is a difference of psh functions locally integrable against the trace of $R$ because
+both wedge products $R \wedge \frac1n[Z_{p_m}]$ and $R \wedge \bar T_n$ are well
+defined). The first term is handled by the induction hypothesis ($q-1$ random factors,
+$\Phi$ replaced by $\Phi \wedge \bar T_n$). For the second, dominate
+$\ddc \chi$ by $c_d \|\chi\|_{C^2}\, \omega_0$, so
+\[
+  \Bigl| \int w_m\, \ddc \chi \wedge R \Bigr|
+  \;\le\; c_d \|\chi\|_{C^2} \int_{\supp \chi} |w_m|\; d\bigl( R \wedge \omega_0 \bigr).
+\]
+Now the key point: $R$ is built from $p_l$ with $l \neq m$ and from deterministic forms,
+hence is \emph{independent} of $w_m$. Taking expectations, conditioning on $R$, and
+applying Fubini together with Lemma~\ref{lem:pointwise},
+\[
+  \E \int_{\supp\chi} |w_m| \; d(R\wedge\omega_0)
+  \;=\; \E_R \int_{\supp\chi} \E\bigl[|w_m(z)|\bigr]\; d(R\wedge\omega_0)(z)
+  \;\le\; C_0 \tfrac{\log(n+2)}{n}\; \E\, \| R \wedge \omega_0 \|_{\supp\chi},
+\]
+and $\E \|R \wedge \omega_0\|_{\supp\chi}$ is again of the form covered by the induction
+hypothesis ($q - 1$ random factors, one more $\omega_0$), after inserting a cutoff
+$\tilde\chi = 1$ on $\supp \chi$. Since $\frac{\log(n+2)}{n}$ is bounded, the induction
+closes.
+\end{proof}
+
+\begin{lemma}[telescoping estimate]\label{lem:telescope}
+For every $f \in C^\infty_c(\C^d)$ there is $C_2 = C_2(f,d,M)$ with
+\[
+  \E\, \Bigl| \Bigl\langle \bigwedge_{l=1}^d \tfrac1n [Z_{p_l}]
+  \;-\; \bar T_n^{\wedge d}, \; f \Bigr\rangle \Bigr|
+  \;\le\; C_2\, \frac{\log n}{n} .
+\]
+\end{lemma}
+
+\begin{proof}
+Telescope:
+\[
+  \bigwedge_{l=1}^d \tfrac1n [Z_{p_l}] - \bar T_n^{\wedge d}
+  \;=\; \sum_{m=1}^{d} \Bigl( \bigwedge_{l<m} \tfrac1n [Z_{p_l}] \Bigr)
+        \wedge \ddc w_m \wedge \bar T_n^{\wedge (d-m)} .
+\]
+Pair with $f$ and integrate by parts in each summand:
+\[
+  \Bigl\langle \Bigl( \bigwedge_{l<m} \tfrac1n [Z_{p_l}]\Bigr) \wedge \ddc w_m \wedge
+  \bar T_n^{\wedge(d-m)}, f \Bigr\rangle
+  \;=\; \int w_m \; \ddc f \wedge \Bigl( \bigwedge_{l<m} \tfrac1n [Z_{p_l}] \Bigr)
+  \wedge \bar T_n^{\wedge (d-m)} .
+\]
+The current on the right involves only $p_l$ with $l < m$, hence is independent of
+$w_m$. Dominating $\ddc f$ by $c_d\|f\|_{C^2}\,\omega_0$ and repeating the
+Fubini step of Lemma~\ref{lem:mass}, each summand is bounded in expectation by
+$c_d \|f\|_{C^2}\; C_0 \frac{\log(n+2)}{n}\; C_1$, with $C_1$ from Lemma~\ref{lem:mass}
+applied with a cutoff $\chi = 1$ on $\supp f$.
+\end{proof}
+
+\section{Proof of Theorem \ref{thm:main}}
+
+Let $V = V_P$ or $V_T$ according to the model, and let
+$\lambda \coloneqq \frac{1}{d!}(\ddc V_P)^{\wedge d} = \sigma^{\otimes d}$, resp.\
+$\lambda \coloneqq (\ddc V_T)^{\wedge d} = \sigma^{\otimes d}$
+(Lemma~\ref{lem:limitMA}). Fix $f \in C^\infty_c(\C^d)$.
+
+\emph{Deterministic part.} The same telescoping as in Lemma~\ref{lem:telescope}, with
+$e_n \coloneqq \bar u_n - V$ in place of $w_m$ and $\ddc V$ in place of
+$\frac1n[Z_{p_l}]$, gives
+\[
+  \bigl| \langle \bar T_n^{\wedge d} - (\ddc V)^{\wedge d}, f \rangle \bigr|
+  \;=\; \Bigl| \sum_{m=1}^d \int e_n\, \ddc f \wedge \bar T_n^{\wedge(m-1)} \wedge
+  (\ddc V)^{\wedge (d-m)} \Bigr|
+  \;\le\; C_3(f,d)\, \delta_n ,
+\]
+using $\|e_n\|_\infty \le \delta_n$ (Lemma~\ref{lem:potconv}) and uniform local mass
+bounds for the mixed wedges $\bar T_n^{\wedge(m-1)} \wedge (\ddc V)^{\wedge(d-m)}$
+(Chern--Levine--Nirenberg as in the base case of Lemma~\ref{lem:mass}: all potentials
+involved are psh and uniformly bounded on compacts, and $\ddc V$-wedges are defined by
+Bedford--Taylor theory since $V$ is locally bounded).
+
+\emph{Random part.} By Lemma~\ref{lem:generic},
+$\langle \bar\mu_n, f\rangle = \frac{n^d}{N_n} \bigl\langle \bigwedge_l \frac1n
+[Z_{p_l}], f \bigr\rangle$ almost surely, and $\frac{n^d}{N_n} \le 1$. Hence, combining
+Lemma~\ref{lem:telescope} with the deterministic part and
+$\frac{n^d}{N_n}(\ddc V)^{\wedge d} = \lambda$,
+\[
+  \E \bigl| \langle \bar\mu_n, f \rangle - \langle \sigma^{\otimes d}, f\rangle \bigr|
+  \;\le\; \frac{n^d}{N_n}\Bigl( C_2 \tfrac{\log n}{n} + C_3 \delta_n \Bigr)
+  \;\le\; C(f,d,M)\, \frac{\log n}{n} .
+\]
+This proves the quantitative claim; convergence in probability of
+$\langle \bar\mu_n, f\rangle$ for each fixed $f \in C^\infty_c$ follows by Markov's
+inequality.
+
+\emph{From vague to weak convergence.} Both $\bar\mu_n$ (a.s.) and $\sigma^{\otimes d}$
+are probability measures. Choose $R > 1$ and $g \in C^\infty_c$ with
+$0 \le g \le 1$ and $g \equiv 1$ on the closed ball $\bar B_R \supset (S^1)^d$. Then
+$\langle \bar\mu_n, g\rangle \to \langle \sigma^{\otimes d}, g \rangle = 1$ in
+probability, so $\bar\mu_n(\C^d \setminus B_R) \le 1 - \langle \bar\mu_n, g\rangle \to
+0$ in probability: no mass escapes to infinity. Together with convergence on a countable
+family of $C^\infty_c$ functions that is dense in $C_c$, this upgrades vague convergence
+in probability to weak convergence in probability. \qed
+
+\section{Remarks}
+
+\begin{remark}[relation to the conditional argument in the notes]\label{rem:slices}
+The conditional computations in the working notes are exactly the one-variable slices of
+$\bar u_n$ and $V$. In model T, for fixed $x_2,\dots,x_d$, the variance profile of the
+univariate polynomial in $x_1$ computed there has normalized logarithm converging to
+$z \mapsto \max\bigl(\log|z|, \log|x_*|\bigr)$ with $|x_*| = \max(1, |x_2|, \dots,
+|x_d|)$ --- which is $V_T(z, x_2, \dots, x_d)$ as a function of $z$. Thus those
+computations correctly identify the limit potential; what they could not deliver is the
+convergence of the random measures, which is precisely what
+Lemmas~\ref{lem:pointwise}--\ref{lem:telescope} supply. The interchange-of-limits step
+$(*)$ and the proposed extension of \cite[Lemma B.1]{BN} are no longer needed.
+\end{remark}
+
+\begin{remark}[scope of the assumptions]
+Gaussian coefficients are nowhere needed; Assumption (A) (independent, unit-variance,
+uniformly bounded densities) is used only twice: for genericity
+(Lemma~\ref{lem:generic}) and for the anti-concentration bound in
+Lemma~\ref{lem:pointwise}. In the Gaussian case $|\xi|^2 \sim \mathrm{Exp}(1)$ in
+Lemma~\ref{lem:pointwise} and one gets the slightly better rate $C/n$. The variances
+need not all equal $1$ either: the proof goes through verbatim whenever the coefficient
+variances $\alpha_c^2$ are such that $\frac{1}{2n}\log \sum_c \alpha_c^2 |z^c|^2$
+converges uniformly to some locally bounded $V$; the limit measure is then
+$(\ddc V)^{\wedge d}$ suitably normalized. This covers, e.g., Kostlan-type variance
+profiles, and makes explicit how the limit depends only on the Newton polytope and the
+exponential scale of the variances, in line with \cite{Bay16}.
+\end{remark}
+
+\begin{remark}[normalization of the root count]
+In model P the number of roots is $d!\,n^d$ (the BKK number of the cube), not $n^d$; for
+$d = 2$, two bidegree-$(n,n)$ curves meet in $2n^2$ points. The corollary in the working
+notes should normalize the empirical measure accordingly; the limit statement is
+unaffected.
+\end{remark}
+
+\begin{remark}[almost-sure convergence]
+The bound $O(\log n / n)$ is not summable, so Borel--Cantelli gives almost-sure
+convergence only along polynomially sparse subsequences (e.g.\ $n_j = j^2$). Full
+almost-sure convergence can be obtained by a second-moment refinement of
+Lemma~\ref{lem:telescope} or by invoking the variance estimates of \cite{BS07}; since
+the application in the working notes only requires convergence in probability, we do not
+pursue this.
+\end{remark}
+
+\begin{thebibliography}{9}
+
+\bibitem{BN} G.~Barbarino and V.~Noferini,
+\emph{The limit empirical spectral distribution of complex matrix polynomials},
+Random Matrices: Theory and Applications 11(3), 2250023, 2022.
+
+\bibitem{Bay16} T.~Bayraktar,
+\emph{Equidistribution of zeros of random holomorphic sections},
+Indiana Univ. Math. J. 65 (2016), 1759--1793.
+
+\bibitem{BT82} E.~Bedford and B.~A.~Taylor,
+\emph{A new capacity for plurisubharmonic functions},
+Acta Math. 149 (1982), 1--40.
+
+\bibitem{Ber75} D.~N.~Bernstein,
+\emph{The number of roots of a system of equations},
+Funct. Anal. Appl. 9 (1975), 183--185.
+
+\bibitem{BS07} T.~Bloom and B.~Shiffman,
+\emph{Zeros of random polynomials on $\C^m$},
+Math. Res. Lett. 14 (2007), 469--479.
+
+\bibitem{Dem} J.-P.~Demailly,
+\emph{Complex Analytic and Differential Geometry},
+open access book, Institut Fourier, Grenoble.
+
+\bibitem{Kli} M.~Klimek,
+\emph{Pluripotential Theory},
+London Math. Soc. Monographs 6, Oxford University Press, 1991.
+
+\end{thebibliography}
+
+\end{document}

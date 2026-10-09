@@ -1,0 +1,70 @@
+\section{Reduction II, part 1: the Jacobian at a root}\label{sec:jacobian}
+
+\begin{lemma}\label{lem:jacobian}
+  Fix $X\in\C^d$. Conditionally on $P(X)=0$, the rows of $J(X)$ are i.i.d.\ centered complex
+  Gaussian vectors with covariance
+  \[
+    \Sigma(X) = S(X)\,H(X), \qquad
+    H_{jk}(X) := \frac{\partial^2}{\partial x_j\,\partial\bar y_k}
+    \log K(x,y)\Big|_{y=x=X};
+  \]
+  equivalently $J \overset{d}{=} G\,\Sigma(X)^{1/2}$ with $G$ as in
+  Section~\ref{sec:background}.
+\end{lemma}
+
+\proof
+Rows are independent because the $p_i$ are. For one row, apply Gaussian conditioning (Schur
+complement) to the jointly Gaussian vector $(p_i(X),\partial_1p_i(X),\dots,\partial_dp_i(X))$:
+with $K_j := \partial_{x_j}K|_X$ and $K_{j\bar k} := \partial_{x_j}\partial_{\bar y_k}K|_X$,
+the conditional covariance is $K_{j\bar k} - K_j\overline{K_k}/S$, which equals
+$S\,\partial_{x_j}\partial_{\bar y_k}\log K$ by expanding the logarithmic derivative.
+\endproof
+
+\begin{lemma}\label{lem:intensity}
+  The expected number of roots per unit volume at $X$ is
+  \[
+    \rho(X) = \frac{d!}{\pi^d}\,\det H(X).
+  \]
+\end{lemma}
+
+\proof
+Apply \eqref{eq:counting} with $\varphi=1$:
+$\rho(X) = \E[\,|\det J|^2 \mid P(X)=0\,]\,p_{P(X)}(0)$. Independence of the components gives
+$p_{P(X)}(0) = (\pi S)^{-d}$. By Lemma~\ref{lem:jacobian} and $\E|\det G|^2 = d!$ (expand
+$\det G\,\overline{\det G}$ over pairs of permutations; only equal pairs survive),
+$\E[|\det J|^2 \mid P(X)=0] = d!\,S^d\det H$, and the powers of $S$ cancel.
+\endproof
+
+The factor $d!$ deserves verification; here are two independent checks.
+
+\begin{proposition}\label{prop:masscheck}
+  In the model of Definition~\ref{def:model}, $\int_{\C^d}\rho(X)\,dX = d!\,n^d = N$.
+\end{proposition}
+
+\proof
+Since $\log K = \sum_l\log k_n(x_l\bar y_l)$, the matrix $H$ is diagonal with entries
+$h(r_l)$ given in Lemma~\ref{lem:h}. In the radial variable $r=|z|^2$ one has $dA=\pi\,dr$,
+so
+\[
+  \int_{\C^d}\det H\,\frac{dX}{\pi^d}
+  = \prod_{l=1}^d\int_0^\infty h(r)\,dr
+  = \prod_{l=1}^d\Bigl[\frac{r\,k_n'(r)}{k_n(r)}\Bigr]_0^\infty = n^d,
+\]
+because $h$ is the derivative of $rk_n'/k_n$, which tends to $\deg k_n = n$ at infinity. This
+matches \eqref{eq:count}.
+\endproof
+
+\begin{proposition}\label{prop:kostlandensity}
+  For the Kostlan kernel $K(x,y) = (1+\langle x,y\rangle)^n$, Lemma~\ref{lem:intensity} gives
+  \[
+    \rho(X) = \frac{d!\,n^d}{\pi^d(1+\|X\|^2)^{d+1}},
+  \]
+  which is $n^d$ times the projective root density derived independently in our earlier
+  notes, with total mass equal to the B\'ezout number $n^d$.
+\end{proposition}
+
+\proof
+Here $H = n\bigl[(1+s)^{-1}I - (1+s)^{-2}XX^*\bigr]$ with $s=\|X\|^2$; its eigenvalues are
+$n/(1+s)$ with multiplicity $d-1$ and $n/(1+s)^2$, so $\det H = n^d(1+s)^{-(d+1)}$. The mass
+integral $\int(1+\|X\|^2)^{-(d+1)}dX = \pi^d/d!$ is elementary.
+\endproof
