@@ -1,0 +1,316 @@
+\section{The input--output problems}\label{sec:setup}
+
+In this section, we specify the coefficient space and local
+root map, choose the output metric, and define conditioning as a derivative
+norm. We then identify the matrix perturbation problem and the probability law
+used to select a root.
+
+\subsection{Coefficient space and the local root map}
+Let $\mathcal H$ be an $m$-dimensional space of complex polynomials on an open
+set $U\subseteq\C^d$, with a specified Hermitian inner product and orthonormal
+basis $\phi_1,\ldots,\phi_m$. Write
+$\phi(z)=(\phi_1(z),\ldots,\phi_m(z))^T$. 
+The input is a coefficient array $c=(c_{ik})\in\C^{d\times m}$, representing
+\[
+ P_c=(p_1,\ldots,p_d)^T,\qquad
+ p_i(z)=\sum_{k=1}^m c_{ik}\phi_k(z).
+\]
+We allow perturbations of every coefficient and measure perturbations using the Frobenius norm:
+\[
+ \|\delta c\|_F^2=\sum_{i,k}|\delta c_{ik}|^2.
+\]
+Thus a change of orthonormal coefficient basis changes coordinates, but not the
+input norm. A nonunitary change of polynomial basis generally changes the
+problem unless its Gram matrix is included in the norm.
+
+Write $J_c(z)=(\partial p_i/\partial z_j)_{i,j}$ for the Jacobian matrix.
+A root $z$ of $P_c$ is \emph{simple} if $J_c(z)$ is invertible. We will work
+with the incidence set
+\[
+ \mathcal V=\{(c,z)\in\C^{d\times m}\times U:
+                  P_c(z)=0,\ \det J_c(z)\ne0\}.
+\]
+At each $(c,z)\in\mathcal V$, the implicit function theorem gives a unique local
+root branch 
+\begin{equation}\label{eq:setup-root-branch}
+   \mathcal S_{c,z}\colon c'\mapsto z(c'), \text{ with } z(c)=z.
+\end{equation}   
+This local map is the input-output map under study.
+Its derivative at $c$ is
+\begin{equation}\label{eq:setup-root-derivative}
+ D\mathcal S_{c,z}[\delta c]=-J_c(z)^{-1}E_z[\delta c],
+ \qquad E_z[\delta c]=\delta c\,\phi(z).
+\end{equation}
+Here $E_z$ evaluates the perturbed equations at the original root:
+$E_z[\delta c]=\delta P(z)$. Derivatives of the root branch and other
+holomorphic maps are complex-linear.
+
+\subsection{Choosing an output metric and defining conditioning}
+
+To quantify a change in the output, we must choose how to measure root
+displacements. Fix a smooth matrix-valued function
+\[
+ G:U\longrightarrow\C^{d\times d},\qquad
+ G(z)=G(z)^*,\qquad v^*G(z)v>0\quad(v\ne0).
+\]
+Thus $G$ assigns a positive definite Hermitian matrix to every possible root
+location. Identifying the tangent space at
+$z\in U$ with $\C^d$, define
+\[
+ \langle u,v\rangle_{G,z}=u^*G(z)v,\qquad
+ \|v\|_{G,z}=\sqrt{v^*G(z)v}.
+\]
+This field of inner products thus defines a Hermitian metric on $U$. The constant
+choice $G(z)=I_d$ gives ordinary Euclidean displacement. Later we will also
+use a particular nonconstant choice $G=H$, determined by the coefficient
+space and defined in Section~\ref{sec:setup-kernel-metric}.
+
+\begin{definition}
+For a simple system--root pair $(c,z)$, the \emph{absolute coefficient
+condition number} with this output metric is defined as 
+\begin{equation}\label{eq:setup-condition-definition}
+ \kappa_G(c,z)
+ :=\sup_{\delta c\ne0}
+    \frac{\|D\mathcal S_{c,z}[\delta c]\|_{G,z}}{\|\delta c\|_F}.
+\end{equation}
+\end{definition}
+
+The squared norm of scalar polynomial evaluation at $z$ is
+\[
+ S(z)=\|\phi(z)\|_2^2.
+\]
+Thus $S(z)=0$ if and only if $z$ is a common root of all the basis polynomials
+$\phi_1,\ldots,\phi_m$, or equivalently of every polynomial in $\mathcal H$.
+For a positive definite Hermitian matrix $G(z)$, the notation $G(z)^{1/2}$
+means its unique positive definite Hermitian square root.
+
+The next proposition specializes the standard condition-as-derivative
+framework \cite[Chapter~14]{burgisser2013condition} to our coefficient space.
+We give the short proof to make the evaluation factor and the choice of
+output metric explicit.
+
+\begin{proposition}\label{prop:setup-condition}
+Fix an output metric $G$ as above and a simple system--root pair $(c,z)$ with
+$S(z)>0$. The condition number in \eqref{eq:setup-condition-definition} is
+\begin{equation}\label{eq:setup-condition}
+ \kappa_G(c,z)=\sqrt{S(z)}\,
+       \|G(z)^{1/2}J_c(z)^{-1}\|_2.
+\end{equation}
+For $G(z)=I_d$, we write $\kappa_{\mathrm{coeff}}:=\kappa_{I_d}$, so
+$\kappa_{\mathrm{coeff}}(c,z)=\sqrt{S(z)}\,\|J_c(z)^{-1}\|_2$.
+For a fixed holomorphic scalar output $g:U\to\C$, with its usual absolute-value
+metric, the corresponding condition number is
+\begin{equation}\label{eq:setup-scalar-condition}
+ \kappa_{\mathrm{coeff}}^{g}(c,z)
+   =\sqrt S\,\|Dg(z)J^{-1}\|_2.
+\end{equation}
+\end{proposition}
+\begin{proof}
+Suppress $c,z$ temporarily and write $J^{-*}=(J^{-1})^*$. The evaluation map
+satisfies $E_zE_z^*=S(z)I_d$. Therefore
+\[
+ (G^{1/2}J^{-1}E_z)(G^{1/2}J^{-1}E_z)^*
+   =S\,G^{1/2}J^{-1}J^{-*}G^{1/2}.
+\]
+Taking operator norms proves \eqref{eq:setup-condition} and the chain rule gives
+\eqref{eq:setup-scalar-condition}.
+\end{proof}
+
+The assumption $S(z)>0$ is not needed for Proposition~\ref{prop:setup-condition}:
+if $S(z)=0$, then $E_z=0$, so the root derivative and the displayed condition
+numbers are zero, and the formulas still hold. Positivity will be important
+later when defining the kernel metric through $\log S$ and normalizing the
+Jacobian by $S^{-1/2}$.
+
+The distinction between coefficient and residual perturbations is essential.
+The norm $\|J^{-1}\|_2$ measures sensitivity to perturbing the equation values
+$P(z)$. Perturbing the coefficient array first evaluates a polynomial at $z$,
+which contributes the factor $\sqrt S$.
+
+For nonzero input and a nonzero Euclidean output $z$, the normwise relative condition is
+\begin{equation}\label{eq:setup-relative}
+ \kappa_{\mathrm{coeff,rel}}(c,z)
+ =\kappa_{\mathrm{coeff}}(c,z)\frac{\|c\|_F}{\|z\|_2}.
+\end{equation}
+For the scalar output $g(z)\ne0$, replace the denominator by $|g(z)|$ and use
+$\kappa_{\mathrm{coeff}}^g$. We do not use the phrase ``relative condition''
+without specifying these input and output scales.
+
+\subsection{The kernel metric}\label{sec:setup-kernel-metric}
+
+We now specify the second output metric used in this paper. The coefficient
+space determines the reproducing kernel
+\[
+ K(z,w)=\sum_{k=1}^m\phi_k(z)\overline{\phi_k(w)},\qquad S(z)=K(z,z).
+\]
+Throughout the general local theory we assume $S>0$ and
+\begin{equation}\label{eq:setup-kernel-metric}
+ H_{jk}(z)=\partial_{\bar z_j}\partial_{z_k}\log S(z),
+ \qquad H(z)>0\quad(z\in U).
+\end{equation}
+The derivatives are taken with $z$ and $\bar z$ as independent variables
+(Wirtinger derivatives). The order of the indices is chosen so that a tangent
+vector $v$ has squared length $v^*H(z)v$. Taking $G=H$ in the preceding
+subsection defines the kernel output metric and its condition number $\kappa_H$.
+
+There is a geometric interpretation of this formula. The notation $[\phi(z)]$
+means the complex line spanned by the nonzero vector $\phi(z)$, a point of
+complex projective space. The Fubini--Study metric is the standard Hermitian
+metric on that space of lines. Its \emph{pullback} by $z\mapsto[\phi(z)]$
+measures a displacement at $z$ by the displacement it induces in this line;
+the resulting matrix is $H(z)$. Positivity means that the line changes to
+first order in every nonzero tangent direction. We use the normalization
+whose expression on $\mathbb P^1$ is $|\dd z|^2/(1+|z|^2)^2$.
+The explicit formula \eqref{eq:setup-kernel-metric} suffices to use the metric
+without this projective interpretation.
+
+Constructing the root metric from the coefficient inner product is also
+central to the sparse-system framework of Malajovich--Rojas
+\cite[Sections~1--2]{malajovich2004high}; input normalizations must be
+matched before comparing condition numbers.
+
+Define the normalized Jacobian
+\begin{equation}\label{eq:setup-normalized}
+ A=S^{-1/2}JH^{-1/2}.
+\end{equation}
+Proposition~\ref{prop:setup-condition} gives the exact identity
+\begin{equation}\label{eq:setup-kernel-condition}
+ \kappa_H(c,z)=\|A^{-1}\|_2.
+\end{equation}
+This is a change of output metric, with the coefficient norm held fixed.
+The Euclidean and kernel-metric condition numbers answer different questions;
+Section~\ref{sec:box} relates them in the box model.
+
+\begin{example}[Two natural metrics in one variable]\label{ex:setup-metrics}
+For the monomial coefficient norm on polynomials of degree at most $n$,
+$S(z)=\sum_{k=0}^n|z|^{2k}$. With $r=|z|^2$,
+\[
+ H(z)=h_n(r)=\left(r\frac{k_n'(r)}{k_n(r)}\right)',
+ \qquad k_n(r)=\sum_{k=0}^n r^k.
+\]
+For the different coefficient norm making
+$\sqrt{\binom nk}z^k$ orthonormal, $S(z)=(1+|z|^2)^n$ and
+$H(z)=n/(1+|z|^2)^2$. The latter is the complex Kostlan model after Gaussian
+coefficients are introduced. The universal local law below applies to both,
+but their kernel metrics and their coefficient norms differ.
+\end{example}
+
+For comparison with the classical projective theory, consider $d$ homogeneous
+equations of a common degree $n$ in $d+1$ variables with the
+Bombieri--Weyl inner product. This makes the monomials
+$\sqrt{n!/\alpha!}\,X^\alpha$, $|\alpha|=n$, orthonormal, where
+$\alpha!=\alpha_0!\cdots\alpha_d!$.
+In the affine chart $X_0=1$, their kernel satisfies
+$S(z)=(1+\|z\|_2^2)^n$, so $H=nG_{\mathrm{FS}}$, with
+$G_{\mathrm{FS}}$ the standard projective metric in this chart.
+The classical degree-normalized projective condition number is therefore
+\begin{equation}\label{eq:setup-classical-mu}
+ \mu(c,[1:z])=\|c\|_F\,\kappa_H(c,z).
+\end{equation}
+Indeed, at $z=0$ the normalized projective Jacobian is $J/\sqrt n$;
+unitary invariance gives the identity in every chart
+\cite{shub1993geometric,burgisser2013condition}.
+Thus $\mu$ includes both an input-norm factor and a degree normalization;
+the coefficient derivative measured in $G_{\mathrm{FS}}$ has norm
+$\kappa_H/\sqrt n$. Neither should be identified with the affine relative
+condition in \eqref{eq:setup-relative}.
+
+\subsection{The matrix eigenvalue problem and its perturbations}
+
+For an eigenvalue $\lambda$ of algebraic multiplicity one of
+$M\in\C^{N\times N}$, choose nonzero
+vectors $r,w$ such that $Mr=\lambda r$ and $w^*M=\lambda w^*$.
+The local eigenvalue map $\mathcal E_{M,\lambda}$ sends a nearby matrix to
+its unique eigenvalue near $\lambda$. Its derivative at $M$ is
+\[
+ D\mathcal E_{M,\lambda}[\delta M]=\frac{w^*\delta M r}{w^*r}.
+\]
+With arbitrary matrix perturbations measured in spectral norm and scalar
+output measured in absolute value, its condition is
+\begin{equation}\label{eq:setup-overlap}
+ \kappa_{\mathrm{eig}}(M,\lambda)
+ =\Lambda(M,\lambda):=\frac{\|w\|_2\|r\|_2}{|w^*r|}\ge1.
+\end{equation}
+The derivative norm is at most the displayed overlap, and a rank-one
+perturbation attains it; $\Lambda\ge1$ follows from Cauchy--Schwarz.
+The same absolute condition is obtained using Frobenius norm,
+but its relative version would then use $\|M\|_F$. Here we consistently use
+\begin{equation}\label{eq:setup-eigen-relative}
+ \kappa_{\mathrm{eig,rel}}(M,\lambda)
+ =\Lambda(M,\lambda)\frac{\|M\|_2}{|\lambda|}
+ \quad(\lambda\ne0).
+\end{equation}
+
+Suppose a differentiable algebraic construction $\mathcal D:c\mapsto M(c)$
+represents $g(z)$ as an eigenvalue. On compatible local branches,
+\begin{equation}\label{eq:setup-composition}
+ \mathcal E\circ\mathcal D=g\circ\mathcal S,
+ \qquad D\mathcal E\,D\mathcal D=Dg\,D\mathcal S.
+\end{equation}
+Consequently coefficient-induced matrix perturbations give exactly the
+original derivative. The comparison in this paper instead allows arbitrary
+perturbations in the intermediate matrix space. It describes the sensitivity
+of that larger problem. Errors in constructing $M$, implementing an eigensolver,
+and recovering other coordinates require additional analysis.
+
+One important construction uses the quotient algebra of the roots. Suppose
+the ideal $I=\langle p_1,\ldots,p_d\rangle$ has exactly $N$ distinct complex
+zeros $z_1,\ldots,z_N$ and consists of all polynomials vanishing at these
+points (equivalently, $I$ is radical). In
+$\mathcal A=\C[x_1,\ldots,x_d]/I$, two polynomials represent the same element
+precisely when their values at all roots agree. Evaluation identifies
+$\mathcal A$ with the $N$-dimensional space of functions on this root set.
+Choose a basis $\B=(b_1,\ldots,b_N)$ of polynomial representatives.
+For a polynomial $g$, multiplication by its class is a linear map on
+$\mathcal A$; denote its matrix, acting on coefficient columns, by $M_g$.
+The evaluation matrix $V=(b_k(z_j))_{k,j}$ is invertible, and evaluation gives
+\[
+ M_g=V^{-T}\diag(g(z_1),\ldots,g(z_N))V^T.
+\]
+If $g$ \emph{separates} the roots, meaning that $g(z_1),\ldots,g(z_N)$ are
+pairwise distinct, its overlap at $z_j$ is therefore
+\begin{equation}\label{eq:setup-interpolation}
+ \Lambda_j=\|V^{-T}e_j\|_2\|Ve_j\|_2,
+ \qquad
+ \Lambda_j^2=
+ \frac{\|Ve_j\|_2^2}
+ {\dist(Ve_j,\spanop\{Ve_k:k\ne j\})^2}.
+\end{equation}
+The last identity follows by orthogonally projecting one evaluation column
+away from the others. Thus matrix conditioning becomes a question about
+interpolation in a specified basis norm. This deterministic interpretation
+also underlies the normal-form analysis in \cite{graf2026numerical}.
+
+\subsection{Gaussian input and a uniformly selected root}\label{sec:setup-probability}
+
+We now make the input random: all $dm$ coefficient coordinates are independent
+$\CN(0,1)$ variables, with density $\pi^{-1}e^{-|a|^2}$ on $\C$.
+Equivalently, the real and imaginary parts have variance $1/2$.
+The components of $P$ are independent and share the kernel $K$.
+
+Assume that almost surely $P$ has exactly $N\ge1$ zeros in $U$, all simple,
+where $N$ is deterministic. First sample $P$ with this Gaussian law, then select
+one of its roots uniformly. For a nonnegative measurable function $F(P,z)$,
+called a \emph{mark}, define
+\begin{equation}\label{eq:setup-selected-root}
+ \Estar F(P,Z)=\frac1N\E\sum_{P(z)=0,\ z\in U}F(P,z).
+\end{equation}
+This determines a probability law $\Pstar$ on system--root pairs. In particular,
+the marginal law of $P$ is its original Gaussian law. This last fact uses the
+deterministic root count. No independence between the roots of one system is
+assumed.
+
+Sampling a root this way is different from conditioning the Gaussian input on
+$P(z)=0$ at a prescribed point. The former also weights the conditional law
+by $|\det J(z)|^2$, as Section~\ref{sec:local-law} proves. We use conditional
+expectations given $Z=z$ in the regular conditional sense supplied by that
+formula, rather than treating a zero-probability event as an ordinary event.
+
+For example, for an overlap threshold $t$,
+\[
+ \Pstar(\Lambda>t)=\frac1N\E\#\{j:\Lambda_j>t\}.
+\]
+A tail bound therefore controls the expected fraction of problematic roots.
+It does not give the same bound for the worst root of a system. Likewise
+$\Estar\log X$ is a logarithmic average, not a median or a high-probability
+bound for $X$.

@@ -1,0 +1,110 @@
+\section{Interpretation and further questions}\label{sec:discussion}
+
+The local and companion results describe two different sources of sensitivity.
+The normalized Jacobian law is determined by a first-order Gaussian calculation
+and the determinant weight at a root. Its inverse moments have threshold four.
+The companion overlap additionally contains the coefficient norm of a Lagrange
+polynomial. For a fixed degree $n\ge2$ its moment threshold is again four, but degree
+uniformity has threshold two. The radial estimates and the exact second moment
+show why concentration of roots near the unit circle does not permit discarding
+the complementary radii from conditioning averages.
+
+This distinction also explains the relation to the limiting spectral measures
+in \cite{barbarino2023monic,barbarino2022limit}. At a simple eigenvalue $\lambda$
+of a matrix $M$, the spectral projector satisfies
+\[
+ \Pi_\lambda=\lim_{z\to\lambda}(z-\lambda)(zI-M)^{-1}
+ =\frac{rw^*}{w^*r},\qquad \|\Pi_\lambda\|_2
+ =\frac{\|r\|_2\|w\|_2}{|w^*r|}.
+\]
+Consequently an overlap estimate requires control of a resolvent residue.
+Barbarino--Noferini's estimates for shifted monic companions
+\cite[Lemma~A.11]{barbarino2023monic} concern fixed spectral parameters away
+from the unit circle; they cannot simply be evaluated at a random eigenvalue,
+where the shifted matrix is singular. Their decomposition into a deterministic
+block shift and a Gaussian correction, followed by the Woodbury identity,
+nevertheless suggests a useful route for studying such residues in block
+companion models.
+
+\subsection{A finite-degree illustration}
+
+Table~\ref{tab:second-moments} evaluates the exact integral
+\eqref{eq:comp-second-integral}. The conditional second moment on the unit
+circle stays below two, while the unconditional second moment grows. These
+values illustrate the proved formulas; they are not used to infer either
+asymptotic or a uniform bound.
+
+\begin{table}[htbp]
+\centering
+\input{paper-sections/second-moment-table}
+\caption{Deterministic quadrature of the exact second-moment formula.
+Positive-coefficient Horner evaluation avoids cancellation at $r=1$.
+Computations at 30 and 50 decimal digits agreed to more than 25 decimal places;
+the table reports six. Degrees one and two also agree with their exact values
+in Example~\ref{ex:comp-small}.}
+\label{tab:second-moments}
+\end{table}
+
+The calculation is reproducible from
+\texttt{research/paper-ac/second\_moment\_table.py}. A separate symbolic script
+checks the cofactor polynomial, reversal, the conditional variance, and the
+closed second-moment integrand in small degrees. These computations are
+consistency checks of the identities, rather than replacements for the proofs.
+
+\subsection{What a conditioning comparison establishes}
+
+Corollary~\ref{cor:comp-relative} says that the geometric mean of the relative
+companion-to-coefficient condition ratio is comparable to $n$. The ratio uses
+the same scalar output but two different input spaces. It is compatible with
+bounded average logarithmic eigenvector overlap because the Euclidean
+coefficient-to-root condition has its own degree scale. Neither statement
+alone bounds floating-point error in a complete algorithm.
+
+An analysis of a particular implementation would have to control formation of
+the companion matrix, the structure of the backward error from the eigensolver,
+and any subsequent recovery. Equation~\eqref{eq:setup-composition} explains
+the role of structure: a perturbation induced exactly by polynomial
+coefficients has the original root derivative, whereas an arbitrary matrix
+perturbation need not arise from a comparably small coefficient perturbation.
+Other linearizations can change this comparison
+\cite{toh1994pseudozeros,deteran2017eigenvalue}.
+
+The selected-root tail also gives, by a union bound,
+\[
+ \Prob\{\max_{p(z)=0}\Lambda(p,z)>t\}\le\min\{1,Cn/t^2\}.
+\]
+The factor $n$ is part of this bound. Controlling a typical root, an expected
+fraction of roots, and the worst root are different probabilistic objectives.
+
+\subsection{The multivariate problem left by the local theory}
+
+For systems, the representation question is now isolated in
+$\Theta_{n,d}^{\B}$ from \eqref{eq:box-decomposition}. The local law and the
+box metric estimates already hold in every dimension. What remains is to
+control interpolation angles for an explicitly specified quotient basis or
+algebraic construction. The univariate division map $D_z$ has a particularly
+simple tridiagonal Gram matrix; a multivariate replacement must account for
+relations between polynomial multiples and for basis selection.
+
+Two extensions require additional ideas. First, bounds for a fixed bivariate
+construction would begin to connect the local theory with multivariate
+algebraic rootfinding. Any dependence on the dimension must be retained if
+the objective is to compare with dimension-exponential worst cases. Second,
+an additive perturbation model $P=P_0+\sigma Q$, where $P_0$ is fixed and $Q$
+is a centered Gaussian system, produces noncentral conditional
+derivatives and a noncentral determinant weight. The centered independence
+law of Theorem~\ref{thm:local-universal} cannot be transferred to that smoothed
+model without further analysis. The results proved here provide the centered
+benchmark for these questions. Smoothed local conditioning and homotopy
+complexity are already studied in the homogeneous Bombieri--Weyl setting
+\cite{burgisser2011smale,armentano2016condition}; see also
+Section~\ref{sec:local-classical}. The remaining task here is to control the
+specified coefficient and representation conditions for the box ensemble
+and its noncentered perturbations.
+
+The noncentral Gaussian estimate of
+\cite[Theorem~A.5]{barbarino2023monic} is a possible ingredient in this task,
+not a substitute for the determinant-weighted law at a selected root.
+Moreover, matrices produced by multivariate elimination generally reuse the
+same input coefficients in several entries. Applying random matrix-polynomial
+results to them requires treating these dependencies explicitly.

@@ -1,0 +1,139 @@
+{
+  "status": "passed",
+  "scope": "exact finite-degree identities; uniform bounds proved in text",
+  "checks": [
+    {
+      "n": 1,
+      "circle_conditional_second_moment": "1",
+      "checked": [
+        "cofactor polynomial",
+        "closed trace",
+        "inversion",
+        "conditional variance",
+        "second-moment integrand"
+      ]
+    },
+    {
+      "n": 2,
+      "circle_conditional_second_moment": "4/3",
+      "checked": [
+        "cofactor polynomial",
+        "closed trace",
+        "inversion",
+        "conditional variance",
+        "second-moment integrand"
+      ]
+    },
+    {
+      "n": 3,
+      "circle_conditional_second_moment": "3/2",
+      "checked": [
+        "cofactor polynomial",
+        "closed trace",
+        "inversion",
+        "conditional variance",
+        "second-moment integrand"
+      ]
+    },
+    {
+      "n": 4,
+      "circle_conditional_second_moment": "8/5",
+      "checked": [
+        "cofactor polynomial",
+        "closed trace",
+        "inversion",
+        "conditional variance",
+        "second-moment integrand"
+      ]
+    },
+    {
+      "n": 5,
+      "circle_conditional_second_moment": "5/3",
+      "checked": [
+        "cofactor polynomial",
+        "closed trace",
+        "inversion",
+        "conditional variance",
+        "second-moment integrand"
+      ]
+    },
+    {
+      "n": 6,
+      "circle_conditional_second_moment": "12/7",
+      "checked": [
+        "cofactor polynomial",
+        "closed trace",
+        "inversion",
+        "conditional variance",
+        "second-moment integrand"
+      ]
+    },
+    {
+      "n": 7,
+      "circle_conditional_second_moment": "7/4",
+      "checked": [
+        "cofactor polynomial",
+        "closed trace",
+        "inversion",
+        "conditional variance",
+        "second-moment integrand"
+      ]
+    },
+    {
+      "n": 8,
+      "circle_conditional_second_moment": "16/9",
+      "checked": [
+        "cofactor polynomial",
+        "closed trace",
+        "inversion",
+        "conditional variance",
+        "second-moment integrand"
+      ]
+    },
+    {
+      "n": 9,
+      "circle_conditional_second_moment": "9/5",
+      "checked": [
+        "cofactor polynomial",
+        "closed trace",
+        "inversion",
+        "conditional variance",
+        "second-moment integrand"
+      ]
+    },
+    {
+      "n": 10,
+      "circle_conditional_second_moment": "20/11",
+      "checked": [
+        "cofactor polynomial",
+        "closed trace",
+        "inversion",
+        "conditional variance",
+        "second-moment integrand"
+      ]
+    },
+    {
+      "n": 11,
+      "circle_conditional_second_moment": "11/6",
+      "checked": [
+        "cofactor polynomial",
+        "closed trace",
+        "inversion",
+        "conditional variance",
+        "second-moment integrand"
+      ]
+    },
+    {
+      "n": 12,
+      "circle_conditional_second_moment": "24/13",
+      "checked": [
+        "cofactor polynomial",
+        "closed trace",
+        "inversion",
+        "conditional variance",
+        "second-moment integrand"
+      ]
+    }
+  ],
+  "degree_two_second_moment": "2/3 + 4*sqrt(3)*pi/27"
+}

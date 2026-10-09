@@ -1,0 +1,415 @@
+\section{Conditioning of companion eigenvalues}
+\label{sec:companion}
+
+We now keep the scalar output fixed and change its representation.  Let
+\[
+  p(x)=\sum_{j=0}^{n}a_jx^j,
+  \qquad a_0,\ldots,a_n\ \text{independent with law }\CN(0,1),
+\]
+and let $C_p$ be multiplication by $x$ on $\C[x]/(p)$ in the ordered
+basis $1,x,\ldots,x^{n-1}$.  Thus $C_p$ has ones on its subdiagonal and
+last column $-(a_0,\ldots,a_{n-1})^{T}/a_n$.  Almost surely $a_n\ne0$
+and all roots are simple.  For a root $z$, put
+\[
+  v(z)=(1,z,\ldots,z^{n-1})^T,
+  \qquad
+  \ell_z(x)=\frac{p(x)}{(x-z)p'(z)}.
+\]
+The coefficient vector of $\ell_z$ is a right eigenvector of $C_p$,
+whereas $v(z)^T$ is a left eigenvector, and $\ell_z(z)=1$.  Consequently
+the absolute eigenvalue condition number for spectral-norm matrix
+perturbations is
+\begin{equation}\label{eq:comp-overlap}
+  \Lambda(p,z)=\|v(z)\|_2\,\|\ell_z\|_2.
+\end{equation}
+Here the second norm is the Euclidean norm of the coefficient vector in
+the displayed monomial basis.  In particular $\Lambda\ge1$.  This basis
+choice is part of the theorem: the overlap is not invariant under a
+general change of polynomial basis.
+
+The next theorem proves part (i) of Theorem~\ref{thm:intro-main}.
+The comparison in part (ii) follows in Corollary~\ref{cor:comp-relative}.
+
+\begin{theorem}[Uniform companion-overlap tails]\label{thm:comp-main}
+There is an absolute constant $C$ such that, for every $n\ge1$ and $t>0$,
+\begin{equation}\label{eq:comp-weak-two}
+  \Pstar\{\Lambda(p,Z)>t\}
+  =\frac1n\E\#\{z:p(z)=0,\ \Lambda(p,z)>t\}
+  \le \min\{1,Ct^{-2}\}.
+\end{equation}
+For every $0<q<2$ there is a constant $C_q$, independent of $n$, with
+\[
+  \Estar\Lambda^q\le C_q,
+  \qquad 0\le\Estar\log\Lambda\le C.
+\]
+The moment range is sharp for bounds uniform in the degree:
+\begin{equation}\label{eq:comp-second-asymptotic}
+  \Estar\Lambda^2=2\log n+O(1)
+  \qquad(n\to\infty).
+\end{equation}
+For $n=1$, the overlap is identically one.
+\end{theorem}
+
+The tail controls the expected fraction of poorly conditioned
+eigenvalues.  It does not require independence of the roots and does not
+assert a degree-independent bound for the worst root of a polynomial.
+The second-moment assertion also shows that the exponent $2$ in
+\eqref{eq:comp-weak-two} cannot be replaced by any larger exponent with
+a degree-independent constant.
+
+\subsection{An exact conditional moment}
+
+Write $k_j(r)=\sum_{i=0}^{j}r^i$ and
+$h_n(r)=(r k_n'(r)/k_n(r))'$, as in the box model.  At a fixed location
+$z$, coefficient multiplication by $x-z$ is the injective map
+\[
+  D_z:\C^n\longrightarrow\C^{n+1},
+  \qquad \mathbf q\longmapsto\operatorname{coeff}((x-z)q(x)).
+\]
+Its Gram matrix $T_z=D_z^*D_z$ is tridiagonal, with diagonal $1+r$,
+superdiagonal $-z$, and subdiagonal $-\overline z$, where $r=|z|^2$.
+In particular it is positive definite, including at $z=0$.
+
+\begin{proposition}[Conditional overlap identity]\label{prop:comp-exact}
+Under the selected-root law, the conditional second moment is
+\begin{equation}\label{eq:comp-exact}
+  \Phi_n(r):=\Estar[\Lambda^2\mid Z=z]
+  =\frac{k_{n-1}(r)}{k_n(r)h_n(r)}\tr(T_z^{-1})
+  =\frac{k_{n-1}(r)A_n(r)}{k_n(r)^2h_n(r)},
+\end{equation}
+where
+\begin{equation}\label{eq:comp-trace-poly}
+  A_n(r)=\sum_{j=0}^{n-1}(j+1)(n-j)r^j.
+\end{equation}
+The identity defines a continuous version of the conditional moment.
+It satisfies
+\[
+  \Phi_n(r)=\Phi_n(r^{-1})\quad(r>0),
+  \qquad \Phi_n(0)=n,
+  \qquad \Phi_n(1)=\frac{2n}{n+1}.
+\]
+For $n=1$, $\Phi_1(r)=1$ for all $r\ge0$.
+\end{proposition}
+
+\begin{proof}
+Ordinary Gaussian conditioning on $p(z)=0$ restricts the standard
+Gaussian coefficient vector to the hyperplane $\operatorname{im}D_z$.
+Writing $p(x)=(x-z)q(x)$ therefore gives
+\[
+  \mathbf q\mid\{p(z)=0\}\sim\CN(0,T_z^{-1}).
+\]
+Indeed its density in these coordinates is proportional to
+$\exp(-\mathbf q^*T_z\mathbf q)$; the Jacobian of the linear
+parametrization is constant.  Gaussian regression also gives
+\[
+  \E[|p'(z)|^2\mid p(z)=0]=k_n(r)h_n(r).
+\]
+At a selected root, the conditional law is tilted by $|p'(z)|^2$.
+Since $p'(z)=q(z)$ and
+$\Lambda^2=k_{n-1}(r)\|\mathbf q\|_2^2/|p'(z)|^2$, the tilt cancels
+the denominator.  Thus
+\[
+  \Estar[\Lambda^2\mid Z=z]
+  =\frac{k_{n-1}(r)\E[\|\mathbf q\|_2^2\mid p(z)=0]}
+  {\E[|p'(z)|^2\mid p(z)=0]},
+\]
+which proves the first equality in \eqref{eq:comp-exact}.
+
+The determinant of the $j\times j$ leading block of $T_z$ is $k_j(r)$:
+both satisfy the recurrence
+$d_j=(1+r)d_{j-1}-r d_{j-2}$, with $d_0=1$ and $d_1=1+r$.
+Deleting its $i$th row and column leaves two such blocks, so
+\begin{equation}\label{eq:comp-trace-minors}
+  \tr(T_z^{-1})
+  =\frac1{k_n(r)}\sum_{i=1}^{n}k_{i-1}(r)k_{n-i}(r)
+  =\frac{A_n(r)}{k_n(r)}.
+\end{equation}
+The coefficient of $r^j$ in the numerator is $(j+1)(n-j)$,
+which proves the second equality.
+
+Reversal provides a useful check and removes the distinction between
+inner and outer roots.  For $z\ne0$, let $p^{\mathrm{rev}}(x)=x^np(1/x)$.
+Its coefficients have the same law as those of $p$, and direct reversal
+of $\ell_z$ gives
+\[
+  \|\ell^{\mathrm{rev}}_{1/z}\|_2
+   =|z|^{n-1}\|\ell_z\|_2,
+  \qquad
+  \|v(1/z)\|_2=|z|^{-(n-1)}\|v(z)\|_2.
+\]
+Hence $\Lambda(p^{\mathrm{rev}},1/z)=\Lambda(p,z)$.  Reversal carries a
+uniformly selected root to a uniformly selected root, proving the
+symmetry of $\Phi_n$.  Finally,
+\[
+  h_n(1)=\frac{n(n+2)}{12},
+  \qquad \tr(T_1^{-1})=\frac{n(n+2)}6.
+\]
+Substitution proves the values at $r=1$; the assertions at $r=0$ and
+$n=1$ follow directly from \eqref{eq:comp-exact}.
+\end{proof}
+
+\subsection{Uniform estimates and a tail bound}
+
+For $0\le r\le1$, the cofactor formula
+\eqref{eq:comp-trace-minors} immediately gives
+\begin{equation}\label{eq:comp-trace-bound}
+  \tr(T_z^{-1})
+  \le n\min\{n,(1-r)^{-1}\}
+  \le\frac{2n}{1-r+1/n},
+\end{equation}
+with the usual interpretation at $r=1$.  Combining this with
+the metric estimate~\eqref{eq:box-metric-bound}, $k_{n-1}\le k_n$, and reversal proves
+\begin{equation}\label{eq:comp-depth-bound}
+  \Phi_n(r)\le C\bigl(1+n(1-\min\{r,r^{-1}\})\bigr)
+  \le C(1+|n\log r|),\qquad r>0.
+\end{equation}
+The conditional second moment alone gives all the uniform moments of
+order below two.  A little more of the same Gaussian regression gives
+the sharper tail in Theorem~\ref{thm:comp-main}.
+
+\begin{lemma}[Conditional moments]\label{lem:comp-third}
+For each $0<q<4$ there is a constant $C_q$, independent of $n$ and $z$, such that
+\[
+  \Estar[\Lambda^q\mid Z=z]\le C_q\Phi_n(|z|^2)^{q/2}.
+\]
+\end{lemma}
+
+\begin{proof}
+Under ordinary conditioning on $p(z)=0$, put $\Sigma=T_z^{-1}$ and
+$\sigma^2=v(z)^T\Sigma\overline{v(z)}=k_n(r)h_n(r)$.  Gaussian
+regression decomposes the coefficient vector as
+\[
+  \mathbf q=b\xi+\eta,
+  \qquad b=\Sigma\overline{v(z)}/\sigma,
+  \qquad \xi=q(z)/\sigma\sim\CN(0,1),
+\]
+where $\eta$ is independent of $\xi$ and has covariance
+$R=\Sigma-bb^*$.  At a selected root, the tilt is $|\xi|^2$.
+It preserves the law of $\eta$ and its independence from $\xi$, while
+$|\xi|^2$ now has density $u e^{-u}$ on $(0,\infty)$.  In particular
+\[
+  \Estar|\xi|^{-q}
+    =\int_0^\infty u^{1-q/2}e^{-u}\,du
+    =\Gamma(2-q/2)<\infty,\qquad 0<q<4.
+\]
+Writing $\beta=\|v(z)\|_2/\sigma$, we have
+\[
+  \Lambda=\beta\frac{\|b\xi+\eta\|_2}{|\xi|}
+  \le\beta\|b\|_2+\beta\frac{\|\eta\|_2}{|\xi|},
+  \qquad \Phi_n(r)=\beta^2\tr\Sigma.
+\]
+The standard Gaussian fourth-moment identity, valid also for a
+degenerate covariance, is
+\[
+  \E\|\eta\|_2^4=(\tr R)^2+\tr(R^2)\le2(\tr R)^2.
+\]
+It follows by diagonalizing $R$ and using $\E|g|^2=1$ and
+$\E|g|^4=2$ for a standard complex Gaussian $g$.
+Hence $\E\|\eta\|_2^q\le2^{q/4}(\tr R)^{q/2}$ for $0<q<4$.  Apply
+$(a+b)^q\le2^{\max\{q-1,0\}}(a^q+b^q)$, independence, and
+$\|b\|_2^2\le\tr\Sigma$, $\tr R\le\tr\Sigma$ to obtain the claim.
+\end{proof}
+
+\begin{proposition}[Fixed-degree integrability]\label{prop:comp-fixed-degree}
+For each fixed $n\ge2$ and $q>0$,
+\[
+  \Estar\Lambda^q<\infty\quad\Longleftrightarrow\quad q<4.
+\]
+For $n=1$ every moment is finite, since $\Lambda=1$.
+\end{proposition}
+
+\begin{proof}
+The stronger first bound in \eqref{eq:comp-depth-bound} gives
+$\Phi_n(r)\le Cn$ at every radius.  Lemma~\ref{lem:comp-third} therefore
+proves finiteness for $q<4$.  For the converse, the residual covariance
+$R$ in its proof has rank $n-1$: regression removes one complex
+direction from the positive definite covariance $\Sigma$.  If $n\ge2$,
+there is thus an $a>0$ with $\Prob\{\|\eta\|_2>a\}>0$.  On this event,
+for sufficiently small $|\xi|$, one has $\|b\xi+\eta\|_2>a/2$.
+Independence and the density $u e^{-u}$ of $|\xi|^2$ then show that
+$\Estar[\Lambda^q\mid Z=z]=\infty$ for $q\ge4$, because
+$\int_0^\varepsilon u^{1-q/2}e^{-u}\,du=\infty$.  Averaging over $Z$
+proves the assertion.
+\end{proof}
+
+Thus the threshold four for each fixed degree comes from the small
+derivative direction in the root-conditioned Gaussian.  The lower
+threshold two for bounds uniform in degree also reflects the
+distribution of root locations.
+
+\begin{proof}[Proof of the tail and moment assertions in
+Theorem~\ref{thm:comp-main}]
+Let $D=|n\log|Z|^2|$ and $W=1+D$.  The box root law~\eqref{eq:box-depth} gives
+$\Pstar\{D>u\}\le\min\{1,2/u\}$, so
+$\Pstar\{W>u\}\le\min\{1,4/u\}$.  By conditional Markov,
+Lemma~\ref{lem:comp-third} with $q=3$, and \eqref{eq:comp-depth-bound},
+\[
+  \Pstar\{\Lambda>t\}
+  \le\Estar\min\{1,CW^{3/2}/t^3\}.
+\]
+For every $A>0$, integration of the tail gives
+\[
+  \Estar\min\{1,(W/A)^{3/2}\}
+  =\frac{3}{2A^{3/2}}\int_0^A
+       u^{1/2}\Pstar\{W>u\}\,du
+  \le\min\{1,C/A\}.
+\]
+Taking $A$ to be a constant multiple of $t^2$ proves
+\eqref{eq:comp-weak-two}.  Tail integration then proves
+$\sup_n\Estar\Lambda^q<\infty$ for $0<q<2$ and
+$\sup_n\Estar\log\Lambda<\infty$.  Nonnegativity of the logarithm
+follows from $\Lambda\ge1$.
+\end{proof}
+
+\subsection{The critical second moment}
+
+\begin{proposition}\label{prop:comp-second}
+For every $n\ge1$,
+\begin{equation}\label{eq:comp-second-integral}
+  \Estar\Lambda^2
+  =\frac2n\int_0^1
+       \frac{k_{n-1}(r)A_n(r)}{k_n(r)^2}\,dr.
+\end{equation}
+In particular $\Estar\Lambda^2=2\log n+O(1)$ as $n\to\infty$.
+\end{proposition}
+
+\begin{proof}
+The density of $|Z|^2$ is $h_n(r)/n$.  It cancels the $h_n$ in
+\eqref{eq:comp-exact}, and reversal makes the contributions of
+$(0,1)$ and $(1,\infty)$ equal.  This proves
+\eqref{eq:comp-second-integral}, including finiteness for each $n$.
+
+For $0\le r<1$, summing \eqref{eq:comp-trace-poly} gives
+\[
+  A_n(r)=
+  \frac{n-(n+2)r+(n+2)r^{n+1}-nr^{n+2}}{(1-r)^3}.
+\]
+If $G_n(r)=k_{n-1}(r)A_n(r)/(n k_n(r)^2)$, rearrangement yields
+\begin{align*}
+  G_n(r)
+  &=\frac1{1-r}
+    \frac{(1-r^n)(1+r^{n+1})}{(1-r^{n+1})^2}\\
+  &\hspace{1em}
+    -\frac{2r}{n(1-r)^2}
+      \left(\frac{1-r^n}{1-r^{n+1}}\right)^2.
+\end{align*}
+Suppose $n\ge2$.  On $0\le r\le1-1/n$ we have
+$r^{n+1}\le e^{-1}$, and therefore
+\[
+  \left|G_n(r)-\frac1{1-r}\right|
+  \le\frac{Cr^n}{1-r}+\frac{2}{n(1-r)^2}.
+\]
+The right side has a uniformly bounded integral on this interval:
+for its first term use $r^n\le e^{-n(1-r)}$ and
+$u=n(1-r)\ge1$; the second term integrates directly.  Hence
+\[
+  \int_0^{1-1/n}G_n(r)\,dr=\log n+O(1).
+\]
+On the remaining interval, \eqref{eq:comp-trace-bound} and
+$k_{n-1}\le k_n$ give $0\le G_n(r)\le n$, so its integral is at most
+one.  Multiplication by two proves the asserted asymptotic.
+\end{proof}
+
+This completes Theorem~\ref{thm:comp-main}.  By monotonicity of moments
+on a probability space, $\sup_n\Estar\Lambda^q=\infty$ for every
+$q\ge2$, allowing the value $+\infty$ for a fixed degree.  Thus the
+sharpness assertion concerns uniformity in $n$; it does not say that
+all moments of order at least two diverge at each fixed degree.
+
+\begin{example}[Degrees one and two]\label{ex:comp-small}
+When $n=1$, $C_p$ is a scalar and $\Lambda=1$.  When $n=2$,
+\[
+  T_z=\begin{pmatrix}1+r&-z\\-\overline z&1+r\end{pmatrix},
+  \qquad
+  \Phi_2(r)=\frac{2(1+r)^2}{1+4r+r^2}.
+\]
+In particular the conditional second moment is $4/3$ on the unit
+circle, and direct integration of \eqref{eq:comp-second-integral}
+gives
+\[
+  \Estar\Lambda^2=\frac23+\frac{4\pi}{9\sqrt3}.
+\]
+The deterministic overlap can nevertheless become arbitrarily large:
+if $p(x)=(x-z)(x-w)$ with $z\ne w$, then
+$\Lambda(p,z)=\sqrt{(1+|z|^2)(1+|w|^2)}/|z-w|$.
+The theorem describes how averaging over the polynomial and a selected
+root controls these near-collision configurations.
+\end{example}
+
+\subsection{Comparison with coefficient conditioning}
+
+For the same scalar output $z$, coefficient and matrix perturbations
+give, respectively,
+\[
+  \kappa_{\mathrm{coeff}}(p,z)
+     =\frac{\sqrt{k_n(|z|^2)}}{|p'(z)|},
+  \qquad
+  \kappa_{\mathrm{eig}}(C_p,z)=\Lambda(p,z).
+\]
+All $n+1$ polynomial coefficients are perturbable in the first
+condition number, including the leading coefficient.  Multiplication
+by the corresponding data norm and division by the common output norm
+$|z|$ define their relative versions; $z\ne0$ almost surely.
+
+\begin{corollary}[A relative conditioning comparison]\label{cor:comp-relative}
+With Euclidean coefficient norm and spectral matrix norm, define
+\[
+  \kappa_{\mathrm{coeff,rel}}(p,z)
+    =\frac{\sqrt{k_n(|z|^2)}\|\mathbf a\|_2}{|p'(z)|\,|z|},
+  \qquad
+  \kappa_{\mathrm{eig,rel}}(C_p,z)
+    =\frac{\Lambda(p,z)\|C_p\|_2}{|z|}.
+\]
+Then
+\begin{align*}
+  \Estar\log\frac{\kappa_{\mathrm{eig}}}{\kappa_{\mathrm{coeff}}}
+    &=\log n+O(1),\\
+  \Estar\log\frac{\kappa_{\mathrm{eig,rel}}}
+                          {\kappa_{\mathrm{coeff,rel}}}
+    &=\log n+O(1).
+\end{align*}
+The error terms are bounded uniformly in the degree.
+\end{corollary}
+
+\begin{proof}
+The normalized derivative
+$p'(Z)/\sqrt{k_n(|Z|^2)h_n(|Z|^2)}$ has the determinant-weighted
+complex Gaussian law from the local theorem: its squared modulus has
+density $u e^{-u}$.  Consequently the following finite-degree identity
+holds, where $\gamma$ is Euler's constant:
+\begin{equation}\label{eq:comp-absolute-identity}
+  \Estar\log\frac{\kappa_{\mathrm{eig}}}{\kappa_{\mathrm{coeff}}}
+  =\Estar\log\Lambda
+    +\frac12\Estar\log h_n(|Z|^2)+\frac{1-\gamma}{2}.
+\end{equation}
+The bounded logarithmic overlap and the box-model estimate~\eqref{eq:box-metric-log}
+$\Estar\log h_n(|Z|^2)=2\log n+O(1)$ prove the first assertion.
+
+For the relative comparison the output factors cancel exactly.  It
+remains to control
+$\E\log\|C_p\|_2-\E\log\|\mathbf a\|_2$; a statistic depending only
+on the polynomial has the same expectation under $\Pstar$, because
+there are always $n$ roots.  With
+$b=(a_0,\ldots,a_{n-1})^T/a_n$, the last column gives the lower bound
+below, while $C_pC_p^*=\diag(0,1,\ldots,1)+bb^*$ gives the upper bound:
+\[
+  \|b\|_2\le\|C_p\|_2\le\sqrt{1+\|b\|_2^2}.
+\]
+Since sums of $m$ independent squared standard complex Gaussians have
+the $\operatorname{Gamma}(m,1)$ law, their logarithmic means give
+\begin{equation}\label{eq:comp-data-scale}
+  \frac\gamma2-\frac1{2n}
+  \le \E\log\|C_p\|_2-\E\log\|\mathbf a\|_2
+  \le\frac\gamma2.
+\end{equation}
+For example, this follows from
+$\E\log\operatorname{Gamma}(m,1)=H_{m-1}-\gamma$, with $H_0=0$.
+Adding \eqref{eq:comp-data-scale} proves the relative assertion.
+\end{proof}
+
+These are signed logarithmic comparisons of two specified local
+condition numbers.  They say that the geometric mean of their ratio is
+bounded above and below by constant multiples of $n$.  The comparison
+does not include errors in forming $C_p$ or in recovering information
+from an eigenvector; an end-to-end stability theorem would also have to
+analyze those maps.

@@ -1,0 +1,46 @@
+{
+  "method": "mpmath tanh-sinh quadrature; positive Horner evaluation",
+  "mpmath_version": "1.3.0",
+  "precisions": [
+    30,
+    50
+  ],
+  "random_samples": 0,
+  "rows": [
+    {
+      "degree": 1,
+      "conditional_second_moment_on_circle": "1.0",
+      "second_moment": "1.0",
+      "second_moment_minus_2_log_n": "1.0",
+      "precision_difference": "0.0"
+    },
+    {
+      "degree": 2,
+      "conditional_second_moment_on_circle": "1.33333333333333333",
+      "second_moment": "1.47279971743743015581959033673",
+      "second_moment_minus_2_log_n": "0.0865053563175395369851260938135",
+      "precision_difference": "9.7016646e-32"
+    },
+    {
+      "degree": 8,
+      "conditional_second_moment_on_circle": "1.77777777777777778",
+      "second_moment": "2.84986269860739175938863445822",
+      "second_moment_minus_2_log_n": "-1.30902038475228009711475827053",
+      "precision_difference": "1.5123252e-31"
+    },
+    {
+      "degree": 32,
+      "conditional_second_moment_on_circle": "1.93939393939393939",
+      "second_moment": "4.87670802621177607789113350654",
+      "second_moment_minus_2_log_n": "-2.05476377938767701628118770804",
+      "precision_difference": "9.4032012e-32"
+    },
+    {
+      "degree": 128,
+      "conditional_second_moment_on_circle": "1.98449612403100775",
+      "second_moment": "7.34205893867278075797636040575",
+      "second_moment_minus_2_log_n": "-2.36200158916645357386488929466",
+      "precision_difference": "3.2204353e-31"
+    }
+  ]
+}

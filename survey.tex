@@ -1,0 +1,1201 @@
+\documentclass[12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage[shortlabels]{enumitem}
+\usepackage{mathtools}
+\usepackage{fullpage}
+\usepackage{microtype}
+\usepackage{needspace}
+\usepackage{booktabs,tabularx}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Algebraic rootfinding methods: a conceptual survey},
+  pdfauthor={Etna Lindy, Martin Lotz, Vanni Noferini}}
+\setlength{\emergencystretch}{2em}
+
+\def\C{\mathbb{C}}
+\def\R{\mathbb{R}}
+\def\B{\mathcal{B}}
+\def\Scal{\mathcal{S}}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\tr}{trace}
+\DeclareMathOperator{\lc}{lc}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\spanop}{span}
+\DeclareMathOperator{\NF}{NF}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newenvironment{reduction}
+  {\par\medskip\noindent\textbf{Reduction and recovery.}\ }
+  {\par\medskip}
+
+\title{Algebraic rootfinding methods: a conceptual survey}
+\author{Etna Lindy, Martin Lotz, Vanni Noferini}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Algebraic rootfinders represent the finite zero set of a polynomial system by a matrix,
+a matrix polynomial, or a univariate polynomial. We explain seven constructions:
+Sylvester and Cayley--B\'ezout resultants, Macaulay matrices, multiparameter eigenvalue
+problems, Gr\"obner elimination, rational univariate representations, and normal-form
+methods. A common quotient-algebra framework explains why these representations work,
+while a single four-root example makes their differences explicit. Short proofs cover
+the main algebraic identities; more substantial existence and regularity results are
+stated with their hypotheses and references. We distinguish exact root correspondence
+from numerical stability, including the effects of projection, basis choice, and the
+norm in which data are perturbed. The survey provides a methodological foundation for
+studying conditioning without presupposing an average-case verdict on the methods.
+\end{abstract}
+
+\section{The problem and a guide to the methods}\label{sec:intro}
+
+Let $P=(p_1,\ldots,p_d)$ be a polynomial map $\C^d\to\C^d$. We assume throughout that
+$I=\langle p_1,\ldots,p_d\rangle$ is radical and zero-dimensional, with distinct roots
+$z_1,\ldots,z_N$, and that $J(z_j)=DP(z_j)$ is invertible. These assumptions exclude
+multiple roots and positive-dimensional solution sets. They make the central ideas
+transparent; methods for multiplicities require additional local-algebra machinery
+\cite{moller1995multivariate,stetter2004numerical}.
+
+The task is to compute all $N$ roots. Newton iteration is local, whereas homotopy
+continuation can find all roots by tracking a suitable collection of paths.
+The methods considered here organize the computation differently:
+\[
+\text{coefficients}\ \longrightarrow\ \text{algebraic representation}
+\ \longrightarrow\ \text{spectral or scalar roots}
+\ \longrightarrow\ \text{solutions of }P.
+\]
+We will ask three questions of each construction: what is built, why does it encode
+the roots, and how are all coordinates recovered? The answers also identify three
+places where numerical errors can enter: construction, solution of the intermediate
+problem, and recovery. Exact equivalence of representations does not imply equal
+conditioning of these operations.
+
+\Needspace{7\baselineskip}
+\subsection{Three algorithmic families}\label{sec:taxonomy}
+
+\begin{description}[style=nextline]
+  \item[Resultant and eigenvalue constructions.]
+  Build a matrix that becomes singular at a root or at a projected root.
+  Sylvester and Cayley--B\'ezout methods hide one variable; Macaulay methods adjoin
+  a linear form; multiparameter methods replace the equations by affine matrix pencils.
+  \item[Scalar elimination.]
+  Build a univariate polynomial whose roots label the solutions, together with
+  formulas recovering their coordinates. Gr\"obner elimination and rational univariate
+  representations take this route.
+  \item[Normal forms.]
+  Construct multiplication operators on the finite-dimensional quotient algebra
+  $A=\C[x_1,\ldots,x_d]/I$, then recover the roots from their common eigenvectors.
+\end{description}
+
+These families overlap. A scalar eliminant can be a characteristic polynomial of a
+multiplication matrix, and a Macaulay matrix can be used to construct a normal form.
+The classification describes how the representation is computed, not mutually exclusive
+algebraic objects. Table~\ref{tab:methods} at the end collects their sizes and hypotheses.
+
+\begin{example}[A running system]\label{ex:running}
+We will follow the same system through the constructions:
+\begin{equation}\label{eq:running}
+  p(x,y)=x^2-1=0,\qquad q(x,y)=y^2-x=0.
+\end{equation}
+Its roots are
+\[
+  (1,1),\quad(1,-1),\quad(-1,i),\quad(-1,-i).
+\]
+Indeed $x=y^2$ and $y^4=1$. The Jacobian determinant is $4xy$, which is nonzero
+at all four roots. The coordinate $y$ distinguishes the roots, while $x$ does not:
+there are two roots above each value of $x$. This distinction will explain why a
+simple polynomial root need not give a simple projected eigenvalue.
+\end{example}
+
+\subsection{Degree conventions and roots at infinity}\label{sec:degrees}
+
+For total degrees $e_1,\ldots,e_d$, a generic system has $\prod_i e_i$ projective
+roots by B\'ezout's theorem, and all are affine if there is no common root on the
+hyperplane at infinity. If instead every equation has degree at most $n$ in
+\emph{each} variable, its support lies in the box $[0,n]^d$. The generic count is
+$d!n^d$, naturally computed in $(\mathbb P^1)^d$; see the multihomogeneous and sparse
+resultant accounts in \cite{cox2005using,gelfand1994discriminants}. The running example
+has total degrees $(2,2)$ and four roots; it is not a generic box-degree-two system,
+which would have eight.
+
+The compactification matters. Ordinary homogenization of a full box-degree-$n$ equation
+to total degree $dn$ has top part $c(x_1\cdots x_d)^n$. For $d\ge2$, the resulting
+equations have common zeros at ordinary projective infinity even when the system is
+generic in its box support. Generic absence of boundary zeros in $(\mathbb P^1)^d$
+does not remove these ordinary projective zeros. We therefore state the no-infinity
+assumption separately for the dense Macaulay construction.
+
+\section{The common algebra: functions on a finite root set}\label{sec:algebra}
+
+Write $R=\C[x_1,\ldots,x_d]$ and $A=R/I$. The class $[f]\in A$ records the values
+of $f$ at the roots; adding a polynomial in $I$ changes none of them. The following
+elementary form of the Chinese remainder theorem is the organizing fact.
+
+\begin{proposition}[Evaluation and interpolation]\label{prop:evaluation}
+Evaluation is an algebra isomorphism
+\[
+  \operatorname{ev}:A\longrightarrow\C^N,\qquad
+  [f]\longmapsto(f(z_1),\ldots,f(z_N)),
+\]
+where multiplication on $\C^N$ is componentwise. In particular $\dim A=N$.
+There are unique classes $\ell_j\in A$ with $\ell_j(z_k)=\delta_{jk}$;
+they satisfy $\ell_j\ell_k=\delta_{jk}\ell_j$ and $\sum_j\ell_j=1$.
+\end{proposition}
+
+\begin{proof}
+Because $I$ is radical, a polynomial vanishes at every root exactly when it belongs
+to $I$ (Hilbert's Nullstellensatz), so evaluation is injective.
+Choose a linear form $t$ taking distinct values $t_j=t(z_j)$. Such choices exist:
+the prohibited coefficient vectors lie in the finite union of hyperplanes
+$\{u:u^T(z_j-z_k)=0\}$, $j\ne k$. The polynomials
+\[
+  \ell_j(x)=\prod_{k\ne j}\frac{t(x)-t_k}{t_j-t_k}
+\]
+evaluate to the coordinate vectors of $\C^N$, proving surjectivity. The remaining
+identities follow by evaluation and injectivity.
+\end{proof}
+
+A form taking distinct values on the root set is called \emph{separating}.
+The proof is conceptual: algorithms compute the quotient from the coefficients;
+they do not first compute the roots to construct the $\ell_j$.
+
+\subsection{Multiplication becomes diagonal}\label{sec:multiplication}
+
+For $g\in R$, multiplication by $[g]$ is a linear operator on $A$. In a basis
+$\B=(b_1,\ldots,b_N)$, write its matrix as $M_g$, with column $k$ equal to
+$[gb_k]_\B$. Define the evaluation matrix
+\[
+  V=(b_k(z_j))_{k,j},\qquad v_j=\B(z_j).
+\]
+Columns index roots; coefficient vectors are columns. Throughout, ${}^T$ denotes
+transpose and ${}^*$ conjugate transpose.
+
+\begin{proposition}[The multiplication eigenvalue theorem]\label{prop:multiplication}
+The matrix $V$ is invertible and
+\begin{equation}\label{eq:stickelberger}
+  M_g=V^{-T}\diag(g(z_1),\ldots,g(z_N))V^T.
+\end{equation}
+Thus all multiplication matrices commute and are simultaneously diagonalizable.
+Their characteristic and minimal polynomials are, respectively,
+\[
+  \det(TI-M_g)=\prod_{j=1}^N(T-g(z_j)),\qquad
+  \prod_{\eta\in\{g(z_1),\ldots,g(z_N)\}}(T-\eta).
+\]
+\end{proposition}
+
+\begin{proof}
+Evaluation sends the coefficient vector $c$ to $V^Tc$ and sends multiplication by $g$
+to multiplication by $\diag(g(z_j))$. Proposition~\ref{prop:evaluation} gives the
+invertibility of $V$ and the asserted similarity. The polynomial identities follow
+for a diagonal matrix.
+\end{proof}
+
+In this convention the right eigenvector at a separated value $g(z_j)$ is
+$[\ell_j]_\B=V^{-T}e_j$, and $v_j^T$ is a left eigenvector. Equivalently,
+the evaluation vectors are right eigenvectors of $M_g^T$. Repeated values of $g$
+create higher-dimensional eigenspaces even when every root of $P$ is simple.
+
+\subsection{The univariate model}\label{sec:companion}
+
+For a monic $p(T)=T^m+a_{m-1}T^{m-1}+\cdots+a_0$, reduction modulo $p$ in the
+basis $(1,T,\ldots,T^{m-1})$ gives the companion matrix
+\begin{equation}\label{eq:companion}
+  C_p=\begin{pmatrix}
+  0&&&-a_0\\
+  1&0&&-a_1\\
+  &\ddots&\ddots&\vdots\\
+  &&1&-a_{m-1}
+  \end{pmatrix},\qquad \det(TI-C_p)=p(T).
+\end{equation}
+For squarefree $p$ the determinant identity follows from
+Proposition~\ref{prop:multiplication}; for every monic $p$ it follows because
+$e_1,C_pe_1,\ldots,C_p^{m-1}e_1$ is a basis and $p(C_p)=0$, so the minimal
+and characteristic polynomials both equal $p$. At a root $\lambda$,
+$(1,\lambda,\ldots,\lambda^{m-1})$ is a \emph{left} eigenvector.
+
+This is the basic representation change: a scalar polynomial equation becomes a
+matrix eigenproblem. The multivariate methods make different choices about which
+part of this pattern to preserve.
+
+\section{Family I: resultant and eigenvalue constructions}\label{sec:familyI}
+
+Here singular matrices detect roots. A \emph{regular} square matrix polynomial
+$R(\lambda)$ has determinant not identically zero. Its finite eigenvalues are the
+zeros of that determinant; a singular matrix polynomial requires a different analysis.
+Even in the regular case, degree drops can produce eigenvalues at infinity. The
+following constructions specify when finite eigenvalues represent affine roots.
+\subsection{The Sylvester resultant (\texorpdfstring{$d=2$}{d=2})}\label{sec:sylvester}
+
+\emph{Idea.} Freeze one coordinate, say $y$, and ask whether the resulting
+polynomials in $x$ have a common root. The Sylvester matrix turns this question
+into singularity of a matrix whose entries are polynomials in $y$.
+
+\emph{Construction and proof.} First take nonzero univariate polynomials
+$f(x)=a_mx^m+\cdots+a_0$ and $g(x)=b_kx^k+\cdots+b_0$ of
+\emph{actual} degrees $m,k\ge1$. Write the coefficient vectors of
+\[
+  x^{k-1}f,\ldots,f,\quad x^{m-1}g,\ldots,g
+\]
+as rows, with columns ordered $x^{m+k-1},\ldots,1$. This defines the
+$(m+k)\times(m+k)$ Sylvester matrix $S(f,g)$. Its transpose represents the map
+\[
+  \C[x]_{<k}\oplus\C[x]_{<m}\longrightarrow\C[x]_{<m+k},
+  \qquad (u,v)\longmapsto uf+vg.
+\]
+If $f$ and $g$ are coprime, $uf=-vg$ implies that $f$ divides $v$; the degree
+bound forces $v=0$, then $u=0$. Conversely, if $h=\gcd(f,g)$ has positive
+degree, $(u,v)=(g/h,-f/h)$ is a nonzero vector in this kernel. Thus
+\[
+  S(f,g)\text{ is singular}\quad\Longleftrightarrow\quad
+  f,g\text{ have a common root in }\C.
+\]
+With this ordering its determinant is the resultant, with product formula
+\[
+  \det S(f,g)=\Res_x(f,g)
+  =a_m^{\,k}\prod_{f(\alpha)=0}g(\alpha),
+\]
+where roots are counted with multiplicity; see \cite[Ch.~3]{cox2005using}.
+The same argument shows $\dim\ker S(f,g)=\deg\gcd(f,g)$: every relation is
+$(u,v)=w(g/h,-f/h)$ with $\deg w<\deg h$.
+
+For $p,q\in\C[x,y]$, choose their degrees $m,k$ in $x$ over $\C[y]$ and
+form $S(y)$ by the same shifts. Its determinant is a polynomial in $y$.
+At a parameter value where both degrees are preserved, the preceding proof
+applies verbatim. If $(x_*,y_*)$ is an affine common root, direct evaluation
+of the rows gives
+\[
+  S(y_*)\begin{pmatrix}x_*^{m+k-1}&\cdots&x_*&1\end{pmatrix}^{T}=0.
+\]
+When the specialized gcd is linear, this vector spans the right kernel, so
+its last two entries recover $x_*$ by a ratio. Several roots in the same
+fiber require additional work, such as computing the fiber gcd.
+
+\begin{example}[The running system]\label{ex:sylvester-running}
+  For $p=x^2-1$ and $q=y^2-x$ in Example~\ref{ex:running}, the degrees in
+  $x$ are $2$ and $1$. The rows $p,xq,q$ give
+  \[
+    S(y)=\begin{pmatrix}1&0&-1\\-1&y^2&0\\0&-1&y^2\end{pmatrix},
+    \qquad \det S(y)=y^4-1.
+  \]
+  At each $\eta\in\{1,-1,\mathrm{i},-\mathrm{i}\}$, a right null vector is
+  $(\eta^4,\eta^2,1)^T=(1,\eta^2,1)^T$. Thus $x=\eta^2$, recovering
+  $(1,\pm1)$ and $(-1,\pm\mathrm{i})$. All four $y$-values are distinct;
+  hiding $x$ instead would combine the roots into two fibers.
+\end{example}
+
+\begin{remark}[A resultant remembers its degree convention]\label{rem:sylvester-infinity}
+  A matrix constructed with fixed degrees remains that size when leading
+  coefficients vanish after specialization. It then tests common zeros of
+  the \emph{homogenized} polynomials in $\mathbb P^1$, including infinity.
+  For example, $f=ax+1$, $g=ax+2$ give
+  \[
+    S(a)=\begin{pmatrix}a&1\\a&2\end{pmatrix},\qquad\det S(a)=a.
+  \]
+  At $a=0$ the affine polynomials $1$ and $2$ have no root, but their
+  degree-one homogenizations $aX+Z$, $aX+2Z$ share $[X:Z]=[1:0]$.
+  Consequently a vanishing fixed-degree resultant need not identify an
+  affine solution. Degree drops and boundary roots must be checked when
+  extending a projected candidate to a full solution.
+\end{remark}
+
+\begin{reduction}
+  Solve the polynomial eigenvalue problem $S(y)v=0$. For generic polynomials
+  of degree $n$ in each variable, $S$ has size $2n$, degree $n$, and
+  $2n^2$ finite eigenvalues, one per root. A companion linearization has
+  size $2n^2$ and can be solved by QZ. Sizes and grades must be adapted to
+  other supports: the running example has size $3$ and degree $2$, so its
+  standard size-$6$ linearization also has two eigenvalues at infinity.
+\end{reduction}
+
+\emph{Numerical aspects and references.} The entries of $S$ depend linearly
+on the input coefficients. Nevertheless, arbitrary perturbations of $S$'s
+coefficient matrices need not respect the repeated-coefficient structure
+of a Sylvester matrix. QZ controls backward error for its pencil; translating
+this into error in the original polynomials also requires control of the
+linearization and construction. See \cite{tisseur2000backward,
+noferini2016numerical} for these numerical issues. The classical sources are
+\cite{sylvester1840method,sylvester1853theory}; accessible accounts include
+\cite[Ch.~3]{cox2005using} and \cite{sturmfels2002solving}.
+
+\subsection{The Cayley/B\'ezout resultant}\label{sec:cayley}
+
+\emph{Idea.} A divided difference compresses the common-root test into a
+smaller matrix. Begin with two univariate polynomials $q_1,q_2$ of degree
+at most $n$. Their \emph{B\'ezoutian} is
+\begin{equation}\label{eq:bezoutian}
+  F(s,t)=\frac{q_1(s)q_2(t)-q_2(s)q_1(t)}{s-t}
+       =v_n(s)^TB(q_1,q_2)v_n(t),
+  \qquad v_n(t)=(1,t,\ldots,t^{n-1})^T.
+\end{equation}
+The numerator vanishes on $s=t$, so the quotient is a polynomial of degree
+at most $n-1$ in each variable. Interchanging $s,t$ changes both numerator
+and denominator by a sign; hence $F(s,t)=F(t,s)$ and $B^T=B$. In particular,
+this is complex symmetry, not Hermitian symmetry. If $\xi$ is a common
+root, then $F(s,\xi)=0$ identically, and therefore $Bv_n(\xi)=0$.
+
+\begin{proposition}[B\'ezout matrix and quotient multiplication]\label{rem:barnett}
+  Suppose $q_1$ is monic of degree $n$, $\deg q_2\le n$, and $C_{q_1}$ is
+  the subdiagonal companion matrix in \eqref{eq:companion}. Then
+  \begin{equation}\label{eq:barnett}
+    B(q_1,q_2)=q_2(C_{q_1})B(q_1,1)
+             =B(q_1,1)q_2(C_{q_1}^{T}).
+  \end{equation}
+  Consequently
+  \[
+    \det B(q_1,q_2)=(-1)^{n(n-1)/2}
+       \prod_{q_1(\alpha)=0}q_2(\alpha)
+       =(-1)^{n(n-1)/2}\Res(q_1,q_2).
+  \]
+\end{proposition}
+
+\begin{proof}
+Put $H(s,t)=(q_1(s)-q_1(t))/(s-t)$. The identity
+\[
+  F(s,t)-q_2(s)H(s,t)
+    =q_1(s)\frac{q_2(t)-q_2(s)}{s-t}
+\]
+shows that $F$ is the remainder of $q_2(s)H$ modulo $q_1(s)$.
+Multiplication by $q_2(s)$ followed by this reduction acts on coefficient
+columns as $q_2(C_{q_1})$, proving the first equality. Transpose it to obtain
+the second. The entries of $B(q_1,1)$ on its anti-diagonal are $1$, and
+those beyond it are zero, so its determinant is $(-1)^{n(n-1)/2}$.
+Finally, the eigenvalues of $C_{q_1}$ are the roots of $q_1$, with
+multiplicity, giving the determinant formula.
+\end{proof}
+
+This is Barnett's factorization; \cite{helmke1989bezoutians} gives a broader
+account. Its order depends on the companion convention. If instead $q_1$
+has degree $n$ and leading coefficient $a\ne0$, and $q_2$ has actual
+degree $k\le n$, the formula becomes
+$\det B=(-1)^{n(n-1)/2}a^{n-k}\Res(q_1,q_2)$.
+The leading-coefficient factor therefore matters when the degrees differ.
+Bilinearity in the two sets of input coefficients follows directly from
+\eqref{eq:bezoutian}, rather than from powers of the companion matrix.
+
+\begin{example}[The same roots in a smaller matrix]\label{ex:bezout-running}
+  With $q_1(s)=s^2-1$, $q_2(s)=y^2-s$, direct division gives
+  \[
+    F(s,t)=-1+y^2(s+t)-st,\qquad
+    B(y)=\begin{pmatrix}-1&y^2\\y^2&-1\end{pmatrix},\qquad
+    \det B(y)=1-y^4.
+  \]
+  At $y=\eta$ with $\eta^4=1$, its kernel is spanned by $(1,\eta^2)^T$,
+  which again gives $x=\eta^2$. The $2\times2$ quadratic matrix polynomial
+  has a size-$4$ companion linearization, matching the four roots.
+  The factorization is visible here: $C_{q_1}=B(q_1,1)=
+  \left(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\right)$ and
+  $B(y)=(y^2I-C_{q_1})B(q_1,1)$.
+\end{example}
+
+\emph{Several eliminated variables.} Write $q_j=p_j[x_d]$, viewing $x_d$
+as a parameter, and introduce $s,t\in\C^{d-1}$. Define
+\begin{equation}\label{eq:cayleyfun}
+  F(s,t)=\frac{1}{\prod_{k=1}^{d-1}(s_k-t_k)}
+  \det\begin{pmatrix}
+    q_1(s_1,\ldots,s_{d-1})&\cdots&q_d(s_1,\ldots,s_{d-1})\\
+    q_1(t_1,s_2,\ldots,s_{d-1})&\cdots&q_d(t_1,s_2,\ldots,s_{d-1})\\
+    \vdots&&\vdots\\
+    q_1(t_1,\ldots,t_{d-1})&\cdots&q_d(t_1,\ldots,t_{d-1})
+  \end{pmatrix}.
+\end{equation}
+Successive rows agree when $s_k=t_k$, so every displayed factor divides
+the determinant and $F$ is a polynomial. If each $q_j$ has degree at most
+$n$ in each variable, $s_k$ occurs in the first $k$ rows and $t_k$ in the
+last $d-k$ rows. Division therefore gives
+\[
+  \deg_{s_k}F\le kn-1,\qquad \deg_{t_k}F\le(d-k)n-1.
+\]
+Expand $F(s,t)=\sum_{\alpha,\beta}R_{\alpha\beta}s^\alpha t^\beta$ using
+these full exponent boxes. Both index sets have size
+$M=(d-1)!n^{d-1}$, producing a square matrix $R(x_d)$ of degree at most
+$dn$ in the hidden variable. For $d>2$, this matrix need not be symmetric.
+
+If $\xi$ is a common affine root of the specialized $q_j$, the last row in
+\eqref{eq:cayleyfun} vanishes at $t=\xi$. Cancelling the nonzero polynomial
+$\prod_k(s_k-\xi_k)$ proves $F(s,\xi)=0$. Similarly $F(\xi,t)=0$.
+Thus $(\xi^\beta)_\beta$ and $(\xi^\alpha)_\alpha$ are right and transpose-left
+null vectors. In a one-dimensional kernel they can be recovered up to scale.
+A coordinate is read from an available pair of monomials differing by that
+coordinate; coordinates absent from these vectors require back-substitution.
+
+\emph{When is this an exact resultant?} For the full common box support,
+the determinant is, up to a fixed nonzero normalization, the
+multihomogeneous resultant of the $q_j$ on $(\mathbb P^1)^{d-1}$
+\cite[Thm.~6.13]{dickenstein2003multihomogeneous}. This supplies the converse
+to the null-vector argument, including boundary roots in that compactification.
+For generic full-box $p_j$, the system has $d!n^d$ simple affine roots,
+no boundary roots in $(\mathbb P^1)^d$, and distinct hidden coordinates.
+Then $R(x_d)$ is regular
+and its finite eigenvalues are exactly those coordinates.
+Arbitrary sparse or total-degree inputs need a support-appropriate
+construction: padding the full-box matrix can make it identically singular.
+
+\begin{example}[A linear system and Cramer's rule]
+  Take $p_1=x-z$, $p_2=y-z$, $p_3=x+y+z-1$ and hide $z$.
+  Subtracting successive rows in \eqref{eq:cayleyfun} and dividing out the
+  differences reduces its determinant to
+  \[
+    \det\begin{pmatrix}1&0&1\\0&1&1\\t_1-z&t_2-z&t_1+t_2+z-1\end{pmatrix}
+    =3z-1.
+  \]
+  The support-adapted Cayley matrix is the scalar $3z-1$; back-substitution
+  gives $x=y=z=1/3$. Its coefficients are precisely the determinants in
+  Cramer's rule. Padding this constant-in-$s,t$ expression to the generic
+  box size $2$ would introduce a zero row and column.
+\end{example}
+
+\begin{reduction}
+  For generic full-box inputs, solve $R(x_d)v=0$ of size
+  $(d-1)!n^{d-1}$ and degree $dn$, for example through a size-$d!n^d$
+  linearization. Recover the other coordinates from null vectors or the
+  original equations, checking boundary candidates for specialized inputs.
+\end{reduction}
+
+\emph{Numerical aspects and references.} Each entry is homogeneous of degree
+$d$ in the input coefficients, and linear in the coefficients of each
+polynomial separately. Scaling and the permitted perturbations therefore
+matter when comparing this eigenproblem with the original root problem;
+small matrix-coefficient errors are not automatically small input errors.
+The classical divided-difference constructions are
+\cite{cayley1857note,dixon1909eliminant}; multihomogeneous determinantal
+formulae are treated in \cite{dickenstein2003multihomogeneous}.
+See \cite{noferini2016numerical} for the numerical analysis, including the
+general Cramer connection, and \cite{nakatsukasa2015computing} for a
+bivariate implementation using subdivision and Chebyshev representations.
+\subsection{The Macaulay resultant and the \texorpdfstring{$u$}{u}-resultant}\label{sec:macaulay}
+
+\emph{Idea.} Adjoin a linear form whose vanishing tests a chosen projection of the roots.
+If $F_i(x_0,x)$ is the homogenization of $p_i$ and
+$h=\mu_0x_0+\sum_i\mu_ix_i$, the projective resultant
+$\Res(F_1,\ldots,F_d,h)$ vanishes precisely when a common root of the $F_i$ lies on $h=0$.
+With the $F_i$ fixed, this polynomial in $\mu$ is the \emph{$u$-resultant}.
+When all projective roots are simple and lie in $x_0\ne0$, its product formula is
+\[
+  \Res(F_1,\ldots,F_d,h)=c\prod_{j=1}^N h(1,z_j),\qquad c\ne0.
+\]
+Thus a separating linear form turns the root set into a univariate spectrum
+\cite{vanderwaerden1950modern,gelfand1994discriminants}.
+
+\emph{A precise construction.} Put $e_i=\deg p_i$, and assume that the $F_i$ define a
+reduced, zero-dimensional projective complete intersection with no point on $x_0=0$.
+These are ordinary projective hypotheses; they need not hold for a generic system with
+prescribed box support. Write
+\[
+  \widehat R=\C[x_0,\ldots,x_d],\qquad
+  \widehat A=\widehat R/\langle F_1,\ldots,F_d\rangle,
+  \qquad s=\sum_i(e_i-1),\quad \rho=s+1.
+\]
+Here $\widehat R_t$ and $\widehat A_t$ denote the homogeneous degree-$t$ pieces.
+The complete-intersection
+Hilbert series gives
+\[
+  \sum_{t\ge0}(\dim\widehat A_t)T^t
+   =\frac{\prod_i(1+T+\cdots+T^{e_i-1})}{1-T},
+  \qquad \dim\widehat A_t=N=\prod_i e_i\quad(t\ge s).
+\]
+Indeed, quotienting successively by a homogeneous nonzerodivisor of degree $e_i$
+multiplies the Hilbert series by $1-T^{e_i}$; the displayed numerator has degree $s$
+and value $N$ at $T=1$. Evaluation at $(1,z_j)$ identifies $\widehat A_s$ and
+$\widehat A_\rho$ with
+$\C^N$; this is the standard Hilbert-function description of a reduced projective
+complete intersection \cite[Chs.~3 and~5]{cox2005using}.
+
+Let $D_\rho$ have one column per degree-$\rho$ monomial and coefficient rows for all
+$mF_i$ with $\deg m=\rho-e_i$. Its row space is precisely the degree-$\rho$ part of
+$\langle F_1,\ldots,F_d\rangle$. Choose a matrix $Z$ whose $N$ columns form a basis of
+$\ker D_\rho$, and choose homogeneous lifts $b_1,\ldots,b_N\in\widehat R_s$
+of a basis of $\widehat A_s$.
+Both choices can be made by rank-revealing linear algebra on polynomial coefficient
+matrices. For a linear form $h$, form the $N\times N$ matrix
+\begin{equation}\label{eq:macaulay-compression}
+  H_h=\begin{pmatrix}
+    \operatorname{coeff}_\rho(b_1h)\\[-1mm]\vdots\\
+    \operatorname{coeff}_\rho(b_Nh)
+  \end{pmatrix}Z.
+\end{equation}
+Coefficient vectors in this formula are rows, in the same monomial order as $D_\rho$.
+This compresses the $h$-rows after imposing all polynomial relations.
+Choose homogeneous linear forms $\alpha,\beta$ and put $h=\alpha-\lambda\beta$.
+
+\begin{proposition}\label{prop:macaulay-compression}
+  Under the stated assumptions, $\det H_h=c'\prod_jh(1,z_j)$ with $c'\ne0$ independent
+  of $h$. If $\beta(1,z_j)\ne0$ for every $j$, then $H_\beta$ is invertible and the pencil
+  $H_\alpha-\lambda H_\beta$ has eigenvalues
+  $\lambda_j=\alpha(1,z_j)/\beta(1,z_j)$, counted with multiplicity.
+\end{proposition}
+\begin{proof}
+Let $V_\rho$ have as its $j$th column the degree-$\rho$ monomials evaluated
+at $(1,z_j)$, and put $E=(b_i(1,z_j))_{i,j}$. Evaluation is an isomorphism in these degrees,
+so $E$ is invertible and $V_\rho$ has rank $N$. Since $D_\rho V_\rho=0$, we have
+$Z=V_\rho C$ for some invertible $C$. Consequently
+\[
+  H_h=E\,\diag\bigl(h(1,z_1),\ldots,h(1,z_N)\bigr)C.
+\]
+Taking determinants proves the assertions.
+\end{proof}
+
+If the $\lambda_j$ are distinct, a right eigenvector $w_j$ satisfies
+$Zw_j\propto V_\rho e_j$, so the root coordinates are the ratios of the entries indexed
+by $x_ix_0^{\rho-1}$ and $x_0^\rho$. Taking $\beta=x_0$ is always valid here; a generic
+$\alpha$ separates the roots. No explicit factorization of the $u$-resultant is needed.
+
+\begin{example}[Macaulay compression for the running system]\label{ex:macaulay-running}
+  For \eqref{eq:running}, $F_1=x^2-x_0^2$, $F_2=y^2-xx_0$, and $\rho=3$.
+  There are ten degree-three monomials and six independent polynomial rows:
+  $x_0F_1,xF_1,yF_1,x_0F_2,xF_2,yF_2$. Choose
+  \[
+    (b_1,b_2,b_3,b_4)=(x_0^2,x_0x,x_0y,xy),\qquad h=y-\lambda x_0.
+  \]
+  In degree three use the quotient basis $(x_0^3,x_0^2x,x_0^2y,x_0xy)$.
+  Reduction by $x^2=x_0^2$ and $y^2=xx_0$ makes the four rows $b_ih$ equal to
+  \[
+    H_h=\begin{pmatrix}
+      -\lambda&0&1&0\\
+      0&-\lambda&0&1\\
+      0&1&-\lambda&0\\
+      1&0&0&-\lambda
+    \end{pmatrix},\qquad \det H_h=\lambda^4-1.
+  \]
+  This is \eqref{eq:macaulay-compression} with $Z$ the coefficient-to-quotient map.
+  At a root, $(1,x,y,xy)^T$ lies in its kernel when $\lambda=y$; its entries recover $x,y$.
+  The constant matrix is the transpose of multiplication by $y$ in the affine basis
+  $(1,x,y,xy)$, reflecting our use of coefficient rows.
+\end{example}
+
+\emph{Relation to the classical determinant formula.} Macaulay expresses the resultant
+as a quotient of two specified determinants \cite{macaulay1902some,macaulay1916algebraic}.
+An arbitrary square minor of a coefficient matrix need not equal the resultant or have
+exactly its zero set. In particular, one cannot always retain all polynomial rows:
+for three quadratics, $\rho=4$ and relations such as $F_2F_1-F_1F_2=0$ already make
+those rows dependent. The compression above gives a direct, verifiable eigenproblem;
+classical determinant quotients use their own prescribed row selection and extraneous-factor
+removal. See J\'onsson--Vavasis \cite{jonsson2005accurate} for a numerical resultant construction.
+
+\begin{reduction}
+  An $N\times N$ generalized eigenvalue problem $H_\alpha w=\lambda H_\beta w$, obtained
+  from homogeneous polynomial relations and a quotient basis. Under the hypotheses above
+  it is regular and has exactly the projected roots as its eigenvalues.
+\end{reduction}
+
+\emph{Numerical aspects.} The uncompressed matrix has $\binom{\rho+d}{d}$ columns.
+Computing its numerical rank, choosing a quotient basis, and scaling polynomial rows
+are substantial parts of the algorithm. Algebraically equivalent compressions can have
+different conditioning. The conditioning results for a particular Macaulay pencil
+\cite{graf2026numerical} therefore need not transfer unchanged to every quotient compression.
+
+\subsection{Multiparameter eigenvalue formulations}\label{sec:mep}
+
+\emph{Idea.} Represent each polynomial as a determinant of an affine matrix pencil:
+\[
+  p_k(x)=\det W_k(x),\qquad
+  W_k(x)=A_{k,0}+\sum_{i=1}^d x_iA_{k,i},\quad A_{k,i}\in\C^{m_k\times m_k}.
+\]
+Then $P(x)=0$ if and only if there are nonzero vectors satisfying the
+\emph{multiparameter eigenvalue problem}
+\begin{equation}\label{eq:mep}
+  W_k(x)v_k=0,\qquad v_k\ne0,\qquad k=1,\ldots,d.
+\end{equation}
+The representation trades polynomial degree for matrix size. Explicit constructions
+are available; a \emph{uniform} representation has entries affine-linear in the polynomial
+coefficients as well as in the variables, allowing products of one coefficient and one
+variable. For fixed $d\ge2$, the smallest size for a representation uniform over all
+total-degree-at-most-$n$ polynomials is $\Theta(n^{d/2})$; in two variables explicit constructions have
+size $2n+1$ or $2n-1$ \cite{boralevi2017uniform}. Choosing a representation is itself
+an algorithmic step, separate from solving its eigenproblem.
+
+\emph{Tensor Cramer's rule.} On $\C^{m_1}\otimes\cdots\otimes\C^{m_d}$ define
+\[
+  \Delta_0=\sum_{\sigma\in\mathfrak S_d}\operatorname{sgn}(\sigma)
+      A_{1,\sigma(1)}\otimes\cdots\otimes A_{d,\sigma(d)},
+\]
+and define $\Delta_i$ by replacing column $i$ of the coefficient array
+$(A_{k,l})_{k,l=1}^d$ with $(-A_{k,0})_k$ before this expansion.
+For two parameters, writing $W_k=A_k+xB_k+yC_k$, this means
+\begin{align*}
+  \Delta_0&=B_1\otimes C_2-C_1\otimes B_2,\\
+  \Delta_1&=C_1\otimes A_2-A_1\otimes C_2,\\
+  \Delta_2&=A_1\otimes B_2-B_1\otimes A_2.
+\end{align*}
+If \eqref{eq:mep} holds and $v=v_1\otimes\cdots\otimes v_d$, then
+\[
+  \Delta_i v=x_i\Delta_0v,\qquad i=1,\ldots,d.
+\]
+To check this, substitute $-A_{k,0}v_k=\sum_lx_lA_{k,l}v_k$ into the determinant
+expansion: every term with a repeated column cancels, leaving only the term $l=i$.
+For scalar blocks this is ordinary Cramer's rule.
+
+When $\Delta_0$ is invertible, the multiparameter problem is called \emph{nonsingular}.
+Atkinson's theorem states that $\Gamma_i=\Delta_0^{-1}\Delta_i$ commute and that their
+joint eigenvalues are exactly the solutions of \eqref{eq:mep}
+\cite{atkinson1972multiparameter}. This converse is the substantive spectral theorem;
+the preceding tensor calculation supplies the elementary forward implication.
+One solves a separating linear combination $\sum_i a_i\Gamma_i$ and recovers all
+coordinates on its common eigenvectors. If the chosen combination has repeated eigenvalues,
+its invariant subspaces must be resolved using the remaining operators.
+
+\begin{example}[A nonsingular two-parameter problem]\label{ex:mep-running}
+  The running system has the representations
+  \[
+    W_1=\begin{pmatrix}x&1\\1&x\end{pmatrix},\qquad
+    W_2=\begin{pmatrix}y&x\\1&y\end{pmatrix}.
+  \]
+  Their determinants are $x^2-1$ and $y^2-x$. In the tensor order
+  $(e_1\otimes e_1,e_1\otimes e_2,e_2\otimes e_1,e_2\otimes e_2)$,
+  \[
+    \Delta_0=I_4,\qquad
+    \Delta_1=\begin{pmatrix}0&0&-1&0\\0&0&0&-1\\-1&0&0&0\\0&-1&0&0\end{pmatrix},
+    \quad
+    \Delta_2=\begin{pmatrix}0&0&0&1\\-1&0&0&0\\0&1&0&0\\0&0&-1&0\end{pmatrix}.
+  \]
+  Direct multiplication gives $\Delta_2^2=\Delta_1$ and $\Delta_1^2=I_4$.
+  Moreover $\det(\lambda I_4-\Delta_2)=\lambda^4-1$, so its four eigenvalues are
+  $y=1,-1,i,-i$; the corresponding $x$ is $y^2$.
+  At any root one can check the common eigenvector explicitly:
+  \[
+    v_1=(1,-x)^T,\quad v_2=(-y,1)^T,\quad
+    v=v_1\otimes v_2=(-y,1,xy,-x)^T.
+  \]
+  Thus $\Delta_1v=xv$ and $\Delta_2v=yv$, and $x=-v_4/v_2$, $y=-v_1/v_2$.
+  Solving only for $x$ leaves two-dimensional eigenspaces; $y$ separates all four roots.
+\end{example}
+
+\begin{reduction}
+  Coupled generalized eigenproblems $\Delta_i v=x_i\Delta_0v$ on a tensor space of
+  dimension $\prod_km_k$. In the nonsingular case, a separating linear combination
+  gives an ordinary or generalized eigenproblem followed by recovery on common eigenvectors.
+\end{reduction}
+
+\emph{Numerical aspects.} Invertibility of $\Delta_0$ is a hypothesis to check, not a
+consequence of having determinantal representations. A singular $\Delta_0$ does not by
+itself make each pencil singular: a regular pencil can have eigenvalues at infinity.
+Nor does excess tensor dimension alone distinguish infinite eigenvalues from a singular
+pencil. For genuinely singular coupled pencils, a structure-aware staircase or related
+reduction is needed before extracting the finite joint spectrum
+\cite{plestenjak2016roots}. For the distinct issue of condition numbers of singular
+matrix polynomials, see \cite{lotz2020wilkinson}. Representation size, scaling, and the tensor dimension all
+affect practical accuracy and cost. Backward error and conditioning of the multiparameter
+problem are studied in \cite{hochstenbach2003backward}; the conditioning of the
+operator-determinant rootfinding reduction is studied in \cite{graf2026numerical}.
+\section{Family II: scalar eliminants}\label{sec:familyII}
+
+A scalar eliminant records the values of a coordinate or linear form on the root
+set. It must be accompanied by a way to recover the other coordinates. The key
+distinction is whether the chosen scalar value separates the roots.
+
+\subsection{Gr\"obner elimination and the shape lemma}\label{sec:groebner}
+
+For a coordinate $x_d$, the elimination ideal $I\cap\C[x_d]$ is generated by a
+unique monic polynomial $f$. Proposition~\ref{prop:evaluation} shows directly that
+\begin{equation}\label{eq:eliminant}
+  f(T)=\prod_{\eta\in\{(z_j)_d:1\le j\le N\}}(T-\eta).
+\end{equation}
+Indeed, $h(x_d)$ belongs to $I$ exactly when $h$ vanishes at all these distinct values.
+Thus $f$ is the \emph{minimal} polynomial of $M_{x_d}$; it equals the characteristic
+polynomial only when $x_d$ separates the roots.
+
+To compute $f$ from the equations, choose lexicographic order
+$x_1\succ\cdots\succ x_d$. The elimination theorem says that the members involving
+only $x_d$ of a Gr\"obner basis form a basis of $I\cap\C[x_d]$
+\cite[Ch.~3]{cox2015ideals}. The short reason is that division of a univariate member
+of $I$ must reduce its leading power of $x_d$; any Gr\"obner-basis leading monomial
+dividing this power is itself a power of $x_d$, and lexicographic order then forces
+the entire divisor to be univariate. Iterating gives a univariate reduction to zero.
+
+\begin{proposition}[Shape lemma in the reduced case]\label{prop:shape}
+If $x_d$ separates the roots, there are unique polynomials $h_i$ of degree less
+than $N$ such that
+\begin{equation}\label{eq:shape}
+  I=\langle x_1-h_1(x_d),\ldots,x_{d-1}-h_{d-1}(x_d),f(x_d)\rangle,
+  \qquad \deg f=N.
+\end{equation}
+The displayed generators form the reduced lexicographic Gr\"obner basis.
+\end{proposition}
+
+\begin{proof}
+Interpolate $h_i((z_j)_d)=(z_j)_i$ at the $N$ distinct values. Each displayed generator
+vanishes at all roots and hence belongs to $I$. The quotient by the displayed ideal
+is isomorphic to $\C[T]/(f)$ and has dimension $N$, as does $R/I$, so the inclusion of
+ideals is equality. The leading monomials $x_1,\ldots,x_{d-1},x_d^N$ are pairwise
+coprime; the generators are monic and their other terms are reduced. This proves
+the Gr\"obner-basis assertion by Buchberger's criterion.
+\end{proof}
+
+This elementary proof explains the usual shape lemma
+\cite{gianni1989algebraic,cox2005using}: a separating coordinate makes the whole
+quotient algebra generated by one element. A generic linear change of coordinates
+provides such a coordinate, but does not guarantee that the projected roots are
+well separated numerically.
+
+\begin{example}[Elimination in the running system]\label{ex:shape}
+With $x\succ y$, set $a=x-y^2=-q$. Reducing $p$ by $a$ gives
+\[
+  p-(x+y^2)a=y^4-1.
+\]
+Conversely, $p=(x+y^2)a+(y^4-1)$ and $q=-a$, so
+\[
+  I=\langle x-y^2,\ y^4-1\rangle.
+\]
+Solving $y^4-1=0$ and evaluating $x=y^2$ recovers all four roots. If we eliminate
+$y$ instead, the eliminant is $x^2-1$, of degree two. Its two roots require the
+additional fiber solves $y^2=x$; the characteristic polynomial of $M_x$ is
+$(T^2-1)^2$. This is why an eliminant need not have degree $N$.
+\end{example}
+
+\begin{reduction}
+Compute a lexicographic Gr\"obner basis, solve the univariate eliminant, and recover
+the other coordinates by the shape formulas when the projection separates.
+Without separation, solve the remaining fibers or change the projection. A
+univariate companion solve adds its own representation and perturbation model.
+\end{reduction}
+
+\emph{Computation and literature.} Buchberger's algorithm and the F4/F5 algorithms
+compute Gr\"obner bases over exact coefficient fields
+\cite{buchberger2006algorithm,faugere1999f4,faugere2002f5}. With rational input one can
+combine exact elimination with arbitrary-precision numerical rootfinding.
+For approximate coefficients, deciding whether a leading coefficient is zero is a
+rank decision; exact leading-term algorithms can change discontinuously across such
+decisions. This motivates the numerical normal-form constructions of
+Section~\ref{sec:normalform}. Coefficient growth and scalar root conditioning must
+still be considered even when elimination itself is performed exactly
+\cite{graf2026numerical}.
+
+\subsection{Rational univariate representation}\label{sec:rur}
+
+Choose a separating linear form $t=u^Tx$ and put $t_j=t(z_j)$. The reduced-case
+rational univariate representation (RUR) consists of
+\begin{equation}\label{eq:rur}
+  f(T)=\prod_{j=1}^N(T-t_j),\qquad
+  g_v(T)=\sum_{j=1}^N v(z_j)\prod_{k\ne j}(T-t_k),
+\end{equation}
+for $v=1,x_1,\ldots,x_d$. Here $g_1=f'$ and $\deg g_v<N$.
+
+\begin{proposition}[Rational recovery and a coefficient construction]\label{prop:rur}
+For every root $z_j$,
+\[
+  (z_j)_i=\frac{g_{x_i}(t_j)}{f'(t_j)}.
+\]
+The polynomials in \eqref{eq:rur} can be computed without knowing the roots by
+\begin{equation}\label{eq:rur-trace}
+  f(T)=\det(TI-M_t),\qquad
+  g_v(T)=\tr\bigl(M_v\adj(TI-M_t)\bigr).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+At $T=t_j$, all terms in $g_v$ except the j-th vanish. The surviving product is
+$f'(t_j)\ne0$, proving recovery. To prove \eqref{eq:rur-trace}, simultaneously
+diagonalize $M_t$ and $M_v$ using \eqref{eq:stickelberger}; the adjugate of the
+diagonal matrix has j-th entry $\prod_{k\ne j}(T-t_k)$, and trace gives the sum.
+\end{proof}
+
+The trace identity is a conceptual recipe. Implementations can obtain the needed
+coefficients from traces $\tr(M_vM_t^k)$ and Newton identities, rather than forming
+the full polynomial adjugate \cite{rouillier1999solving,alonso1996zeros}. In the
+radical case, RUR and polynomial shape coordinates are equivalent: $f'$ is invertible
+modulo $f$ and $h_i\equiv g_{x_i}/f'\pmod f$. The rational form is useful for exact
+representation and arithmetic; it is not a general numerical conditioning guarantee.
+
+\begin{example}[Rational recovery in the running system]\label{ex:rur}
+Take $t=y$. We have $f(T)=T^4-1$, $f'(T)=4T^3$, and
+\[
+  g_x(T)\equiv T^2f'(T)\equiv4T\pmod f,\qquad
+  g_y(T)\equiv Tf'(T)\equiv4\pmod f.
+\]
+At a root $\lambda$ of $f$ the recovered point is
+\[
+  x=\frac{4\lambda}{4\lambda^3}=\lambda^2,\qquad
+  y=\frac4{4\lambda^3}=\lambda,
+\]
+using $\lambda^4=1$. A form need not be a coordinate: $t=x+y$ also separates
+these roots, taking values $2,0,-1+i,-1-i$. Its polynomial is
+\[
+  f_t(T)=T(T-2)(T^2+2T+2)=T^4-2T^2-4T.
+\]
+Since $y=t-x$ and $x^2=1$, the equation $y^2=x$ gives
+$x=(t^2+1)/(2t+1)$, with $y=t-x$; the denominator is nonzero at the four listed
+values. This is an alternative rational parametrization of exactly the same roots.
+\end{example}
+
+\begin{reduction}
+Find a separating form $t$; compute $f$ and the coordinate numerators; solve the scalar
+degree-$N$ equation $f(T)=0$; evaluate the rational recovery formulas. If the chosen
+form does not separate, these reduced-case formulas with denominator $f'$ cannot
+be used unchanged.
+\end{reduction}
+
+\emph{Computation and literature.} Rouillier's RUR and Kronecker-style geometric
+resolution make univariate descriptions effective
+\cite{rouillier1999solving,giusti2001grobner,kronecker1882grundzuge}. An absolutely
+continuous distribution for the coefficients of $t$ avoids the finitely many collision
+hyperplanes with probability one. It need not avoid nearly colliding projections,
+however, and both the scalar
+solve and rational recovery can then be sensitive. Making $f$ monic fixes a scalar
+normalization, not the coefficient norm, the scaling of $T$, or whether perturbations
+may change its leading coefficient. Those choices remain part of a condition analysis.
+\section{Family III: normal-form methods}\label{sec:familyIII}
+\subsection{Constructing the multiplication operators}\label{sec:normalform}
+
+Proposition~\ref{prop:multiplication} explains the eigenvalues. The computational
+task is to obtain $[x_i b_k]_\B$ from the coefficients of $P$. A \emph{normal form}
+is the linear reduction map taking a polynomial to its unique representative in
+$\spanop\B$ modulo $I$. A Gr\"obner basis supplies one such map: repeatedly replace
+leading monomials using the polynomial relations until only standard monomials
+remain. Border bases allow more flexible choices of $\B$, with consistency conditions
+ensuring that the resulting multiplication operators commute
+\cite{mourrain1999criterion,elkadi2007introduction}.
+
+\begin{example}[Multiplication matrices for the running system]\label{ex:toy}
+The relations $x^2=1$, $y^2=x$ reduce every monomial to the span of
+$\B=(1,x,y,xy)$. Since $\dim A=4$, these four classes form a basis. Columnwise
+multiplication gives
+\begin{equation}\label{eq:running-matrices}
+M_x=\begin{pmatrix}
+0&1&0&0\\1&0&0&0\\0&0&0&1\\0&0&1&0
+\end{pmatrix},\qquad
+M_y=\begin{pmatrix}
+0&0&0&1\\0&0&1&0\\1&0&0&0\\0&1&0&0
+\end{pmatrix}.
+\end{equation}
+For example, the last column of $M_y$ records $y(xy)=xy^2=x^2=1$.
+Directly, $M_y^2=M_x$ and $M_y^4=I$. The vectors
+$e_1,M_ye_1,M_y^2e_1,M_y^3e_1$ form a basis, so $M_y$ is cyclic with
+minimal and characteristic polynomial $T^4-1$. Also, $M_x$ exchanges two pairs
+of basis vectors. Thus
+\[
+\det(TI-M_y)=T^4-1,\qquad \det(TI-M_x)=(T^2-1)^2.
+\]
+Diagonalize $M_y$. If $M_y r=\lambda r$, then $M_xr=\lambda^2r$, so the
+corresponding root is $(\lambda^2,\lambda)$. This gives all four roots with no
+matching of independently ordered eigenvalue lists. Diagonalizing $M_x$ alone
+would leave two two-dimensional eigenspaces that $M_y$ must further resolve.
+\end{example}
+
+Normal forms need only be known on a finite polynomial space containing $\B$ and
+its products by the coordinates. This leads to the following practical formulation.
+
+\begin{proposition}[A truncated normal form]\label{prop:tnf}
+Let $U$ be a finite-dimensional polynomial space containing $\B$ and all $x_i\B$.
+Suppose a linear map $L:U\to\C^N$ satisfies $\ker L=I\cap U$, and the classes
+of $\B$ form a basis of $A$. Put
+\[
+  L_\B=(L(b_1)\ \cdots\ L(b_N)),\qquad
+  L_{x_i\B}=(L(x_i b_1)\ \cdots\ L(x_i b_N)).
+\]
+Then $L_\B$ is invertible and
+\begin{equation}\label{eq:tnf}
+  M_{x_i}=L_\B^{-1}L_{x_i\B}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+A linear combination of $\B$ annihilated by $L$ belongs to $I$, so its coefficients
+vanish. This proves invertibility. Each column of the right side of
+\eqref{eq:tnf} represents the unique combination of $\B$ whose difference from
+$x_ib_k$ is annihilated by $L$, hence belongs to $I$.
+\end{proof}
+
+One constructs $L$ from linear relations between monomials: a sufficiently large
+Macaulay matrix lists multiples of the input equations as rows. The quotient by
+its row space, equivalently the cokernel of its transpose, gives the required
+quotient map when the rank and degree conditions hold. The word
+``sufficiently'' is essential; too small a truncation can miss relations.
+QR with pivoting or an SVD can then select $\B$ for which $L_\B$ is well conditioned.
+This is the approach of stabilized and truncated normal forms
+\cite{telen2018stabilized,telen2018truncated,mourrain2021truncated}. It explains
+both the flexibility of these methods and their connection to
+Section~\ref{sec:macaulay}.
+
+\begin{reduction}
+Compute multiplication matrices in a chosen quotient basis. Choose a separating
+$g=\sum_i\gamma_i x_i$ and solve the ordinary eigenproblem for
+$M_g=\sum_i\gamma_i M_{x_i}$. Recover each coordinate from the action of the other
+matrices on the same eigenspace. Equivalently, use evaluation eigenvectors of
+$M_g^T$ when the basis contains appropriate coordinate monomials.
+\end{reduction}
+
+\emph{Numerical aspects and literature.} Multiplication matrices need not be normal,
+although the running example happens to give permutation matrices. A Schur-based
+implementation can work with clusters or invariant subspaces instead of individual
+eigenvectors \cite{corless1997reordered}. The cost of a dense $N$-dimensional
+eigensolve is $O(N^3)$; constructing a reliable quotient can itself be substantial.
+Foundational numerical treatments are Auzinger--Stetter, M\"oller--Stetter, and
+Stetter \cite{auzinger1988elimination,moller1995multivariate,stetter1996matrix,
+stetter2004numerical}. For modern variants and the effects of clustering, see
+\cite{telen2018truncated,parkinson2022analysis}. No basis-selection rule makes
+intrinsically ill-conditioned roots disappear, and improving a quotient solve
+does not by itself bound the conditioning of its eigenvectors.
+
+\section{Conditioning: specify what is perturbed}\label{sec:conditioning}
+
+The constructions above are exact algebraic statements. To compare their numerical
+behavior, one must specify an input norm, an output norm, and which entries or
+coefficients may change. This section gives the basic formulas rather than an
+average-case classification.
+
+\subsection{Equation values, coefficients, and representations}
+
+At a simple root $z$, differentiation gives
+\begin{equation}\label{eq:root-derivative}
+  \delta z=-J(z)^{-1}\delta P(z).
+\end{equation}
+Thus $\|J^{-1}\|_2$ is the absolute condition for Euclidean perturbations of the
+\emph{equation values}. Suppose instead that all equations use a fixed basis
+$\phi=(\phi_1,\ldots,\phi_m)^T$, with $p_i=c_i^T\phi$, and the coefficient
+array has its Euclidean norm.
+
+\begin{proposition}[Coefficient condition of a root]\label{prop:coeff-condition}
+With $S(z)=\sum_k|\phi_k(z)|^2$,
+\[
+  \kappa_{\mathrm{coeff}}(P,z)=\sqrt{S(z)}\,\|J(z)^{-1}\|_2.
+\]
+For a scalar output $g(z)$, replace $\|J^{-1}\|_2$ by $\|Dg(z)J^{-1}\|_2$.
+\end{proposition}
+
+\begin{proof}
+The coefficient evaluation map $E_z:\delta c\mapsto\delta P(z)$ satisfies
+$E_zE_z^*=S(z)I_d$. Therefore the squared operator norm of $J^{-1}E_z$ is
+$S(z)\|J^{-1}\|_2^2$. Apply the chain rule for the scalar output.
+\end{proof}
+
+For example, with $p(T)=\sum_{k=0}^m a_kT^k$, the coefficient condition of a
+simple root $\lambda$ is
+\[
+  \frac{\bigl(\sum_{k=0}^m|\lambda|^{2k}\bigr)^{1/2}}{|p'(\lambda)|},
+\]
+when all coefficients are perturbable. If a monic leading coefficient is held
+fixed, the sum ends at $m-1$. The value-perturbation expression $1/|p'|$ omits
+this evaluation norm. With a sup norm on a fixed unit disk, evaluation outside
+the disk also needs care: a degree-$m$ perturbation bounded by $\epsilon$ on the
+disk can reach $\epsilon|\lambda|^m$ at an exterior point.
+
+For nonzero data and output, a normwise relative condition multiplies the
+corresponding absolute condition by the input norm and divides by the output
+norm. This does not change which perturbations are allowed. It also does not
+remove dependence on a nonunitary change of basis.
+
+\subsection{Eigenvectors, interpolation, and basis choice}
+
+For a simple eigenvalue $\lambda$ of a matrix $M$, choose right and left
+eigenvectors $r,w$, so $Mr=\lambda r$ and $w^*M=\lambda w^*$. Differentiating
+and multiplying by $w^*$ gives
+\[
+  \delta\lambda=\frac{w^*(\delta M)r}{w^*r},\qquad
+  \kappa_{\mathrm{eig}}=\frac{\|w\|_2\|r\|_2}{|w^*r|},
+\]
+for absolute spectral-norm matrix perturbations; a rank-one perturbation attains
+the bound. For $M_g$ with $g$ separating, Proposition~\ref{prop:multiplication}
+therefore gives
+\begin{equation}\label{eq:overlap}
+  \kappa_{\mathrm{eig}}(g(z_j),M_g)
+  =\Lambda_j:=\|V^{-T}e_j\|_2\|Ve_j\|_2\ge1.
+\end{equation}
+The normalization is $v_j^TV^{-T}e_j=1$; in the Hermitian convention the left
+eigenvector is $\overline{v_j}$.
+
+The inverse Gram matrix makes the geometry explicit:
+\[
+  \Lambda_j^2=(V^*V)_{jj}\bigl((V^*V)^{-1}\bigr)_{jj}
+  =\frac{\|v_j\|_2^2}
+  {\operatorname{dist}(v_j,\spanop\{v_k:k\ne j\})^2}.
+\]
+To see the last equality, project $v_j$ orthogonally onto the complement of
+the other columns. The vector dual to $v_j$ is this residual divided by its
+squared norm. Thus conditioning measures an interpolation angle involving all
+the evaluation vectors, not only the distance to the nearest root.
+
+\begin{example}[A basis can create poor eigenvalue conditioning]\label{ex:basis}
+For $p=x^2-1$, the basis $(1,x)$ gives
+$M_x=\left(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\right)$, whose two
+eigenvalues have condition one. In the basis $(1,\epsilon x)$, $\epsilon>0$,
+\[
+  M_x=\begin{pmatrix}0&\epsilon\\\epsilon^{-1}&0\end{pmatrix}.
+\]
+At the root 1 the evaluation vector is $(1,\epsilon)^T$ and the idempotent
+$(1+x)/2$ has coefficient vector $(1/2,1/(2\epsilon))^T$. Hence
+\[
+  \Lambda=\frac{\epsilon+\epsilon^{-1}}2.
+\]
+The roots remain $\pm1$ and $|p'(\pm1)|=2$, but the unstructured eigenvalue
+condition grows without bound as $\epsilon\to0$. This is a representation effect.
+\end{example}
+
+\subsection{Matrix polynomials and scalar eliminants}
+
+For a regular matrix polynomial $R(\lambda)=\sum_{k=0}^mR_k\lambda^k$ and a
+simple finite eigenvalue, let $R(\lambda)v=0$ and $w^*R(\lambda)=0$.
+The same differentiation gives
+\[
+  \delta\lambda=-\frac{w^*\delta R(\lambda)v}{w^*R'(\lambda)v}.
+\]
+Under the coefficient norm $(\sum_k\|\delta R_k\|_F^2)^{1/2}$, its condition is
+\begin{equation}\label{eq:pep-condition}
+  \frac{\bigl(\sum_{k=0}^m|\lambda|^{2k}\bigr)^{1/2}
+  \|w\|_2\|v\|_2}{|w^*R'(\lambda)v|}.
+\end{equation}
+Cauchy--Schwarz proves the upper bound, and coefficientwise aligned rank-one
+perturbations attain it. Other coefficient weights or function norms give different
+evaluation factors \cite{tisseur2000backward}. For the pencil $(M,I)$, allowing
+independent perturbations of both matrices with their maximum spectral norm gives
+$\Lambda(1+|\lambda|)$; holding $I$ fixed gives \eqref{eq:overlap}.
+
+For a monic scalar eliminant with distinct roots $t_j$,
+\[
+  f'(t_j)=\prod_{k\ne j}(t_j-t_k).
+\]
+Taking logarithms expresses its value-perturbation sensitivity through pairwise
+projected distances. This elementary identity does not by itself compare coefficient
+conditioning across methods: the evaluation factors, eliminant coefficient norm,
+and coordinate-recovery step still enter. A projection can bring distinct,
+well-separated multivariate roots close together.
+
+Finally, if $R(c,\lambda)$ is built exactly from the input coefficients, then a
+coefficient perturbation induces $\delta R=D_cR[\delta c]$, a structured subset
+of all matrix-polynomial perturbations. The chain rule must recover
+\eqref{eq:root-derivative} for the exact composite solve and recovery map.
+A backward-stable QR or QZ computation controls perturbations of the matrix or
+pencil it receives; translating them back to the original polynomial coefficients
+requires additional analysis of construction, linearization, and recovery.
+
+Noferini--Townsend and Graf--Townsend exhibit systems for which intermediate
+subproblems are much more sensitive than the original roots under their specified
+perturbation models \cite{noferini2016numerical,graf2026numerical}. These are
+worst-case results, not statements that every input is unstable. Nor do the exact
+identities in this survey establish favorable average-case behavior. They identify
+the quantities and choices that a probabilistic or smoothed analysis must control.
+
+\section{Synthesis and comparison}\label{sec:synthesis}
+
+\subsection{What the representations have in common}
+
+The quotient algebra gives a precise comparison. For a separating $t$, the
+eliminant is $\det(TI-M_t)$; without separation, its squarefree minimal polynomial
+has smaller degree. Under the stated regularity and no-extraneous-root assumptions,
+a hidden-variable resultant determinant represents the same projected root values.
+Macaulay quotient compression and truncated normal forms compute different
+coordinates for the same finite-dimensional multiplication maps.
+
+One should therefore distinguish equality of the represented zero set, equality of
+scalar determinants including multiplicities and factors, and similarity or equivalence
+of matrix representations. The first does not imply the latter two, and none alone
+implies equality of numerical condition numbers.
+
+\subsection{An optional duality viewpoint: residues}\label{sec:residues}
+
+There is a useful explanation of the Jacobian factors that appear with B\'ezoutians.
+For a reduced complete intersection, define
+\[
+  \tau(f)=\tr M_f=\sum_j f(z_j),\qquad
+  \mathcal R(f)=\sum_j\frac{f(z_j)}{\det J(z_j)}.
+\]
+The latter is the global residue functional in the simple-root case
+\cite{cattani2005residues}. The pairings $\tau(fg)$ and $\mathcal R(fg)$ are
+nondegenerate, but they are different: if $\mathcal J=[\det DP]\in A$, then
+$\tau(f)=\mathcal R(\mathcal J f)$. Nondegeneracy follows immediately in the
+idempotent basis, where both pairings are diagonal with nonzero diagonal entries.
+
+\begin{proposition}[Univariate B\'ezoutian and residue duality]\label{prop:residue-bezout}
+Let $p$ be monic and squarefree of degree $m$. Then $B(p,1)=H^{-1}$, where $H$ is the
+residue Gram matrix in the monomial basis of $\C[x]/(p)$:
+\[
+  H_{ab}=\sum_{p(\lambda)=0}\frac{\lambda^{a+b}}{p'(\lambda)},
+  \qquad 0\le a,b<m,
+\]
+\end{proposition}
+
+\begin{proof}
+For each root $\lambda_j$, the B\'ezoutian evaluated at its second argument is
+$p(s)/(s-\lambda_j)=p'(\lambda_j)\ell_j(s)$. Thus
+$B(p,1)V=V^{-T}\diag(p'(\lambda_j))$, whereas
+$H=V\diag(1/p'(\lambda_j))V^T$. Multiplication gives $B(p,1)H=I$.
+\end{proof}
+
+For $p=x^2-1$, this residue Gram matrix and its inverse are both
+$\left(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\right)$; the ordinary
+trace Gram matrix is $2I$. Calling B\'ezoutian duality simply trace duality would
+miss this Jacobian weight.
+
+More generally, if $P(x)=Q(x)(x-z_j)$, then
+\[
+  [\det Q]=\det J(z_j)[\ell_j]\quad\text{in }A.
+\]
+At another root $z_k$, $Q(z_k)(z_k-z_j)=0$ makes its determinant vanish; at
+$z_j$, differentiation gives $Q(z_j)=J(z_j)$. Evaluation proves the identity.
+It explains why determinant numerators in normal-form condition formulas can
+equally be written as norms of Lagrange idempotents \cite{graf2026numerical}.
+
+\subsection{A comparison to use when choosing a construction}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.19\textwidth}XX@{}}
+\toprule
+Method & Intermediate problem and size & Conditions and recovery \\
+\midrule
+Sylvester & For two generic box-degree-$n$ equations: a $2n\times2n$ PEP of grade $n$.
+ & Distinct projected roots and no common fiber root at infinity; recover the
+ eliminated coordinate from a null vector or a fiber solve. \\[0.5em]
+Cayley--B\'ezout & For $d$ generic box-degree-$n$ equations: size
+ $(d-1)!n^{d-1}$, grade dn.
+ & Regularity and the stated multihomogeneous model; recover coordinates from
+ tensor evaluation vectors. \\[0.5em]
+Macaulay / $u$-resultant & Dense degree-$\rho$ relation matrix, followed here by
+ an $N\times N$ compressed pencil.
+ & Complete intersection with no ordinary projective root at infinity; valid
+ quotient ranks, a nonvanishing denominator, and a separating ratio
+ $\alpha/\beta$ for individual eigenvector recovery. \\[0.5em]
+Multiparameter & Operator-determinant pencils on a tensor space of dimension
+ $\prod_k m_k$.
+ & The nonsingular theory assumes $\Delta_0$ invertible. Singular formulations
+ need an appropriate reduction; coordinates belong to common eigenspaces. \\[0.5em]
+Gr\"obner elimination & A scalar eliminant of degree at most $N$, plus extension
+ equations.
+ & A separating coordinate gives degree $N$ and polynomial shape recovery;
+ otherwise solve the remaining fibers. \\[0.5em]
+RUR & A scalar degree-$N$ polynomial and $d$ rational coordinate formulas.
+ & A separating linear form and nonvanishing recovery denominator; construction
+ is symbolic or based on quotient traces. \\[0.5em]
+Normal form & An $N\times N$ ordinary multiplication eigenproblem.
+ & A valid quotient basis or truncation and a separating multiplier; recover
+ coordinates on shared eigenspaces. \\
+\bottomrule
+\end{tabularx}
+\caption{The seven constructions. A PEP is a polynomial eigenvalue problem.
+Sizes in the first two rows refer to full box supports; the Macaulay row instead
+uses total degrees and $\rho=\sum_i(e_i-1)+1$. A regular size-$m$ PEP of grade $r$
+has $mr$ eigenvalues counting infinity and algebraic multiplicity; a companion
+linearization has size $mr$. These counts are not guarantees of distinct affine roots.}
+\label{tab:methods}
+\end{table}
+
+For exact input and symbolic output, elimination and RUR provide explicit root
+descriptions. For numerical work, retaining matrix structure can avoid forming
+large scalar eliminant coefficients, but introduces basis, linearization, and
+eigenvector issues. Normal forms make basis selection explicit; resultants make
+the relation to coefficient elimination explicit; multiparameter formulations make
+affine matrix pencils explicit. The right choice depends on the polynomial support,
+available arithmetic, desired output, and the conditioning of the construction.
+
+The running example gives a concrete cross-check: Sylvester yields $y^4-1$,
+B\'ezout yields $1-y^4$, Gr\"obner elimination gives $x=y^2$ and $y^4=1$, RUR
+gives the same coordinates rationally, and multiplication by $y$ has characteristic
+polynomial $T^4-1$. The Macaulay and multiparameter examples recover the same four
+points through pencils. Their agreement is an algebraic fact; their response to
+floating-point perturbations depends on which of these representations is used.
+
+\clearpage
+\bibliographystyle{plain}
+\bibliography{survey}
+\end{document}

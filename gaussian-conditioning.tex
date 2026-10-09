@@ -1,0 +1,75 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{booktabs,tabularx,graphicx}
+\usepackage[shortlabels]{enumitem}
+\usepackage{needspace}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Local root conditioning and companion eigenvectors of Gaussian polynomials},
+ pdfauthor={Etna Lindy, Martin Lotz, Vanni Noferini}}
+\setlength{\emergencystretch}{2em}
+
+\newcommand{\C}{\mathbb C}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prob}{\mathbb P}
+\newcommand{\Estar}{\mathbb E_*}
+\newcommand{\Pstar}{\mathbb P_*}
+\newcommand{\CN}{\mathcal{CN}}
+\newcommand{\B}{\mathcal B}
+\newcommand{\dd}{\,\mathrm d}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\spanop}{span}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Cov}{Cov}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Local root conditioning and companion eigenvectors\\
+of Gaussian polynomials}
+\author{Etna Lindy, Martin Lotz, Vanni Noferini}
+\date{Draft --- 12 September 2026}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+For a polynomial of degree $n$ with independent standard complex Gaussian
+coefficients, we prove a degree-independent second-power tail for the
+eigenvector condition number of its companion matrix at a uniformly selected
+root. Its moments are uniformly bounded precisely below order two, while its
+second moment is $2\log n+O(1)$. The expected logarithm of the relative
+companion-to-coefficient condition ratio is $\log n+O(1)$. The proof separates
+local root sensitivity from interpolation in the companion basis. For Gaussian
+systems, marked Kac--Rice and a kernel metric reduce the normalized Jacobian
+to an induced Ginibre law, giving a sharp fourth-power conditioning tail.
+Exact box root laws and a tridiagonal Gram matrix then yield the companion
+results. We specify the perturbation spaces and output metrics throughout;
+the comparison concerns local conditioning, rather than stability of a
+complete algorithm.
+\end{abstract}
+
+\input{paper-sections/introduction}
+\input{paper-sections/setup}
+\input{paper-sections/local-law}
+\input{paper-sections/box}
+\input{paper-sections/companion}
+\input{paper-sections/discussion}
+
+\bibliographystyle{plainurl}
+\bibliography{gaussian-conditioning}
+\end{document}

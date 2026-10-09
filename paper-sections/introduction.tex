@@ -1,0 +1,218 @@
+\section{Introduction}\label{sec:introduction}
+
+Computing the roots of a polynomial by solving a companion eigenvalue problem
+changes the perturbations to which the answer is exposed. A polynomial root
+responds to errors in its coefficients; the unstructured eigenvalue condition
+permits errors in every entry of the companion matrix. We ask how the conditioning of these two problems
+compares for Gaussian input. Our main result gives a sharp probabilistic
+description of companion eigenvalue conditioning and a relative comparison
+with the original root problem.
+
+Average-condition theorems for matrix polynomials use their coefficient
+matrices as input. Applying such a theorem after linearization also requires
+its probability law and perturbation norm to match those of the induced
+companion problem. Section~\ref{sec:intro-previous} makes this distinction
+explicit for the results of Armentano--Beltr\'an.
+
+Consider
+\[
+ p(x)=\sum_{k=0}^n a_kx^k,
+ \qquad a_0,\ldots,a_n\ \text{independent standard complex Gaussians}.
+\]
+Here each coefficient has independent real and imaginary parts of variance
+$1/2$. Let $C_p$ be the $n\times n$ monic companion matrix, with ones on its
+subdiagonal and last column $-(a_0,\ldots,a_{n-1})^T/a_n$. First sample $p$,
+then choose one of its $n$ roots $Z$ uniformly; write $\Pstar,\Estar$ for this
+joint law. Almost surely the roots are simple and nonzero.
+
+For a root $z$, let $r,w$ be right and left eigenvectors of $C_p$ at $z$:
+$C_pr=zr$ and $w^*C_p=zw^*$. The quantity
+\begin{equation}\label{eq:intro-overlap}
+ \Lambda(p,z)=\frac{\|w\|_2\|r\|_2}{|w^*r|}
+\end{equation}
+is the absolute eigenvalue condition number for arbitrary matrix perturbations
+in spectral norm. It is often called the eigenvector overlap. We compare
+relative condition numbers using Euclidean norm on polynomial coefficients,
+spectral norm on matrices, and relative error in the same scalar root. Their
+precise definitions are given in Section~\ref{sec:setup}.
+
+\Needspace{17\baselineskip}
+\begin{theorem}[Main result: conditioning of Gaussian companions]\label{thm:intro-main}
+There is an absolute constant $C$ such that the following hold.
+\begin{enumerate}[(i)]
+ \item For every degree $n\ge1$ and every $t>0$,
+ \begin{equation}\label{eq:intro-tail}
+   \Pstar\{\Lambda(p,Z)>t\}\le\min\{1,Ct^{-2}\}.
+ \end{equation}
+ Moreover,
+ \begin{equation}\label{eq:intro-second}
+   \Estar\Lambda(p,Z)^2=2\log n+O(1)
+   \qquad(n\to\infty).
+ \end{equation}
+ Consequently the moments $\Estar\Lambda^q$ are bounded uniformly in degree
+ precisely for $0<q<2$, and $\Estar\log\Lambda=O(1)$.
+ \item The relative eigenvalue and coefficient condition numbers satisfy
+ \begin{equation}\label{eq:intro-relative}
+   \Estar\log
+   \frac{\kappa_{\mathrm{eig,rel}}(C_p,Z)}
+        {\kappa_{\mathrm{coeff,rel}}(p,Z)}
+   =\log n+O(1)
+   \qquad(n\to\infty).
+ \end{equation}
+\end{enumerate}
+The constants in the $O(1)$ terms are independent of $n$.
+\end{theorem}
+
+The first assertion controls the expected fraction of roots with a large
+eigenvalue condition number, uniformly in the degree. Its exponent is sharp:
+any larger exponent with a degree-independent constant would bound the second
+moment, contradicting \eqref{eq:intro-second}. The second assertion says that
+the geometric mean of the relative companion-to-coefficient condition ratio
+is comparable to $n$. These statements fit together because the coefficient
+root condition has its own degree scale. They concern a uniformly selected
+root and two specified local problems, rather than a bound on all errors in
+a complete rootfinding algorithm.
+
+For clarity, the two relative conditions in the theorem are
+\begin{equation}\label{eq:intro-relative-definitions}
+ \kappa_{\mathrm{coeff,rel}}(p,z)
+ =\frac{\|a\|_2\bigl(\sum_{k=0}^n|z|^{2k}\bigr)^{1/2}}
+        {|z|\,|p'(z)|},\qquad
+ \kappa_{\mathrm{eig,rel}}(C_p,z)
+ =\Lambda(p,z)\frac{\|C_p\|_2}{|z|},
+\end{equation}
+where $a=(a_0,\ldots,a_n)^T$ and every polynomial coefficient is perturbable.
+Theorem~\ref{thm:comp-main} proves part (i), and
+Corollary~\ref{cor:comp-relative} proves part (ii).
+
+\subsection{Proof strategy and the role of root geometry}
+
+The proof separates local root sensitivity from the additional conditioning
+of interpolation in the companion basis. To analyze local sensitivity, we
+first work with systems of $d$ independent complex Gaussian polynomials
+sharing a covariance kernel. That kernel defines a natural output metric.
+Marked Kac--Rice shows that, after normalization by this metric, the Jacobian
+at a selected root is independent of the root location and has a
+determinant-weighted Gaussian law. The resulting intrinsic condition number
+$\kappa_H$, defined in Section~\ref{sec:setup-kernel-metric}, satisfies
+\[
+ \Pstar\{\kappa_H>t\}\le
+ \min\left\{1,\frac{d(d+1)}{4t^4}\right\},
+\]
+with the constant asymptotically exact for fixed $d$. The precise assumptions
+and statements are Theorems~\ref{thm:local-universal} and~\ref{thm:local-tail}.
+The induced Ginibre and Wishart distributions used here are established
+random-matrix results \cite{fischmann2012induced,kumar2017smallest}.
+
+For the Gaussian box ensemble, exact radial laws then translate this geometric
+normalization back to Euclidean root displacement. They give
+$\Estar\log\kappa_{\mathrm{coeff}}=-\log n+O_d(1)$ and retain the
+contribution of roots outside the unit polydisk. Finally, in one variable,
+writing $p(x)=(x-z)q(x)$ turns the coefficient norm into the Gram matrix of
+multiplication by $x-z$. This matrix is tridiagonal. Its inverse trace, together
+with the Gaussian weight at a root, gives the exact conditional overlap moment
+and the bounds in Theorem~\ref{thm:intro-main}. The same argument also shows
+that, for each fixed $n\ge2$, overlap moments are finite precisely below order
+four; the threshold two concerns uniformity as the degree grows.
+
+The paper follows this proof structure. Section~\ref{sec:setup} fixes the
+input--output maps, metrics, and sampling law.
+Section~\ref{sec:local-law} establishes the local Gaussian law;
+Section~\ref{sec:box} derives the box root and coefficient scales; and
+Section~\ref{sec:companion} proves the main theorem.
+Section~\ref{sec:discussion} discusses its interpretation and the multivariate
+questions that remain.
+
+\subsection{Relation to previous work}\label{sec:intro-previous}
+
+Local conditioning of polynomial systems has a substantial geometric and
+probabilistic theory. Shub--Smale developed the projective framework, its
+relation to ill-posedness, and distributional estimates in the
+\emph{Complexity of B\'ezout's theorem} series
+\cite{shub1993geometric,shub1993volumes,shub1993packing}.
+B\"urgisser--Cucker \cite{burgisser2013condition} give a systematic account.
+Proposition~\ref{prop:setup-condition} is a standard derivative-norm
+calculation in explicitly specified input and output metrics; it is included
+to fix conventions, not as a new condition-number theorem.
+
+Beltr\'an--Pardo \cite{beltran2009smale,beltran2011fast} used average
+conditioning and integration over system--root pairs to obtain average
+polynomial-time homotopy algorithms. Their work also gives exact moments of
+the normalized projective condition number below order four
+\cite[Sections~7--8]{beltran2011fast}.
+B\"urgisser--Cucker \cite{burgisser2011smale} established smoothed estimates,
+and Armentano--Beltr\'an--B\"urgisser--Cucker--Shub
+\cite[Theorem~2]{armentano2016condition} obtained an exact centered
+inverse-Jacobian Frobenius second moment and a smoothed bound.
+Section~\ref{sec:local-classical} spells out the overlap with our local law.
+Lairez \cite{lairez2017deterministic} subsequently obtained a deterministic
+algorithm with polynomial average complexity.
+
+For sparse systems, Malajovich--Rojas \cite{malajovich2004high} construct
+metrics from the coefficient spaces, relate conditioning to the discriminant,
+and prove fourth-power tail bounds. Their normalization and worst-root
+probability differ from our absolute, selected-root formulation. Toric
+condition metrics and homotopy complexity are developed further in
+\cite{malajovich2019toric,malajovich2023renormalization}.
+Our local section presents the common-kernel Gaussian calculation in a form
+suited to comparing coefficient and algebraic-representation perturbations;
+the fourth-power exponent and the homogeneous moment identities already
+belong to this established theory.
+
+Toh--Trefethen \cite{toh1994pseudozeros} explain the different perturbation
+geometries of polynomial roots and companion eigenvalues. Noferini--Townsend
+and Graf--Townsend construct multivariate examples in which intermediate
+algebraic problems amplify conditioning exponentially with the number of
+variables \cite{noferini2016numerical,graf2026numerical}. Our representation
+theorem concerns one variable and growing degree; the local framework extends
+to systems, but the present paper does not resolve those growing-dimension
+examples.
+
+B\"urgisser--Cucker--Rocha Cardozo \cite{burgisser2015characteristic} study
+the conditioning of characteristic polynomials induced by Gaussian matrices.
+Their results demonstrate the importance of the induced coefficient law in
+an algebraic reduction. Here the construction runs from a Gaussian polynomial
+to its companion matrix, giving a different probability distribution and
+perturbation problem.
+
+\Needspace{4\baselineskip}
+Armentano--Beltr\'an \cite[Theorem~1.1]{armentano2019polynomial} study the
+polynomial eigenvalue problem for
+$Q(z)=\sum_{j=0}^k B_jz^j$, where $B_j\in\C^{m\times m}$.
+Their perturbable input is the tuple $(B_0,\ldots,B_k)$, with norm
+$(\sum_j\|B_j\|_F^2)^{1/2}$, and their random model makes all entries of these
+coefficient matrices independent complex Gaussians. Thus their main theorem
+concerns matrix-polynomial eigenvalue conditioning; Remark~1.4 discusses
+companion algorithms in this setting as well as scalar polynomial rootfinding.
+The scalar specialization \cite[Section~3.1]{armentano2019polynomial} gives an
+exact identity for our coefficient ensemble, using the standard Fubini--Study
+output metric. In our notation,
+\[
+ \mu_{\mathrm{FS}}(p,z)
+ =\frac{\|a\|_2\bigl(\sum_{k=0}^n|z|^{2k}\bigr)^{1/2}}
+        {(1+|z|^2)|p'(z)|},\qquad \Estar\mu_{\mathrm{FS}}^2=1.
+\]
+This is relative to the input norm and uses a projective output metric,
+explained in Section~\ref{sec:setup-kernel-metric}. It differs from our kernel
+metric. The companion overlap concerns a further change of input: arbitrary
+perturbations of $C_p$. Viewing $zI-C_p$ as a degree-one matrix polynomial does
+not make the Gaussian coefficient-matrix theorem applicable: its leading
+matrix is fixed, and $C_p$ has prescribed zeros and ones and ratios of Gaussian
+coefficients. Our theorem analyzes this induced matrix ensemble. The distinction
+is therefore between input spaces, metrics, and probability laws, rather than
+between polynomial solving and eigenvalue problems as such.
+
+Barbarino--Noferini study limiting empirical eigenvalue measures of random
+matrix polynomials, both with a fixed identity leading coefficient
+\cite{barbarino2023monic} and with random leading coefficients
+\cite{barbarino2022limit}. The latter paper includes our scalar Gaussian
+ensemble and its limiting uniform root distribution on the unit circle
+\cite[Theorem~1.2]{barbarino2022limit}. These results describe root locations;
+weak convergence of empirical measures does not determine companion overlap
+moments. Their monic paper also provides bounds for the smallest singular
+value of a Gaussian matrix with arbitrary deterministic mean
+\cite[Theorem~A.5]{barbarino2023monic}. These are relevant tools for smoothed
+analysis, although an application to root conditioning must account for
+sampling at a root and for the actual perturbation structure. Both papers
+treat polynomials in one variable; growing matrix size is distinct from a
+growing number of variables in a polynomial system.

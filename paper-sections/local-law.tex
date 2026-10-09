@@ -1,0 +1,275 @@
+\section{The normalized Jacobian at a selected root}
+\label{sec:local-law}
+
+We use the common-kernel Gaussian model and the selected-root law of
+Section~\ref{sec:setup-probability}, with $S>0$, $H>0$, and exactly $N\ge1$
+simple roots in $U$ almost surely. The same argument applies to a finite
+collection of holomorphic functions under these assumptions. Write $dV$
+for Lebesgue measure on $\C^d\simeq\mathbb R^{2d}$.
+
+\subsection{Gaussian regression and the kernel metric}
+
+The order of the indices in \eqref{eq:setup-kernel-metric} fixes our complex covariance
+convention.  A derivative $Dp(z)$ is a row, whereas a root displacement is a
+column.  With $D\phi(z)$ the matrix whose $k$th column is
+$\partial_{z_k}\phi(z)$, direct differentiation gives
+\begin{equation}\label{eq:local-metric-projection}
+  H(z)=\frac1{S(z)}D\phi(z)^*
+  \left(I-\frac{\phi(z)\phi(z)^*}{S(z)}\right)D\phi(z).
+\end{equation}
+Thus $\delta z^*H(z)\delta z$ is the squared norm of the derivative of
+$z\mapsto[\phi(z)]$ in the Fubini--Study metric, with the normalization specified
+by \eqref{eq:local-metric-projection}.  Positivity of $H$ says that this
+projective evaluation map is an immersion.
+
+\begin{lemma}[Conditional derivative law]\label{lem:local-regression}
+  At any fixed $z\in U$,
+  \[
+    \E\bigl[Dp_i(z)^*Dp_i(z)\mid p_i(z)=0\bigr]=S(z)H(z).
+  \]
+  Consequently, conditionally on $P_c(z)=0$,
+  \begin{equation}\label{eq:local-regression}
+    J_c(z)\ \stackrel{\mathrm d}{=}\ \sqrt{S(z)}\,G_0 H(z)^{1/2},
+  \end{equation}
+  where $G_0$ has independent $\CN(0,1)$ entries and the square root is the
+  positive Hermitian square root.
+\end{lemma}
+
+\begin{proof}
+  For one component, Gaussian regression applied to $(p,Dp)$ gives
+  \[
+    \E\bigl[\overline{\partial_jp}\,\partial_kp\mid p=0\bigr]
+    =\partial_{\bar z_j}\partial_{z_k}S
+     -\frac{(\partial_{\bar z_j}S)(\partial_{z_k}S)}{S}
+    =S H_{jk}.
+  \]
+  The conditional mean and the conditional pseudo-covariance are zero.
+  The components remain independent after conditioning on their respective
+  values.  A standard Gaussian row $g$ satisfies
+  $\E[(gH^{1/2})^*(gH^{1/2})]=H$, which proves
+  \eqref{eq:local-regression} with our row convention.
+\end{proof}
+
+Recall that $A=S^{-1/2}JH^{-1/2}$ and $\kappa_H=\|A^{-1}\|_2$.
+Although $A$ is a standard Gaussian matrix under conditioning at a fixed point,
+its law at a selected root has an additional determinant weight.
+
+\subsection{The marked Kac--Rice law}
+
+Integration over system--root pairs by coarea is standard in polynomial
+conditioning; see \cite[Sections~5--6]{beltran2011fast} and
+\cite[Remark~5]{armentano2016condition}. The determinant weight below is its
+complex Kac--Rice form.
+
+\begin{lemma}[Marked Kac--Rice]\label{lem:local-rice}
+  For every nonnegative Borel function $F$ of the full coefficient array and
+  the point,
+  \begin{equation}\label{eq:local-rice}
+    \E\sum_{z\in U:\,P_c(z)=0}F(c,z)
+    =\int_U\frac{
+       \E\bigl[F(c,z)|\det J_c(z)|^2\mid P_c(z)=0\bigr]
+      }{(\pi S(z))^d}\,dV(z).
+  \end{equation}
+  The equality is valid in $[0,\infty]$.  It also holds for signed or complex
+  marks whenever either side with $|F|$ is finite.
+\end{lemma}
+
+\begin{proof}
+  Regard $P_c$ as a smooth Gaussian map between real spaces of dimension $2d$.
+  Its value at $z$ has density $(\pi S(z))^{-d}$ at zero, and holomorphy gives
+  $\det D_{\mathbb R}P_c(z)=|\det J_c(z)|^2$.  The value distribution is
+  nondegenerate since $S>0$, and the assumed simplicity excludes singular
+  zeros almost surely.  The Rice formula therefore applies on compact
+  subsets of $U$.  For a bounded continuous mark, use the full finite
+  coefficient array as the auxiliary Gaussian field in the weighted Rice
+  formula \cite[Theorems~6.2 and~6.4]{azais2009level}.
+  A monotone-class argument extends the identity to bounded Borel marks.
+  Truncation of the mark and exhaustion of $U$ by compact sets then give
+  \eqref{eq:local-rice} by monotone convergence.  Finally apply the
+  nonnegative identity to $|F|$ to justify the integrable case.
+\end{proof}
+
+\begin{theorem}[Universal local law]\label{thm:local-universal}
+  Under $\Pstar$, the root location $Z$ and the normalized Jacobian $A(c,Z)$
+  are independent.  Their densities are respectively
+  \begin{equation}\label{eq:local-root-density}
+    \frac{d!}{N\pi^d}\det H(z),\qquad z\in U,
+  \end{equation}
+  with respect to $dV(z)$, and
+  \begin{equation}\label{eq:local-induced-density}
+    q_d(A)=\frac{1}{d!\,\pi^{d^2}}
+      |\det A|^2\exp\bigl(-\|A\|_F^2\bigr),
+      \qquad A\in\C^{d\times d},
+  \end{equation}
+  with respect to Lebesgue measure on the matrix entries.  Moreover,
+  \begin{equation}\label{eq:local-Wishart}
+    A^*A\ \stackrel{\mathrm d}{=}\ B^*B,
+    \qquad B\in\C^{(d+1)\times d}
+  \end{equation}
+  for $B$ with independent $\CN(0,1)$ entries.
+\end{theorem}
+
+\begin{proof}
+  Apply Lemma~\ref{lem:local-rice} with
+  $F(c,z)=f(z)g(A(c,z))$, where $f,g\geq0$.  Lemma~\ref{lem:local-regression}
+  and
+  \[
+    |\det J_c(z)|^2=S(z)^d\det H(z)\,|\det A(c,z)|^2
+  \]
+  yield
+  \begin{equation}\label{eq:local-factorization}
+    \Estar[f(Z)g(A)]
+    =\frac{1}{N\pi^d}\int_U f(z)\det H(z)\,dV(z)
+      \E\bigl[g(G_0)|\det G_0|^2\bigr].
+  \end{equation}
+  Expanding the determinant over permutations gives
+  $\E|\det G_0|^2=d!$: only equal pairs of permutations have nonzero
+  expectation.  With $f=g=1$, \eqref{eq:local-factorization} shows that
+  \eqref{eq:local-root-density} integrates to one.  The factorization then
+  proves independence and \eqref{eq:local-induced-density}.
+
+  A complex Wishart matrix $B^*B$, with $B$ of size $m\times d$, has density
+  proportional to $(\det W)^{m-d}e^{-\operatorname{tr}W}$ on positive
+  Hermitian matrices.  The square Gaussian Gram matrix $G_0^*G_0$ has exponent
+  zero.  Multiplication of its density by $|\det G_0|^2=\det(G_0^*G_0)$ therefore
+  gives precisely the case $m=d+1$, proving \eqref{eq:local-Wishart}.
+\end{proof}
+
+The matrix law \eqref{eq:local-induced-density} is the complex induced Ginibre
+ensemble with parameter one \cite{fischmann2012induced}. The zero-density
+formula belongs to the established covariance-kernel approach to Gaussian
+zeros \cite{bleher2000universality,malajovich2004high}. These are standard
+ingredients. Their
+role here is to identify exactly the distribution of the coefficient-to-root
+derivative in the kernel metric, separating it from the distribution of root
+locations and from any algebraic representation.
+
+\subsection{A sharp tail for local conditioning}
+
+\begin{theorem}[Tail and moments]\label{thm:local-tail}
+  Put $C_d=d(d+1)/4$.  For every $t>0$,
+  \begin{equation}\label{eq:local-tail}
+    \Pstar\{\kappa_H>t\}\leq\min\{1,C_dt^{-4}\},
+    \qquad
+    \lim_{t\to\infty}t^4\Pstar\{\kappa_H>t\}=C_d.
+  \end{equation}
+  In particular, for $q>0$,
+  \begin{equation}\label{eq:local-moment-range}
+    \Estar\kappa_H^q<\infty\quad\Longleftrightarrow\quad q<4,
+    \qquad
+    \Estar\kappa_H^q\leq\frac{4}{4-q}C_d^{q/4}
+    \quad(0<q<4).
+  \end{equation}
+  The inverse Frobenius moment is exactly
+  \begin{equation}\label{eq:local-frobenius}
+    \Estar\|A^{-1}\|_F^2=d.
+  \end{equation}
+  Also $\Estar|\log\kappa_H|<\infty$.
+\end{theorem}
+
+\begin{proof}
+  Let $X=\sigma_{\min}(A)^2$.  By \eqref{eq:local-Wishart}, this is the smallest
+  eigenvalue of a complex Wishart matrix with rectangularity one.  Its density
+  is \cite[Section~2.2, equation~(15)]{kumar2017smallest}
+  \begin{equation}\label{eq:local-smallest-density}
+    f_d(x)=x e^{-dx}L_{d-1}^{(2)}(-x)
+    =x e^{-dx}\sum_{k=0}^{d-1}
+        \binom{d+1}{k+2}\frac{x^k}{k!},\qquad x>0.
+  \end{equation}
+  For $0\leq k\leq d-1$,
+  \[
+    \frac{\binom{d+1}{k+2}}{\binom{d+1}{2}}
+      =\frac{2(d-1)(d-2)\cdots(d-k)}{(k+2)!}
+      \leq d^k,
+  \]
+  where the empty product is one.  Hence
+  $f_d(x)\leq\binom{d+1}{2}x$.  Since
+  $\kappa_H=X^{-1/2}$, integration over $0<x<t^{-2}$ proves the bound in
+  \eqref{eq:local-tail}.  The expansion
+  $f_d(x)=\binom{d+1}{2}x+O_d(x^2)$ at zero proves its sharp asymptotic.
+  Integrating the tail gives both the moment threshold and, on splitting at
+  $t=C_d^{1/4}$, the bound in \eqref{eq:local-moment-range}.
+
+  There is an elementary cofactor proof of \eqref{eq:local-frobenius}:
+  \[
+    \Estar\|A^{-1}\|_F^2
+      =\frac{\E\bigl[|\det G_0|^2\|G_0^{-1}\|_F^2\bigr]}{d!}
+      =\frac{\E\|\operatorname{adj}G_0\|_F^2}{d!}
+      =\frac{d^2(d-1)!}{d!}=d.
+  \]
+  Each cofactor is the determinant of a $(d-1)\times(d-1)$ standard complex
+  Gaussian matrix and has second moment $(d-1)!$; at $d=1$ the empty
+  determinant is one.  Finally, the positive logarithmic part follows from
+  any positive moment below four.  For the negative part, use
+  $\log^+(1/\kappa_H)=\log^+\sigma_{\min}(A)
+   \leq\log^+\|A\|_F$ and the Gaussian decay in
+  \eqref{eq:local-induced-density}.
+\end{proof}
+
+Two consequences clarify the scope of the theorem.  First,
+\begin{equation}\label{eq:local-dimension-tail}
+  \Pstar\{\kappa_H>\sqrt d\,t\}
+  \leq\min\{1,(2t^4)^{-1}\}.
+\end{equation}
+Thus the geometric normalization gives a tail uniform in the coefficient
+space, polynomial degrees, and, after the scale $\sqrt d$, the dimension.
+Second, \eqref{eq:setup-selected-root} makes the same probability an expected
+fraction of roots:
+\[
+  \frac1N\E\#\{z\in U:P_c(z)=0,\ \kappa_H(c,z)>t\}
+  =\Pstar\{\kappa_H>t\}.
+\]
+This statement does not assume independence between different roots.
+
+\subsection{Comparison with classical projective moments}
+\label{sec:local-classical}
+
+In the common-degree Bombieri--Weyl model of
+\eqref{eq:setup-classical-mu}, the classical Frobenius variant is
+$\mu_F(c,[1:z])=\|c\|_F\|A^{-1}\|_F$.
+Consequently \eqref{eq:local-frobenius} recovers the centered identity
+\begin{equation}\label{eq:local-known-frobenius}
+ \Estar\frac{\mu_F(c,[1:Z])^2}{\|c\|_F^2}=d
+\end{equation}
+of Armentano--Beltr\'an--B\"urgisser--Cucker--Shub
+\cite[Theorem~2]{armentano2016condition}. Their theorem also allows unequal
+degrees and gives the bound $d/\sigma^2$ for Gaussian perturbations of an
+arbitrary deterministic homogeneous system, with equality at zero center.
+Thus this homogeneous second-moment identity is already known.
+
+Beltr\'an--Pardo \cite[Sections~7--8]{beltran2011fast} give exact operator
+moments of $\mu$ for orders $0<q<4$ under spherical Bombieri--Weyl input.
+Those results use the same rectangular Gaussian singular-value mechanism.
+Malajovich--Rojas \cite[Theorem~1]{malajovich2004high} already obtain a
+fourth-power tail for the event that some sparse-system root has large
+condition number, with their projective input normalization.
+Theorem~\ref{thm:local-tail} gives the explicit distribution and sharp
+constant for the absolute kernel-metric condition at a selected root under
+our common-kernel assumptions. Its moment threshold is consistent with these
+earlier results; it does not establish a new exponent for polynomial systems.
+
+\begin{example}[One complex equation]\label{ex:local-one-variable}
+  When $d=1$, the variable $|A|^2$ has density $x e^{-x}$ on $x>0$.
+  For every nondegenerate finite-dimensional Gaussian polynomial ensemble
+  covered by the hypotheses,
+  \[
+    \Pstar\{\kappa_H>t\}
+      =1-e^{-t^{-2}}(1+t^{-2}),\qquad
+    \Estar\kappa_H^2=1.
+  \]
+  The tail is asymptotic to $1/(2t^4)$, independently of the degree.
+\end{example}
+
+There is also a short consistency check for the known projective identity
+$\Estar\mu_{\mathrm{FS}}^2=1$ in the scalar monomial model
+\cite{armentano2019polynomial}. Kac--Rice cancels the derivative denominator,
+while the conditional coefficient vector given $p(z)=0$ is a standard
+Gaussian on an $n$-dimensional hyperplane. Hence
+\[
+ \Estar\mu_{\mathrm{FS}}^2
+ =\frac1{n\pi}\int_{\C}
+    \frac{\E[\|a\|_2^2\mid p(z)=0]}{(1+|z|^2)^2}\,dV(z)
+ =\frac1\pi\int_{\C}\frac{dV(z)}{(1+|z|^2)^2}=1.
+\]
+This identity and Example~\ref{ex:local-one-variable} concern different
+condition numbers, despite their equal second moments.

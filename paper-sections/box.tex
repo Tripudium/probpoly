@@ -1,0 +1,242 @@
+\section{The box ensemble: root location and coefficient scale}\label{sec:box}
+
+Fix $d,n\ge1$ and let
+\begin{equation}\label{eq:box-model}
+ p_i(z)=\sum_{\alpha\in\{0,\ldots,n\}^d}c_{i,\alpha}z^\alpha,
+ \qquad c_{i,\alpha}\sim\CN(0,1)\quad\hbox{independently}.
+\end{equation}
+The monomials are orthonormal in the coefficient norm. For generic coefficients,
+the system has
+\begin{equation}\label{eq:box-count}
+ N=d!n^d
+\end{equation}
+simple affine roots, all in $(\C^*)^d$. This is the mixed-volume count for
+$d$ identical boxes $[0,n]^d$ \cite{bernstein1975roots,cox2005using}.
+The exceptional coefficient sets are proper algebraic sets and hence have
+Gaussian measure zero. Equivalently, the multihomogeneous compactification
+on $(\mathbb P^1)^d$ has intersection number $d!n^d$, with no boundary
+intersection for generic sections. This statement concerns that
+compactification; ordinary homogenization to total degree $dn$ can introduce
+common zeros at projective infinity.
+
+Put
+\[
+ k_n(r)=\sum_{j=0}^n r^j,\qquad
+ h_n(r)=\left(r\frac{k_n'(r)}{k_n(r)}\right)'.
+\]
+The covariance kernel and its metric are
+\begin{equation}\label{eq:box-kernel}
+ K(z,w)=\prod_{\ell=1}^d k_n(z_\ell\bar w_\ell),\qquad
+ H(z)=\diag(h_n(|z_1|^2),\ldots,h_n(|z_d|^2)).
+\end{equation}
+In particular $H>0$. A convenient interpretation is obtained by giving
+$J_r\in\{0,\ldots,n\}$ probabilities
+$\Prob(J_r=j)=r^j/k_n(r)$. Differentiation gives
+\begin{equation}\label{eq:box-variance}
+ r h_n(r)=\Var(J_r),\qquad r>0.
+\end{equation}
+The continuous endpoint values are $h_n(0)=1$ and
+$h_n(1)=n(n+2)/12$.
+
+\subsection{An exact selected-root law}
+
+\begin{proposition}[Independent radial coordinates]\label{prop:box-root-law}
+Under $\Pstar$, the coordinates of $Z$ are independent, their angles are
+independent and uniform, and $R_\ell=|Z_\ell|^2$ has distribution
+\begin{equation}\label{eq:box-cdf}
+ F_n(r)=\Pstar(R_\ell\le r)=\frac{r k_n'(r)}{n k_n(r)},\qquad
+ F_n'(r)=\frac{h_n(r)}n\quad(r\ge0).
+\end{equation}
+Moreover, $R_\ell$ and $R_\ell^{-1}$ have the same law.
+\end{proposition}
+\begin{proof}
+Theorem~\ref{thm:local-universal} and \eqref{eq:box-count} give joint density
+$\prod_\ell h_n(|z_\ell|^2)/(n\pi)$ with respect to complex Lebesgue measure.
+In polar coordinates $\dd V(z_\ell)=\tfrac12\dd r_\ell\dd\theta_\ell$,
+which proves the density statement. Integration gives \eqref{eq:box-cdf},
+with limits zero and one since $r k_n'/k_n$ tends to zero and $n$ at the
+two endpoints. The identity $k_n(r)=r^n k_n(r^{-1})$ implies
+$F_n(r)=1-F_n(r^{-1})$ for $r>0$, proving inversion symmetry.
+\end{proof}
+
+The independence in this proposition is between coordinates of one selected
+root. Different roots of the same polynomial system remain dependent.
+
+\begin{lemma}[Depth and the outer-root moment]\label{lem:box-depth}
+For any one coordinate, put $s=n\log R$. Then
+\begin{equation}\label{eq:box-depth}
+ \Pstar(|s|>t)\le\min\{1,2/t\}\quad(t>0),\qquad
+ \Estar\log^+R=\frac{\log(n+1)}n.
+\end{equation}
+Consequently $\sup_n\Estar\log(1+|s|)<\infty$.
+\end{lemma}
+\begin{proof}
+For $0<r<1$, the mean of the truncated geometric law in
+\eqref{eq:box-variance} is at most the untruncated mean $r/(1-r)$.
+Thus
+\[
+ F_n(e^{-t/n})\le\frac1{n(e^{t/n}-1)}\le\frac1t.
+\]
+Inversion symmetry gives the two-sided tail. Also
+\begin{align*}
+ \Estar\log^+R
+ &=\int_1^\infty\frac{1-F_n(r)}r\dd r\\
+ &=\frac1n\left[\log\frac{r^n}{k_n(r)}\right]_{r=1}^{r=\infty}
+ =\frac{\log(n+1)}n.
+\end{align*}
+Finally integrate the depth tail against $(1+t)^{-1}\dd t$.
+\end{proof}
+
+\subsection{Uniform metric estimates}
+
+The next elementary estimate is used both for coefficient conditioning and
+for the companion overlap. It replaces a boundary-layer asymptotic by a bound
+valid at every radius and degree.
+
+\begin{lemma}[The one-variable kernel metric]\label{lem:box-metric-bound}
+There are absolute constants $0<c<C<\infty$ such that, for $n\ge1$ and
+$0\le r\le1$,
+\begin{equation}\label{eq:box-metric-bound}
+ \frac{c}{(1-r+1/n)^2}\le h_n(r)
+ \le\frac{C}{(1-r+1/n)^2}.
+\end{equation}
+For $r>0$,
+\begin{equation}\label{eq:box-metric-reversal}
+ h_n(r)=r^{-2}h_n(r^{-1}).
+\end{equation}
+\end{lemma}
+\begin{proof}
+For $0\le r\le1/4$, the pair of indices $0,1$ in the variance formula gives
+$h_n(r)\ge k_n(r)^{-2}\ge(1-r)^2\ge9/16$. Direct differentiation of
+$k_n(r)=(1-r^{n+1})/(1-r)$ gives, for $0<r<1$,
+\begin{equation}\label{eq:box-explicit-h}
+ h_n(r)=\frac1{(1-r)^2}
+       -\frac{(n+1)^2r^n}{(1-r^{n+1})^2}
+ \le\frac1{(1-r)^2}.
+\end{equation}
+Thus $h_n$ is bounded above and below by absolute positive constants on
+$[0,1/4]$, which proves the assertion there.
+
+For $1/4\le r<1$, set
+\[
+ m=\min\{n,\lfloor(1-r)^{-1}\rfloor\}.
+\]
+Then $k_n(r)\le m+1$. Also $\log r\ge-(1-r)/r\ge-4(1-r)$, so
+$r^j\ge e^{-4}$ for $0\le j\le m$. Each of these indices has probability
+at least $e^{-4}/(m+1)$. Using an independent copy $J_r'$,
+\[
+ \Var(J_r)=\frac12\E(J_r-J_r')^2
+ \ge e^{-8}\Var(\operatorname{Unif}\{0,\ldots,m\})
+ =e^{-8}\frac{m(m+2)}{12}.
+\]
+Since $m\ge\tfrac12\min\{n,(1-r)^{-1}\}$, division by $r\le1$
+proves the lower bound in \eqref{eq:box-metric-bound}.
+For the upper bound, $\Var(J_r)\le n^2/4$ and $r\ge1/4$ imply
+$h_n(r)\le n^2$. Combining this with \eqref{eq:box-explicit-h} gives
+\[
+ h_n(r)\le\min\{n^2,(1-r)^{-2}\}
+ \le\frac4{(1-r+1/n)^2}.
+\]
+At $r=1$, use $h_n(1)=n(n+2)/12$. Finally, differentiating
+$F_n(r)=1-F_n(r^{-1})$ proves \eqref{eq:box-metric-reversal}.
+\end{proof}
+
+\begin{corollary}[Logarithmic metric scale]\label{cor:box-metric-log}
+For $R$ with distribution \eqref{eq:box-cdf},
+\begin{equation}\label{eq:box-metric-log}
+ \Estar\left|\log\frac{h_n(R)}{n^2}\right|\le C
+\end{equation}
+with an absolute constant. In particular $\Estar\log h_n(R)=2\log n+O(1)$.
+\end{corollary}
+\begin{proof}
+For $0<r\le1$, write $s=n\log r\le0$. Since
+$n(1-r)\le|s|$, Lemma~\ref{lem:box-metric-bound} gives
+\[
+ \frac{c}{(1+|s|)^2}\le\frac{h_n(r)}{n^2}\le C.
+\]
+For $r>1$, apply reversal. At every $r>0$ this yields
+\[
+ \left|\log\frac{h_n(r)}{n^2}\right|
+ \le C+2\log(1+|n\log r|)+2\log^+r.
+\]
+Take expectations and apply Lemma~\ref{lem:box-depth}, noting that
+$\log(n+1)/n\le\log2$.
+\end{proof}
+
+\subsection{Coefficient conditioning and representation overlap}
+
+\begin{proposition}[The coefficient scale]\label{prop:box-coefficient-scale}
+For fixed $d$ in the box model,
+\begin{equation}\label{eq:box-coefficient-scale}
+ \Estar\log\kappa_{\mathrm{coeff}}(P,Z)=-\log n+O_d(1).
+\end{equation}
+The same formula holds for the matched scalar coordinate condition
+$\kappa_{\mathrm{coeff}}^{x_1}$ in \eqref{eq:setup-scalar-condition}.
+All logarithms here are absolutely integrable for each $n,d$.
+\end{proposition}
+\begin{proof}
+Put $H=n^2D$, with diagonal entries $h_n(R_\ell)/n^2$. From
+$J=\sqrt S A H^{1/2}$ we obtain
+\[
+ \kappa_{\mathrm{coeff}}=n^{-1}\|D^{-1/2}A^{-1}\|_2.
+\]
+The logarithm of $\|D^{-1/2}A^{-1}\|_2$ differs from that of
+$\|A^{-1}\|_2$ by at most
+$\tfrac12\max_\ell|\log D_{\ell\ell}|$.
+Theorem~\ref{thm:local-tail} and Corollary~\ref{cor:box-metric-log}
+give \eqref{eq:box-coefficient-scale} and absolute integrability.
+For the scalar output there is the more precise factorization
+\begin{equation}\label{eq:box-coordinate-factorization}
+ \kappa_{\mathrm{coeff}}^{x_1}
+ =h_n(R_1)^{-1/2}\|e_1^T A^{-1}\|_2.
+\end{equation}
+The root location and $A$ are independent. The row norm has an integrable
+logarithm because it is at most $\|A^{-1}\|_2$ and at least
+$\|A\|_2^{-1}$. Apply Corollary~\ref{cor:box-metric-log} again.
+\end{proof}
+
+Suppose now that a fixed monomial set $\B$ is a quotient basis on a generic
+coefficient chart. Use multiplication by $x_1$, whose root values are distinct
+almost surely in the box model. One way to check the last assertion is to
+consider pairs $z\ne w$ with $z_1=w_1$: evaluation at these points gives two
+independent linear conditions on each polynomial, since constants and all
+coordinates belong to the coefficient space. The pair incidence set has
+dimension at most one less than coefficient space. Its projection therefore
+has Gaussian measure zero.
+
+Define the extended nonnegative expectation
+$\Theta_{n,d}^{\B}=\Estar\log\Lambda_{\B}$, where the overlap uses the
+Euclidean norm on the chosen quotient coordinates. Equations
+\eqref{eq:setup-overlap} and \eqref{eq:box-coefficient-scale} imply
+\begin{equation}\label{eq:box-decomposition}
+ \Estar\log\frac{\kappa_{\mathrm{eig}}(M_{x_1},Z_1)}
+                     {\kappa_{\mathrm{coeff}}^{x_1}(P,Z)}
+ =\log n+\Theta_{n,d}^{\B}+O_d(1).
+\end{equation}
+This identity also holds with the full-root condition in the denominator,
+but \eqref{eq:box-decomposition} compares the same scalar output.
+If $\Theta_{n,d}^{\B}=+\infty$, interpret the equality in the extended sense;
+the other logarithmic terms are integrable. No bound on multivariate overlap
+is asserted here. Section~\ref{sec:companion} controls it for the univariate
+companion basis.
+
+For completeness, the evaluation factor itself satisfies
+\begin{equation}\label{eq:box-evaluation-scale}
+ \Estar\log k_n(R)=2\log n+O(1),\qquad
+ \Estar\log\sqrt{S(Z)}=d\log n+O_d(1).
+\end{equation}
+Indeed reversal gives the exact identity
+\[
+ \log k_n(R)=\log k_n(e^{-|s|/n})+s_+.
+\]
+Here $\Estar s_+=\log(n+1)$, while
+\[
+ \frac{n}{1+|s|}\le k_n(e^{-|s|/n})\le n+1.
+\]
+The lower bound follows by comparing the sum with
+$\int_0^n e^{-|s|x/n}\dd x$ and using $1-e^{-u}\ge u/(1+u)$.
+Lemma~\ref{lem:box-depth} proves \eqref{eq:box-evaluation-scale}.
+Replacing coefficient conditioning by residual conditioning would therefore
+change the leading term in \eqref{eq:box-decomposition} from $\log n$ to
+$(d+1)\log n$. The outer roots contribute to this difference, even though
+most roots lie close to the unit polytorus.
